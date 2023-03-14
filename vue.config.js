@@ -39,6 +39,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: '/audit',
+  lintOnSave: false,
   css: {
     loaderOptions: {
       sass: {

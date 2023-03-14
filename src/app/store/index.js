@@ -9,6 +9,9 @@ export default createStore({
   mutations: {
   },
   actions: {
+    OPEN_SESSION: async (context) => {
+      await context.dispatch('userinfo/OPEN_SESSION', null, { root: true });
+    },
   },
   modules: {
     userinfo,
