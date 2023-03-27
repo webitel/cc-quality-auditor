@@ -11,7 +11,7 @@ body {
   height: 100%;
   margin: 0;
   font-size: 100%;
-  background: var(--page-bg-color);
+  background-color: var(--page-bg-color) !important;
 }
 
 * {
@@ -47,4 +47,8 @@ a {
 
 img {
   width: 100%;
+}
+
+#app{
+  background-color: var(--page-bg-color);
 }

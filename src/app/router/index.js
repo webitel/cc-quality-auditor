@@ -1,6 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
+import AuditorSections
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
+
+import store from '../store';
+
 import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
+import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
+import OpenedScorecard
+  from '../../modules/scorecards/components/opened-scorecard.vue';
+
+const checkRouteAccess = ((to, from, next) => {
+  const hasReadAccess = store.getters['userinfo/CHECK_OBJECT_ACCESS']({ route: to });
+  if (hasReadAccess) {
+    next();
+  } else {
+    next('/access-denied');
+  }
+});
 
 const routes = [
   {
@@ -11,7 +28,27 @@ const routes = [
   {
     path: '/',
     name: 'auditor-workspace',
+    // redirect: { name: 'the-start-page' },
     component: TheAuditorWorkspace,
+    children: [{
+      path: 'scorecards',
+      name: AuditorSections.SCORECARDS,
+      component: Scorecards,
+      // beforeEnter: checkRouteAccess,
+    },
+      {
+      path: 'scorecards/:id',
+      name: `${AuditorSections.SCORECARDS}-edit`,
+      component: OpenedScorecard,
+      // beforeEnter: checkRouteAccess,
+    },
+      {
+      path: 'scorecards/new',
+      name: `${AuditorSections.SCORECARDS}-new`,
+      component: OpenedScorecard,
+      // beforeEnter: checkRouteAccess,
+    },
+    ],
   },
 ];
 
