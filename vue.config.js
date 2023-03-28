@@ -50,21 +50,21 @@ module.exports = defineConfig({
     },
   },
   chainWebpack: (config) => {
-    // config.resolve.alias.set('vue', '@vue/compat');
-    //
-    // config.module
-    //       .rule('vue')
-    //       .use('vue-loader')
-    //       .tap((options) => {
-    //         return {
-    //           ...options,
-    //           compilerOptions: {
-    //             compatConfig: {
-    //               MODE: 2,
-    //             },
-    //           },
-    //         };
-    //       });
+    config.resolve.alias.set('vue', '@vue/compat');
+
+    config.module
+          .rule('vue')
+          .use('vue-loader')
+          .tap((options) => {
+            return {
+              ...options,
+              compilerOptions: {
+                compatConfig: {
+                  MODE: 2,
+                },
+              },
+            };
+          });
 
     config.plugin('webpack-bundle-analyzer').use(new BundleAnalyzerPlugin({
       analyzerHost: '127.0.0.1:8082',

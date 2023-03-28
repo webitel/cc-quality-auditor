@@ -6,28 +6,26 @@
     <div class="object-input-grid">
       <wt-input
         :value="itemInstance.name"
-        :v="v.itemInstance.name"
-        :label="$t('scorecards.name')"
+        :label="t('scorecards.name')"
         :disabled="disableUserInput"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
       ></wt-input>
       <wt-textarea
         :value="itemInstance.description"
-        :label="$t('scorecards.description')"
+        :label="t('scorecards.description')"
         :disabled="disableUserInput"
         @input="setItemProp({ prop: 'description', value: $event })"
       ></wt-textarea>
       <wt-select
-        :label="$t('scorecards.team')"
-        :v="v.itemInstance.team"
+        :label="t('scorecards.team')"
         :value="itemInstance.team"
         required
         @input="setItemProp({ prop: 'provider', value: $event })"
       ></wt-select>
       <wt-switcher
         :disabled="disableUserInput"
-        :label="$t('scorecards.state')"
+        :label="t('scorecards.state')"
         :value="itemInstance.state"
         @change="setItemProp({ prop: 'isSupervisor', value: $event })"
       ></wt-switcher>
@@ -35,13 +33,15 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'opened-scorecard-general',
-};
+const store = useStore();
+console.log(store.state.scorecards.itemInstance);
+const itemInstance = store.state.scorecards.itemInstance;
+const { t } = useI18n();
 </script>
 
 <style scoped>
-
 </style>

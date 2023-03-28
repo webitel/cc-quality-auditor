@@ -15,5 +15,6 @@ export default {
   },
   objects: {
     new: 'new',
+    allScorecards: 'All scorecards',
   },
 };
