@@ -8,11 +8,12 @@
       <template v-slot:actions>
         <wt-button
           color="secondary"
-        >{{ $t('reusable.add') }}
+          class="add"
+        >{{ $t('objects.add') }}
         </wt-button>
         <wt-button
           color="secondary"
-        >{{ $t('reusable.delete') }}
+        >{{ $t('objects.delete') }}
         </wt-button>
       </template>
     </wt-headline>
@@ -38,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//.test {
-//  border: 1px solid black;
-//}
+.add {
+  margin-right: var(--spacing-sm);
+}
 </style>

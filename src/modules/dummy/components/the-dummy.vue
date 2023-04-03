@@ -6,7 +6,7 @@
     <h1 class="dummy_title">{{t('scorecards.dummy')}}</h1>
     <wt-button
       @click="add"
-    >{{ t('reusable.add') }}
+    >{{ t('objects.add') }}
     </wt-button>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
   justify-content: center;
 
   &_title {
-    @extend %typo-body-1;
+    //@extend %typo-body-1;
     margin-bottom: var(--spacing-sm);
   }
 

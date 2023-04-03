@@ -3,19 +3,22 @@ import {
 } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
 import BaseStoreModule from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
 import AuditAPI from '../../api/APIRepository';
+import deepCopy from 'deep-copy';
 
 const REQUIRED_DATA_FIELDS = ['name', 'state', 'id'];
 
-export default class TableStoreModule extends BaseStoreModule {
-  state = {
+const  state = {
     dataList: [],
+    headers: [],
     isLoading: false,
+    search: '',
     page: 1,
     size: 10,
+    sort: '',
     isNext: false,
   };
 
-  getters = {
+  const getters = {
     SELECTED_DATA_ITEMS: (state) => state.dataList.filter((item) => item._isSelected),
 
     DATA_SORT: (state) => {
@@ -33,7 +36,7 @@ export default class TableStoreModule extends BaseStoreModule {
     },
   };
 
-  actions = {
+  const actions = {
     LOAD_DATA: (context, payload) => context.dispatch('LOAD_DATA_LIST', payload),
     LOAD_DATA_LIST: async (context) => {
       context.commit('SET_LOADING', true);
@@ -75,9 +78,18 @@ export default class TableStoreModule extends BaseStoreModule {
       context.commit('SET_VARIABLE_PROP', { index, prop, value });
       context.commit('SET_ITEM_PROPERTY', { prop: '_dirty', value: true });
     },
+
+    
+    PREV_PAGE: (context) => {
+      if (context.state.page > 1) {
+        const page = context.state.page - 1;
+        context.commit('SET_PAGE', page);
+        context.dispatch('LOAD_DATA_LIST');
+      }
+    },
   };
 
-  mutations = {
+  const mutations = {
     SET_DATA_LIST: (state, items) => {
       state.dataList = items;
     },
@@ -98,11 +110,16 @@ export default class TableStoreModule extends BaseStoreModule {
     },
   };
 
-  modules = {};
+  const modules = {};
 
 
-  constructor({ resettableState, headers } = {}) {
-    super();
-    this.state = { headers, ...this.state, ...resettableState };
-  }
+  // constructor({ resettableState, headers } = {}) {
+  //   super();
+  //   this.state = { headers, ...this.state, ...resettableState };
+  // }
+
+export default {
+  getActions: () => actions,
+  getMutations: () => mutations,
+  generateState: () => deepCopy(state),
 };

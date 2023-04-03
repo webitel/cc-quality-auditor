@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="main">
     <wt-app-header>
       <wt-notifications-bar></wt-notifications-bar>
       <wt-navigation-bar :current-app="currentApp" :nav="nav"></wt-navigation-bar>
@@ -7,11 +7,12 @@
       <wt-header-actions
         :build-info="{ release, build }"
         :user="userinfo"
+        class="test"
         @logout="logoutUser"
         @settings="settings"
       />
     </wt-app-header>
-    <router-view/>
+      <router-view/>
   </main>
 </template>
 
@@ -69,14 +70,13 @@ const apps = computed(() => {
 
   const allApps = [admin, supervisor, agent, history, audit];
   if (config?.ON_SITE) allApps.push(grafana);
-  console.log(currentApp);
   return allApps.filter(({ name }) => checkAccess(name));
 });
 
 const nav = computed(() => {
   const scorecards = {
     value: AuditorSections.SCORECARDS,
-    name: t(`WebitelApplications.${WebitelApplications.AUDIT}.sections.${AuditorSections.SCORECARDS}`),
+    name: t(`WebitelApplications.${WebitelApplications.AUDIT}.section.${AuditorSections.SCORECARDS}`),
     route: '/scorecards',
   };
   const nav = [scorecards];
@@ -107,4 +107,29 @@ onMounted(() => {
 .wt-navigation-bar {
   margin-right: auto;
 }
+
+//.main{
+//  min-height: 100%;
+//}
+//
+////.object-wrap {
+////  display: flex;
+//  //width: 100%;
+//  //min-height: 100%;
+//  //overflow-y: scroll;
+////}
+//
+//// main content itself, without nav but with main header
+//.object {
+//  flex-grow: 1;
+//  display: flex;
+//  //flex-direction: column;
+//  min-height: 100%;
+//  background: var(--page-bg-color);
+//}
+
+//.object-content-wrap {
+//  flex-grow: 1;
+//  display: flex;
+//}
 </style>

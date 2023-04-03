@@ -1,0 +1,26 @@
+<template>
+  <wt-tooltip>
+    <template v-slot:activator>
+      <wt-icon-btn
+        v-bind="attrs"
+        class="table-action"
+        @click="emits('click')"
+        icon="edit"
+      ></wt-icon-btn>
+    </template>
+  </wt-tooltip>
+</template>
+
+<script setup>
+import { useAttrs } from 'vue';
+//        @click="$emit('click')"
+const attrs = useAttrs();
+
+const emits = defineEmits([
+  'click',
+]);
+</script>
+
+<style scoped>
+
+</style>

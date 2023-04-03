@@ -14,12 +14,22 @@ import configuration from './interceptors/utils/openAPIConfig';
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
 const fieldsToSend = [];
-const defaultListObject = {
-  // type: 0,
-  // enabled: false,
-  // active: 0,
-  // waiting: 0,
-  // priority: '0',
+// const defaultListObject = {
+//   // type: 0,
+//   // enabled: false,
+//   // active: 0,
+//   // waiting: 0,
+//   // priority: '0',
+// };
+//
+const defaultListObject = { // default object prototype, to merge response with it to get all fields
+  name: '',
+  description: '',
+  createdAt: 0,
+  createdBy: {},
+  updatedAt: 0,
+  updatedBy: {},
+  enabled: false,
 };
 
 const defaultSingleObject = {
@@ -37,7 +47,7 @@ const _getAuditLookup = (getList) => function ({
   return getList(params);
 };
 
-const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm).setGetListMethod(_getAuditLookup);
+const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, {defaultListObject});
 const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);

@@ -2,12 +2,6 @@
   <router-view/>
 </template>
 
-<style lang="scss" scoped>
-body {
-  background-color: var(--page-bg-color) !important;
-}
+<style lang="scss">
 
-#app {
-  background-color: var(--page-bg-color) !important;
-}
 </style>
