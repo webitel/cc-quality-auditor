@@ -40,15 +40,16 @@
 
 <script setup>
 import General from './opened-scorecard-general.vue';
-import { computed, onBeforeMount, reactive, ref } from 'vue';
+import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
-import Criterias from './open-scorecard-criterias.vue';
+import CriteriasForm from './opened-scorecard-criterias.vue';
 import {useRoute, useRouter} from "vue-router";
 
 const namespace = '/audit/scorecard';
 let currentTab = reactive({});
+const mode = 'fill';
 
 
 const { t } = useI18n();
@@ -63,7 +64,7 @@ const tabs = computed(() => {
     value: 'general',
     namespace,
   }, {
-    text: t('objects.criterias'),
+    text: t('objects.criteria'),
     value: 'criteria',
     namespace: `${namespace}/criteria`,
   }];
@@ -72,7 +73,7 @@ const tabs = computed(() => {
 console.log(tabs);
 
 
-onBeforeMount( async () => {
+onMounted( async () => {
     await store.dispatch('scorecards/LOAD_ITEM', id);
     setInitialTab();
 });
@@ -159,20 +160,22 @@ function changeTab(tab) {
 }
 
 const component = computed(() => {
-  console.log(currentTab.value)
-  if(currentTab.value) {
-    if(currentTab.value.value = 'general') {
-      return General;
-    } else {
-      return Criterias;
-    }
-  }
+  // console.log(currentTab.value)
+  // if(currentTab.value) {
+  //   if(currentTab.value.value = 'general') {
+  //     return General;
+  //   } else {
+      return CriteriasForm;
+  //   }
+  // }
 
 })
 
 function setInitialTab() {
-  console.log(tabs)
-  if (tabs) changeTab(tabs[0]);
+  // console.log(tabs)
+  console.log('mkkkkk');
+  console.log(tabs.value[0]);
+  if (tabs) changeTab(tabs.value[0]);
 }
 </script>
 

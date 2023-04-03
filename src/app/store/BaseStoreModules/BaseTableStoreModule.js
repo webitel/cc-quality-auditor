@@ -5,7 +5,7 @@ import BaseStoreModule from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStor
 import AuditAPI from '../../api/APIRepository';
 import deepCopy from 'deep-copy';
 
-const REQUIRED_DATA_FIELDS = ['name', 'state', 'id'];
+const REQUIRED_DATA_FIELDS = ['name', 'enabled', 'id'];
 
 const  state = {
     dataList: [],
@@ -79,12 +79,36 @@ const  state = {
       context.commit('SET_ITEM_PROPERTY', { prop: '_dirty', value: true });
     },
 
-    
+
     PREV_PAGE: (context) => {
       if (context.state.page > 1) {
         const page = context.state.page - 1;
         context.commit('SET_PAGE', page);
         context.dispatch('LOAD_DATA_LIST');
+      }
+    },
+
+    PATCH_ITEM_PROPERTY: async (context, {
+      item, index, prop, value,
+    }) => {
+      await context.commit('PATCH_ITEM_PROPERTY', { index, prop, value });
+      const id = item?.id || context.state.dataList[index].id;
+      const changes = { [prop]: value };
+      try {
+        await context.dispatch('PATCH_ITEM', { id, changes });
+        context.commit('PATCH_ITEM_PROPERTY', {
+          item, index, prop, value,
+        });
+        context.dispatch('LOAD_DATA_LIST');
+        // context.commit('PATCH_ITEM_PROPERTY', {
+        //   item, index, enabled, value,
+        // });
+        // context.commit('PATCH_ITEM_PROPERTY', {
+        //   item, index, prop, value,
+        // });
+        // context.dispatch('LOAD_DATA_LIST');
+      } catch {
+
       }
     },
   };
@@ -107,6 +131,9 @@ const  state = {
     },
     SET_SIZE: (state, size) => {
       state.size = size;
+    },
+    PATCH_ITEM_PROPERTY: (state, { index, prop, value }) => {
+      state.dataList[index][prop] = value;
     },
   };
 

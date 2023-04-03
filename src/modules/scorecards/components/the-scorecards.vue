@@ -64,6 +64,7 @@
             <template v-slot:state="{ item, index }">
               <wt-switcher
                 :value="item.enabled"
+                @change="patchProperty({item, index, prop: 'enabled', value: $event})"
               ></wt-switcher>
             </template>
             <template v-slot:actions="{ item }">
@@ -179,16 +180,20 @@ function close() {
   router.go(-1);
 }
 
-const id = store.state.scorecards.itemId;
+const id = computed(() => store.state.scorecards.itemId);
 const pathName = store.state.scorecards.itemInstance.name;
 
-function editLink({ id }) {
-  const routeName = pathName;
-  return { name: `${routeName}-edit`, params: { id } };
+
+async function edit({id}) {
+  await store.dispatch('scorecards/SET_ITEM_ID', id);
+  router.push({
+    name: `${namespace}-edit`,
+    params: { id },
+  });
 }
 
-function edit(item) {
-  router.push(this.editLink(item));
+async function patchProperty (payload) {
+  await store.dispatch(`${namespace}/PATCH_ITEM_PROPERTY`, payload);
 }
 
 </script>

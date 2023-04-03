@@ -22,6 +22,9 @@ export default {
     state: 'State',
     generalInfo: 'General info',
     general: 'general',
-    criterias: 'criterias',
+    criteria: 'criterias',
+    deleteConfirmation: {
+      title: 'Delete Scorecard',
+    }
   },
 };

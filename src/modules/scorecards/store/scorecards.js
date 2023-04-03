@@ -13,8 +13,9 @@ const resettableState = {
     name: '',
     description: '',
     team: [],
-    state: false,
+    enabled: false,
     id: '',
+    questions: [],
   },
 };
 

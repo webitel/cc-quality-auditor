@@ -13,7 +13,8 @@ import configuration from './interceptors/utils/openAPIConfig';
 
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
-const fieldsToSend = [];
+const fieldsToSend = ['name', 'description', 'id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'enabled'];
+// const fieldsToSend = [];
 // const defaultListObject = {
 //   // type: 0,
 //   // enabled: false,
@@ -23,13 +24,13 @@ const fieldsToSend = [];
 // };
 //
 const defaultListObject = { // default object prototype, to merge response with it to get all fields
-  name: '',
-  description: '',
   createdAt: 0,
   createdBy: {},
+  description: '',
+  enabled: false,
+  name: '',
   updatedAt: 0,
   updatedBy: {},
-  enabled: false,
 };
 
 const defaultSingleObject = {
@@ -41,17 +42,17 @@ const _getAuditLookup = (getList) => function ({
                                                  page = 1,
                                                  size= 10,
                                                  fields,
-                                                 teamId = [209] }) {
+                                                 teamId = [] }) {
   // const params = [page, size, q, sort, fields, id, teamId];
   const params = [page, size, undefined, undefined, fields, undefined, teamId, undefined, undefined, undefined, undefined];
   return getList(params);
 };
 
-const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, {defaultListObject});
+const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, { defaultListObject });
 const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
-const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm);
+const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, {fieldsToSend});
 const itemDeleter = new SdkDeleterApiConsumer(auditService.deleteAuditForm);
 const getAuditList = (params) => listGetter.getList(params);
 const getAudit = (params) => itemGetter.getItem(params);

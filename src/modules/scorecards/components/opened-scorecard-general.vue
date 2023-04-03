@@ -21,15 +21,14 @@
         :label="t('objects.team',2)"
         :value="itemInstance.teams"
         :search-method="teamLookupApi"
-        required
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
       ></wt-select>
       <wt-switcher
         :disabled="disableUserInput"
         :label="t('objects.state')"
-        :value="itemInstance.state"
-        @change="setItemProp({ prop: 'enable', value: $event })"
+        :value="itemInstance.enabled"
+        @change="setItemProp({ prop: 'enabled', value: $event })"
       ></wt-switcher>
     </div>
   </section>
@@ -46,6 +45,11 @@ console.log(store.state.scorecards.itemInstance);
 const itemInstance = computed(() => store.state.scorecards.itemInstance);
 console.log(itemInstance)
 const { t } = useI18n();
+
+async function setItemProp(payload) {
+  await store.dispatch('scorecards/SET_ITEM_PROPERTY', payload)
+}
+
 </script>
 
 <style scoped>
