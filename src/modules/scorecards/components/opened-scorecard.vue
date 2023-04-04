@@ -11,7 +11,7 @@
             :color="disabledSave && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
-          >{{ $t('objects.save') }}
+          >{{ t('objects.save') }}
           </wt-button-select>
         </template>
         <wt-headline-nav :path="path"></wt-headline-nav>
@@ -32,34 +32,32 @@
           :is="component"
           :namespace="namespace"
         ></component>
-        <input type="submit" hidden> <!--  submit form on Enter  -->
+        <input type="submit" hidden>
       </form>
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup>
-import General from './opened-scorecard-general.vue';
-import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
-import CriteriasForm from './opened-scorecard-criterias.vue';
-import {useRoute, useRouter} from "vue-router";
-
-const namespace = '/audit/scorecard';
-let currentTab = reactive({});
-const mode = 'fill';
-
+import Criterias from './opened-scorecard-criterias.vue';
+import General from './opened-scorecard-general.vue';
 
 const { t } = useI18n();
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+const namespace = '/audit/scorecard';
+const currentTab = reactive({});
 
-
-const tabs = computed(() => {
-  return [{
+const id = computed(() => store.state.scorecards.itemId);
+const pathName = computed(() => store.state.scorecards.itemInstance.name);
+const tabs = computed(() => [
+  {
     text: t('objects.general'),
     value: 'general',
     namespace,
@@ -67,47 +65,50 @@ const tabs = computed(() => {
     text: t('objects.criteria'),
     value: 'criteria',
     namespace: `${namespace}/criteria`,
-  }];
-});
-
-console.log(tabs);
-
-
-onMounted( async () => {
-    await store.dispatch('scorecards/LOAD_ITEM', id);
-    setInitialTab();
-});
-
-const id = computed(() => store.state.scorecards.itemId);
-console.log(id)
-const pathName = computed(() => store.state.scorecards.itemInstance.name);
-console.log(pathName)
+  },
+]);
 const path = computed(() => {
   const baseUrl = 'audit/scorecards';
 
-      return [
-        { name: t('reusable.audit') },
-        { name: t('scorecards.scorecards'), route: '/scorecards' },
-        {
-          name: id ? pathName.value.slice(0, pathName.value.lenght) : t('objects.new'),
-          route: id.value ? `${baseUrl}/${id.value}` : `${baseUrl}/new`,
-        },
-      ];
-    });
+  return [
+    { name: t('reusable.audit') },
+    { name: t('scorecards.scorecards'), route: '/scorecards' },
+    {
+      name: id.value ? pathName.value.slice(0, pathName.value.lenght) : t('objects.new'),
+      route: id.value ? `${baseUrl}/${id.value}` : `${baseUrl}/new`,
+    },
+  ];
+});
+const component = computed(() => {
+  if (currentTab.value) {
+    if (currentTab.value.value === 'general') {
+      return General;
+    }
+    return Criterias;
+  }
+});
+
+function updateItem(payload) {
+  store.dispatch('scorecards/UPDATE_ITEM', payload);
+}
+
+function addItem(payload) {
+  store.dispatch('scorecards/ADD_ITEM', payload);
+}
+
+function loadItem(payload) {
+  store.dispatch('scorecards/LOAD_ITEM', payload);
+}
+
+async function setItemId(payload) {
+  await store.dispatch('scorecards/SET_ITEM_ID', payload);
+}
 
 function close() {
   router.go(-1);
 }
 
-function updateItem(item) {
-  store.dispatch('scorecards/UPDATE_ITEM', item);
-}
-
-function addItem(item) {
-  store.dispatch('scorecards/ADD_ITEM', item);
-}
-
-async function redirectToEdit() {
+function redirectToEdit() {
   const routeName = route.name.replace('-new', '-edit');
   return router.replace({
     name: routeName,
@@ -117,28 +118,23 @@ async function redirectToEdit() {
 }
 
 async function save() {
-  // if (!this.disabledSave) {
-    if (id) {
-      await updateItem();
-    } else {
-      try {
-        await addItem();
-        if (this.id) {
-          await redirectToEdit();
-        }
-      } catch (err) {
-        throw err;
+  if (id.value) {
+    await updateItem();
+  } else {
+    try {
+      await addItem();
+      if (this.id) {
+        await redirectToEdit();
       }
+    } catch (err) {
+      throw err;
     }
-  // }
+  }
 }
 
 function saveAs() {
-  store.dispatch('scorecards/SET_ITEM_ID', { prop: 'name', value: '' });
-  // setItemProp({ prop: 'stopCause', value: '' });
-  // setItemProp({ prop: 'attempts', value: 0 });
-  // setItemProp({ prop: 'id', value: '' });
-  store.dispatch('scorecards/SET_ITEM_ID', null);
+  setItemId({ prop: 'name', value: '' });
+  setItemId(null);
   save();
 }
 
@@ -148,35 +144,20 @@ const saveOptions = computed(() => {
     callback: saveAs,
   };
   return [saveAsNew];
-})
+});
 
 function changeTab(tab) {
-  console.log(tab)
-  // if (Object.keys(route.query).length) {
-  //   router.replace({ query: null });
-  // }
   currentTab.value = tab;
-  console.log(currentTab);
 }
-
-const component = computed(() => {
-  // console.log(currentTab.value)
-  // if(currentTab.value) {
-  //   if(currentTab.value.value = 'general') {
-  //     return General;
-  //   } else {
-      return CriteriasForm;
-  //   }
-  // }
-
-})
 
 function setInitialTab() {
-  // console.log(tabs)
-  console.log('mkkkkk');
-  console.log(tabs.value[0]);
-  if (tabs) changeTab(tabs.value[0]);
+  if (tabs.value) changeTab(tabs.value[0]);
 }
+
+onMounted(() => {
+  loadItem(id);
+  setInitialTab();
+});
 </script>
 
 <style scope>

@@ -1,9 +1,9 @@
 <template>
   <div class="dummy">
     <div class="dummy_pic">
-      <img src="../assets/the-dummy.svg" alt="Workspace is empty"/>
+      <img src="../assets/the-dummy.svg" alt="Workspace is empty" />
     </div>
-    <h1 class="dummy_title">{{t('scorecards.dummy')}}</h1>
+    <h1 class="dummy_title">{{ t('scorecards.dummy') }}</h1>
     <wt-button
       @click="add"
     >{{ t('objects.add') }}
@@ -11,30 +11,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useI18n } from 'vue-i18n';
-import { useRouter, useRoute } from 'vue-router';
-import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'the-dummy',
-  setup() {
-    const { t } = useI18n();
-    const router = useRouter();
-    const route = useRoute();
-    const routeName = ref('/audit/scorecards');
-    function add(query) {
-      router.push({
-        name: 'scorecards-new',
-        // query: {
-        //   ...route.query,
-        //   ...query,
-        // },
-      });
-    }
-    return { t, add };
+const { t } = useI18n();
+const router = useRouter();
+
+const props = defineProps({
+  namespace: {
+    type: String,
   },
-};
+});
+
+function add() {
+  router.push({ name: `${props.namespace}-new` });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +43,7 @@ export default {
     margin-bottom: var(--spacing-sm);
   }
 
-  &_pic{
+  &_pic {
     width: 200px;
     height: 200px;
     margin-bottom: var(--spacing-md);

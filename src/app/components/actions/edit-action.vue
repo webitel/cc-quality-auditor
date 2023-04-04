@@ -8,12 +8,15 @@
         icon="edit"
       ></wt-icon-btn>
     </template>
+    {{ t('objects.edit') }}
   </wt-tooltip>
 </template>
 
 <script setup>
 import { useAttrs } from 'vue';
-//        @click="$emit('click')"
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const attrs = useAttrs();
 
 const emits = defineEmits([

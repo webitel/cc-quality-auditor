@@ -11,7 +11,7 @@ export default {
     add: 'Add',
     delete: 'Delete',
     save: 'Save',
-    saveAs: 'saveAs',
+    saveAs: 'SaveAs',
     new: 'New',
     name: 'Name',
     description: 'Description',
@@ -21,10 +21,14 @@ export default {
     modifiedBy: 'Modified By',
     state: 'State',
     generalInfo: 'General info',
-    general: 'general',
-    criteria: 'criterias',
+    general: 'General',
+    criteria: 'Criterias',
+    yes: 'Yes',
+    no: 'No',
+    edit: 'Edit',
     deleteConfirmation: {
       title: 'Delete Scorecard',
-    }
+      askingAlert: 'Are you sure?',
+    },
   },
 };

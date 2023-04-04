@@ -9,25 +9,26 @@
       </object-header>
     </template>
     <template v-slot:main>
+      <delete-confirmation-popup
+        v-show="isDeleteConfirmationPopup"
+        :namespace="namespace"
+        :id="id"
+        @close="closePopup"
+      ></delete-confirmation-popup>
+
       <div class="scorecards-main-section">
         <header class="content-header">
-          <h3 class="content-title">{{ t('objects.all', { entity: t('scorecards.scorecards', 2)}) }}</h3>
-          <div class="content-header__actions-wrap">
-            <wt-search-bar
-              :value="search"
-              debounce
-            ></wt-search-bar>
-            <wt-table-actions
-              :icons="['refresh','column-select']"
-            >
-            </wt-table-actions>
-          </div>
+          <h3 class="content-title">{{ t('objects.all', { entity: t('scorecards.scorecards', 2) }) }}</h3>
+          <filters-panel
+            :headers="headers"
+            :namespace="namespace"
+          ></filters-panel>
         </header>
 
         <wt-loader v-show="isLoaded"></wt-loader>
 
-        <div v-if="isEmptyWorkspace" class="scorecards__dummy" >
-          <the-dummy></the-dummy>
+        <div v-if="isEmptyWorkspace" class="scorecards__dummy">
+          <the-dummy :namespace="namespace"></the-dummy>
         </div>
         <div v-show="!isLoaded">
           <wt-table
@@ -38,7 +39,7 @@
             @sort="sort"
           >
             <template v-slot:name="{ item }">
-              <span class="name-link" @click="openAgentView(item.id)">
+              <span class="name-link" @click="openAuditView(item.id)">
                 {{ item.name }}
               </span>
             </template>
@@ -70,11 +71,11 @@
             <template v-slot:actions="{ item }">
               <edit-action
                 class="scorecards-editing"
-                @click="edit(item)"
+                @click="openAuditView(item)"
               ></edit-action>
-                <delete-action
-                  @click="callDelete(item)"
-                ></delete-action>
+              <delete-action
+                @click="openPopup(item)"
+              ></delete-action>
             </template>
           </wt-table>
           <wt-pagination
@@ -89,56 +90,55 @@
           ></wt-pagination>
         </div>
 
-        </div>
+      </div>
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import EditAction from '../../../app/components/actions/edit-action.vue';
 import DeleteAction from '../../../app/components/actions/delete-action.vue';
+import DeleteConfirmationPopup from '../../../app/components/utils/delete-confirmation-popup.vue';
+import FiltersPanel from '../../_shared/filters/components/filters-panel.vue';
 
 const { t, tc } = useI18n();
 const store = useStore();
 const router = useRouter();
-const route = useRoute();
-
 const namespace = 'scorecards';
+const isDeleteConfirmationPopup = ref(false);
 
 const dataList = computed(() => store.state.scorecards.dataList);
+const isLoaded = computed(() => store.state.scorecards.isLoading);
+const isEmptyWorkspace = computed(() => !dataList.value.length);
+const headersValue = computed(() => store.state.scorecards.headers);
+const isNext = computed(() => store.state.scorecards.isNext);
+const page = computed(() => store.state.scorecards.page);
+const size = computed(() => store.state.scorecards.size);
+const id = computed(() => store.state.scorecards.itemId);
+const headers = computed(() => {
+  if (!headersValue.value.length) return [];
+  return headersValue.value.map((header) => ({
+    ...header,
+    text: typeof header.locale === 'string' ? t(header.locale) : tc(...header.locale),
+  }));
+});
+const path = computed(() => [
+  { name: t('reusable.audit'), route: '' },
+  { name: t('scorecards.scorecards'), route: '/' },
+]);
 
 async function loadData() {
   await store.dispatch(`${namespace}/LOAD_DATA`);
 }
 
-onMounted(() => loadData());
-
-const isLoaded = computed(() => store.state.scorecards.isLoading);
-
-const isEmptyWorkspace = computed(() => !dataList.value.length);
-
-const headers = computed(() => {
-  const headersValue = computed(() => store.state.scorecards.headers);
-  if (!headersValue.value.length) return [];
-  return headersValue.value.map((header) => ({
-      ...header,
-      text: typeof header.locale === 'string' ? t(header.locale) : tc(...header.locale)
-    })
-  );
-})
-
-const isNext = computed(() => store.state.scorecards.isNext);
-const page = computed(() => store.state.scorecards.page);
-const size = computed(() => store.state.scorecards.size);
-
-async function setSize() {
-  await store.dispatch(`${namespace}/SET_SIZE`);
+async function setSize(payload) {
+  await store.dispatch(`${namespace}/SET_SIZE`, payload);
 }
 
 async function nextPage() {
@@ -149,52 +149,42 @@ async function prevPage() {
   await store.dispatch(`${namespace}/PREV_PAGE`);
 }
 
+async function setItemId(payload) {
+  await store.dispatch(`${namespace}/SET_ITEM_ID`, payload);
+}
+
+async function patchProperty(payload) {
+  await store.dispatch(`${namespace}/PATCH_ITEM_PROPERTY`, payload);
+}
+
 function prettifyDateTime(timestamp) {
-  if(!timestamp) return '';
+  if (!timestamp) return '';
   return new Date(+timestamp).toLocaleString();
 }
 
-async function openAgentView(id) {
-    await store.dispatch('scorecards/SET_ITEM_ID', id);
-  router.push({
-    name: 'scorecards-edit',
-    params: { id },
-  });
+function openAuditView(id) {
+  setItemId(id);
+  router.push({ name: `${namespace}-edit`, params: { id } });
 }
 
-const path = computed(() => {
-return [
-    { name: t('reusable.audit'), route: '' },
-    { name: t('scorecards.scorecards'), route: '/' },
-    // { name: `${this.$t('scorecards.scorecards')} (${this.callId})` },
-  ]
-})
-
 function create() {
-  router.push({
-    name: 'scorecards-new',
-  });
+  router.push({ name: `${namespace}-new` });
 }
 
 function close() {
   router.go(-1);
 }
 
-const id = computed(() => store.state.scorecards.itemId);
-const pathName = store.state.scorecards.itemInstance.name;
-
-
-async function edit({id}) {
-  await store.dispatch('scorecards/SET_ITEM_ID', id);
-  router.push({
-    name: `${namespace}-edit`,
-    params: { id },
-  });
+function openPopup(item) {
+  setItemId(item.id);
+  isDeleteConfirmationPopup.value = true;
 }
 
-async function patchProperty (payload) {
-  await store.dispatch(`${namespace}/PATCH_ITEM_PROPERTY`, payload);
+function closePopup() {
+  isDeleteConfirmationPopup.value = false;
 }
+
+onMounted(() => loadData());
 
 </script>
 

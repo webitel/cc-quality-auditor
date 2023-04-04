@@ -1,11 +1,11 @@
 import deepCopy from 'deep-copy';
-import BaseStoreModule from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
+import BaseStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
 import BaseTableModule from './BaseTableStoreModule';
 import BaseOpenedInstanceStoreModule from './BaseOpenedInstanceStoreModule';
 
-
 export default class ObjectStoreModule extends BaseStoreModule {
-  getters = {}
+  getters = {};
 
   actions = {
     ...BaseTableModule.getActions(),
@@ -35,7 +35,7 @@ export default class ObjectStoreModule extends BaseStoreModule {
     },
   };
 
-  modules = {}
+  modules = {};
 
   constructor({ resettableState, headers } = {}) {
     super();

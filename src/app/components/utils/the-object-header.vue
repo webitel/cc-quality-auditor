@@ -31,8 +31,9 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-const { t, tc } = useI18n();
-import {computed} from 'vue';
+import { computed } from 'vue';
+
+const { t } = useI18n();
 
 const props = defineProps({
   hidePrimary: {
@@ -57,9 +58,7 @@ const props = defineProps({
   },
 });
 
-const hideSecondary = computed (() => {
-  return !(props.secondaryAction || props.secondaryText);
-})
+const hideSecondary = computed(() => !(props.secondaryAction || props.secondaryText));
 </script>
 
 <style lang="scss" scoped>

@@ -12,7 +12,7 @@
         @settings="settings"
       />
     </wt-app-header>
-      <router-view/>
+    <router-view />
   </main>
 </template>
 
@@ -31,7 +31,7 @@ const build = process.env.VUE_APP_BUILD_NUMBER;
 const store = useStore();
 const router = useRouter();
 
-const userinfo = store.state.userinfo;
+const { userinfo } = store.state;
 const currentApp = userinfo.thisApp;
 
 const checkAccess = store.getters['userinfo/CHECK_APP_ACCESS'];
@@ -107,29 +107,4 @@ onMounted(() => {
 .wt-navigation-bar {
   margin-right: auto;
 }
-
-//.main{
-//  min-height: 100%;
-//}
-//
-////.object-wrap {
-////  display: flex;
-//  //width: 100%;
-//  //min-height: 100%;
-//  //overflow-y: scroll;
-////}
-//
-//// main content itself, without nav but with main header
-//.object {
-//  flex-grow: 1;
-//  display: flex;
-//  //flex-direction: column;
-//  min-height: 100%;
-//  background: var(--page-bg-color);
-//}
-
-//.object-content-wrap {
-//  flex-grow: 1;
-//  display: flex;
-//}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <section>
     <header class="content-header">
-      <h3 class="content-title">{{ $t('objects.generalInfo') }}</h3>
+      <h3 class="content-title">{{ t('objects.generalInfo') }}</h3>
     </header>
     <div class="object-input-grid">
       <wt-input
@@ -37,17 +37,16 @@
 <script setup>
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import {computed} from "vue";
-import teamLookupApi from "@/modules/_shared/lookups/api/teamLookupApi";
+import { computed } from 'vue';
+import teamLookupApi from '@/modules/_shared/lookups/api/teamLookupApi';
 
 const store = useStore();
-console.log(store.state.scorecards.itemInstance);
-const itemInstance = computed(() => store.state.scorecards.itemInstance);
-console.log(itemInstance)
 const { t } = useI18n();
 
+const itemInstance = computed(() => store.state.scorecards.itemInstance);
+
 async function setItemProp(payload) {
-  await store.dispatch('scorecards/SET_ITEM_PROPERTY', payload)
+  await store.dispatch('scorecards/SET_ITEM_PROPERTY', payload);
 }
 
 </script>

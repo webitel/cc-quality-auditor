@@ -1,4 +1,5 @@
 import { SortSymbols } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
+
 export default [
   {
     value: 'name',

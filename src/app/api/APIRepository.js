@@ -10,20 +10,20 @@ import {
 import instance from './instance';
 import configuration from './interceptors/utils/openAPIConfig';
 
-
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
-const fieldsToSend = ['name', 'description', 'id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'enabled'];
-// const fieldsToSend = [];
-// const defaultListObject = {
-//   // type: 0,
-//   // enabled: false,
-//   // active: 0,
-//   // waiting: 0,
-//   // priority: '0',
-// };
-//
-const defaultListObject = { // default object prototype, to merge response with it to get all fields
+const fieldsToSend = [
+  'name',
+  'description',
+  'id',
+  'created_at',
+  'created_by',
+  'updated_at',
+  'updated_by',
+  'enabled',
+];
+
+const defaultListObject = {
   createdAt: 0,
   createdBy: {},
   description: '',
@@ -33,26 +33,11 @@ const defaultListObject = { // default object prototype, to merge response with 
   updatedBy: {},
 };
 
-const defaultSingleObject = {
-  // type: 0,
-  // formSchema: {},
-  // taskProcessing: {},
-};
-const _getAuditLookup = (getList) => function ({
-                                                 page = 1,
-                                                 size= 10,
-                                                 fields,
-                                                 teamId = [] }) {
-  // const params = [page, size, q, sort, fields, id, teamId];
-  const params = [page, size, undefined, undefined, fields, undefined, teamId, undefined, undefined, undefined, undefined];
-  return getList(params);
-};
-
 const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, { defaultListObject });
 const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
-const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, {fieldsToSend});
+const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, { fieldsToSend });
 const itemDeleter = new SdkDeleterApiConsumer(auditService.deleteAuditForm);
 const getAuditList = (params) => listGetter.getList(params);
 const getAudit = (params) => itemGetter.getItem(params);
@@ -69,7 +54,6 @@ const AuditAPI = {
   patch: patchAudit,
   update: updateAudit,
   delete: deleteAudit,
-  // getLookup: getAuditFormsLookup,
 };
 
 export default AuditAPI;

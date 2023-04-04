@@ -11,12 +11,10 @@ const actions = {
     context.commit('SET_PARENT_ITEM_ID', id);
   },
   SET_ITEM_ID: (context, id) => {
-    console.log(id);
     if (id !== 'new') context.commit('SET_ITEM_ID', id);
     else context.commit('SET_ITEM_ID', 0);
   },
   LOAD_ITEM: async (context) => {
-    console.log(context.state);
     if (context.state.itemId) {
       const item = await context.dispatch('GET_ITEM');
       context.commit('SET_ITEM', proxy(item));
