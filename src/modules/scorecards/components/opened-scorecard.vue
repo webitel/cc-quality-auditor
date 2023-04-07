@@ -54,8 +54,8 @@ const router = useRouter();
 const namespace = '/audit/scorecard';
 const currentTab = reactive({});
 
-const id = computed(() => store.state.scorecards.itemId);
-const pathName = computed(() => store.state.scorecards.itemInstance.name);
+const id = computed(() => store.state.scorecards.card.itemId);
+const pathName = computed(() => store.state.scorecards.card.itemInstance.name);
 const tabs = computed(() => [
   {
     text: t('objects.general'),
@@ -89,19 +89,19 @@ const component = computed(() => {
 });
 
 function updateItem(payload) {
-  store.dispatch('scorecards/UPDATE_ITEM', payload);
+  store.dispatch('scorecards/card/UPDATE_ITEM', payload);
 }
 
 function addItem(payload) {
-  store.dispatch('scorecards/ADD_ITEM', payload);
+  store.dispatch('scorecards/card/ADD_ITEM', payload);
 }
 
 function loadItem(payload) {
-  store.dispatch('scorecards/LOAD_ITEM', payload);
+  store.dispatch('scorecards/card/LOAD_ITEM', payload);
 }
 
 async function setItemId(payload) {
-  await store.dispatch('scorecards/SET_ITEM_ID', payload);
+  await store.dispatch('scorecards/card/SET_ITEM_ID', payload);
 }
 
 function close() {

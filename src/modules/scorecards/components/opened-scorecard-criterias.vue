@@ -14,7 +14,7 @@ import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-fo
 
 const store = useStore();
 
-const itemInstance = computed(() => store.state.scorecards.itemInstance);
+const itemInstance = computed(() => store.state.scorecards.card.itemInstance);
 const questions = computed({
   get() {
     return itemInstance.value.questions || [];

@@ -4,66 +4,90 @@
     min-width="480"
     @close="close"
   >
-    <template v-slot:title>{{ t('objects.deleteConfirmation.title') }}</template>
+    <template v-slot:title>{{ $t('objects.deleteConfirmation.title') }}</template>
     <template v-slot:main>
       <p>
-        {{ t('objects.deleteConfirmation.askingAlert') }}
+        {{ deleteMessage }}
+        {{ $t('objects.deleteConfirmation.undoneActionAlert') }}
       </p>
     </template>
     <template v-slot:actions>
       <wt-button
         color="secondary"
-        @click="confirm"
-      >{{ t('vocabulary.yes') }}
+        :disabled="isDeleting"
+        @click="cancel"
+      >{{ $t('reusable.cancel') }}
       </wt-button>
       <wt-button
         color="danger"
-        @click="close"
-      >{{ t('vocabulary.no') }}
+        :loading="isDeleting"
+        @click="confirm"
+      >{{ $t('reusable.delete') }}
       </wt-button>
     </template>
   </wt-popup>
 </template>
 
 <script setup>
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
-
-const { t } = useI18n();
-const store = useStore();
 
 const props = defineProps({
-  namespace: {
-    type: String,
-  },
-  id: {
+  deleteCount: {
     type: Number,
-    default: 0,
+    required: true,
+  },
+  callback: {
+    type: Function,
+    required: true,
   },
 });
 
-const emits = defineEmits([
+const emit = defineEmits([
+  'confirm',
+  'cancel',
   'close',
 ]);
 
-async function deleteItem(payload) {
-  await store.dispatch(`${props.namespace}/DELETE_ITEM`, payload);
-}
+const { t, tc } = useI18n();
+
+const isDeleting = ref(false);
+
+const deleteMessage = computed(() => {
+  if (props.deleteCount === 0) {
+    return t(
+      'objects.deleteConfirmation.askingAlert',
+      2,
+      null,
+      { count: t('objects.deleteConfirmation.deleteAll') },
+    );
+  }
+  return t(
+    'objects.deleteConfirmation.askingAlert',
+    props.deleteCount === 1 ? 1 : 2,
+    null,
+    { count: props.deleteCount },
+  );
+});
 
 function close() {
-  emits('close');
+  emit('close');
 }
 
-function confirm() {
-  if (props.id) {
-    try {
-      deleteItem(props.id);
-    } catch (err) {
-      throw err;
-    } finally {
-      close();
-    }
+async function confirm() {
+  try {
+    isDeleting.value = true;
+    emit('confirm');
+    await props.callback();
+  } finally {
+    isDeleting.value = false;
+    close();
   }
+}
+
+function cancel() {
+  emit('cancel');
+  close();
 }
 </script>
 

@@ -43,10 +43,10 @@ import teamLookupApi from '@/modules/_shared/lookups/api/teamLookupApi';
 const store = useStore();
 const { t } = useI18n();
 
-const itemInstance = computed(() => store.state.scorecards.itemInstance);
+const itemInstance = computed(() => store.state.scorecards.card.itemInstance);
 
 async function setItemProp(payload) {
-  await store.dispatch('scorecards/SET_ITEM_PROPERTY', payload);
+  await store.dispatch('scorecards/card/SET_ITEM_PROPERTY', payload);
 }
 
 </script>

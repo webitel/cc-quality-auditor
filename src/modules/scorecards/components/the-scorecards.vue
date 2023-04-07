@@ -11,14 +11,17 @@
     <template v-slot:main>
       <delete-confirmation-popup
         v-show="isDeleteConfirmationPopup"
-        :namespace="namespace"
-        :id="id"
-        @close="closePopup"
+        :delete-count="deleteCount"
+        :callback="deleteCallback"
+        @confirm="confirmDelete"
+        @close="closeDelete"
       ></delete-confirmation-popup>
 
       <div class="scorecards-main-section">
         <header class="content-header">
-          <h3 class="content-title">{{ t('objects.all', { entity: t('scorecards.scorecards', 2) }) }}</h3>
+          <h3 class="content-title">
+            {{ t('objects.all', { entity: t('scorecards.scorecards', 2) }) }}
+          </h3>
           <filters-panel
             :headers="headers"
             :namespace="namespace"
@@ -65,7 +68,7 @@
             <template v-slot:state="{ item, index }">
               <wt-switcher
                 :value="item.enabled"
-                @change="patchProperty({item, index, prop: 'enabled', value: $event})"
+                @change="patchProperty({ item, index, prop: 'enabled', value: $event })"
               ></wt-switcher>
             </template>
             <template v-slot:actions="{ item }">
@@ -74,7 +77,10 @@
                 @click="openAuditView(item)"
               ></edit-action>
               <delete-action
-                @click="openPopup(item)"
+                @click="askDeleteConfirmation({
+                  deleted: [item.id],
+                  callback: deleteItem,
+                })"
               ></delete-action>
             </template>
           </wt-table>
@@ -96,10 +102,11 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useTableStore } from '../../../app/composables/useTableStore';
+import { useDeleteConfirmationPopup } from '../../../app/composables/useDeleteConfirmationPopup';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import EditAction from '../../../app/components/actions/edit-action.vue';
@@ -107,25 +114,44 @@ import DeleteAction from '../../../app/components/actions/delete-action.vue';
 import DeleteConfirmationPopup from '../../../app/components/utils/delete-confirmation-popup.vue';
 import FiltersPanel from '../../_shared/filters/components/filters-panel.vue';
 
-const { t, tc } = useI18n();
-const store = useStore();
+const { t } = useI18n();
 const router = useRouter();
 const namespace = 'scorecards';
-const isDeleteConfirmationPopup = ref(false);
 
-const dataList = computed(() => store.state.scorecards.dataList);
-const isLoaded = computed(() => store.state.scorecards.isLoading);
+const {
+  dataList,
+  isLoaded,
+  headersValue,
+  isNext,
+  page,
+  size,
+
+  loadData,
+  setSize,
+  nextPage,
+  prevPage,
+  patchProperty,
+  deleteItem,
+  sort,
+} = useTableStore(namespace);
+
+const {
+  isVisible: isDeleteConfirmationPopup,
+  deleteCount,
+  deleteCallback,
+
+  askDeleteConfirmation,
+  confirmDelete,
+  closeDelete,
+} = useDeleteConfirmationPopup();
+
 const isEmptyWorkspace = computed(() => !dataList.value.length);
-const headersValue = computed(() => store.state.scorecards.headers);
-const isNext = computed(() => store.state.scorecards.isNext);
-const page = computed(() => store.state.scorecards.page);
-const size = computed(() => store.state.scorecards.size);
-const id = computed(() => store.state.scorecards.itemId);
+
 const headers = computed(() => {
   if (!headersValue.value.length) return [];
   return headersValue.value.map((header) => ({
     ...header,
-    text: typeof header.locale === 'string' ? t(header.locale) : tc(...header.locale),
+    text: typeof header.locale === 'string' ? t(header.locale) : t(...header.locale),
   }));
 });
 const path = computed(() => [
@@ -133,59 +159,21 @@ const path = computed(() => [
   { name: t('scorecards.scorecards'), route: '/scorecards' },
 ]);
 
-async function loadData() {
-  await store.dispatch(`${namespace}/LOAD_DATA`);
-}
-
-async function setSize(payload) {
-  await store.dispatch(`${namespace}/SET_SIZE`, payload);
-}
-
-async function nextPage() {
-  await store.dispatch(`${namespace}/SET_NEXT_PAGE`);
-}
-
-async function prevPage() {
-  await store.dispatch(`${namespace}/PREV_PAGE`);
-}
-
-async function setItemId(payload) {
-  await store.dispatch(`${namespace}/SET_ITEM_ID`, payload);
-}
-
-async function patchProperty(payload) {
-  await store.dispatch(`${namespace}/PATCH_ITEM_PROPERTY`, payload);
-}
-
-async function sort(...params) {
-  await store.dispatch('scorecards/SORT', { header: params[0], nextSortOrder: params[1] }, { root: true });
-}
-
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
   return new Date(+timestamp).toLocaleString();
 }
 
 function openAuditView(id) {
-  setItemId(id);
-  router.push({ name: `${namespace}-edit`, params: { id } });
+  return router.push({ name: `${namespace}-edit`, params: { id } });
 }
 
 function create() {
-  router.push({ name: `${namespace}-new` });
+  return router.push({ name: `${namespace}-new` });
 }
 
 function close() {
   router.go(-1);
-}
-
-function openPopup(item) {
-  setItemId(item.id);
-  isDeleteConfirmationPopup.value = true;
-}
-
-function closePopup() {
-  isDeleteConfirmationPopup.value = false;
 }
 
 onMounted(() => loadData());

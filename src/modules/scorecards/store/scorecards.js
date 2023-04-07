@@ -1,21 +1,37 @@
+import TableStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/TableStoreModule';
+import CardStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/CardStoreModule';
+import BaseStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
+import ApiStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/ApiStoreModule';
 import AuditAPI from '../../../app/api/APIRepository';
 import headers from './_internals/headers';
-import ObjectStoreModule
-  from '../../../app/store/BaseStoreModules/ObjectStoreModule';
 
-const resettableState = {
+const cardState = {
   itemInstance: {
     name: '',
     description: '',
     team: [],
     enabled: false,
-    id: '',
     questions: [],
   },
 };
 
-const scorecards = new ObjectStoreModule({ resettableState, headers })
-  .attachAPIModule(AuditAPI)
-  .generateAPIActions()
+const api = new ApiStoreModule()
+  .generateAPIActions(AuditAPI)
+  .getModule();
+
+const table = new TableStoreModule({ headers })
+  .setChildModules({ api })
+  .getModule();
+
+const card = new CardStoreModule()
+  .setChildModules({ api })
+  .getModule({ state: cardState });
+
+const scorecards = new BaseStoreModule()
+  .setChildModules({ table, card })
   .getModule();
 export default scorecards;
