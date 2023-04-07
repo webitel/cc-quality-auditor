@@ -3,14 +3,14 @@ import { SortSymbols } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
 export default [
   {
     value: 'name',
-    locale: 'objects.name',
+    locale: 'reusable.name',
     show: true,
     field: 'name',
     sort: SortSymbols.NONE,
   },
   {
     value: 'description',
-    locale: 'objects.description',
+    locale: 'vocabulary.description',
     show: true,
     field: 'description',
     sort: SortSymbols.NONE,
@@ -45,7 +45,7 @@ export default [
   },
   {
     value: 'state',
-    locale: 'objects.state',
+    locale: 'reusable.state',
     show: true,
     field: 'enabled',
     sort: SortSymbols.NONE,

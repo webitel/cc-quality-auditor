@@ -5,7 +5,7 @@ import {
 import deepCopy from 'deep-copy';
 import AuditAPI from '../../api/APIRepository';
 
-const REQUIRED_DATA_FIELDS = ['name', 'enabled', 'id'];
+const REQUIRED_DATA_FIELDS = ['name', 'enabled', 'id', 'question'];
 
 const state = {
   dataList: [],
@@ -15,6 +15,7 @@ const state = {
   page: 1,
   size: 10,
   sort: '',
+  question: '',
   isNext: false,
 };
 
@@ -48,6 +49,7 @@ const actions = {
       page: context.state.page,
       size: context.state.size,
       skipParent: true,
+      question: context.state.question,
     };
     try {
       const { items, next } = await AuditAPI.getList(params);

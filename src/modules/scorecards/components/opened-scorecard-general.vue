@@ -6,14 +6,14 @@
     <div class="object-input-grid">
       <wt-input
         :value="itemInstance.name"
-        :label="t('objects.name')"
+        :label="t('reusable.name')"
         :disabled="disableUserInput"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
       ></wt-input>
       <wt-textarea
         :value="itemInstance.description"
-        :label="t('objects.description')"
+        :label="t('vocabulary.description')"
         :disabled="disableUserInput"
         @input="setItemProp({ prop: 'description', value: $event })"
       ></wt-textarea>
@@ -26,7 +26,7 @@
       ></wt-select>
       <wt-switcher
         :disabled="disableUserInput"
-        :label="t('objects.state')"
+        :label="t('reusable.state')"
         :value="itemInstance.enabled"
         @change="setItemProp({ prop: 'enabled', value: $event })"
       ></wt-switcher>

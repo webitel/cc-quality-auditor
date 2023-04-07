@@ -9,11 +9,11 @@
       <wt-button
         color="secondary"
         class="add"
-      >{{ $t('objects.add') }}
+      >{{ $t('reusable.add') }}
       </wt-button>
       <wt-button
         color="secondary"
-      >{{ $t('objects.delete') }}
+      >{{ $t('reusable.delete') }}
       </wt-button>
     </template>
   </wt-headline>
@@ -26,7 +26,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const path = computed(() => [
-  { name: t('reusable.audit') },
+  { name: t('webitelUI.appNavigator.audit') },
   { name: t('scorecards.scorecards') },
 ]);
 </script>

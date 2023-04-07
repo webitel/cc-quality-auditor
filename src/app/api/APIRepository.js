@@ -21,6 +21,7 @@ const fieldsToSend = [
   'updated_at',
   'updated_by',
   'enabled',
+  'question',
 ];
 
 const defaultListObject = {
@@ -31,6 +32,7 @@ const defaultListObject = {
   name: '',
   updatedAt: 0,
   updatedBy: {},
+  question: '',
 };
 
 const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, { defaultListObject });

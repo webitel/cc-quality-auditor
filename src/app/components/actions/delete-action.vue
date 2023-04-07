@@ -8,7 +8,7 @@
         @click="emits('click')"
       ></wt-icon-btn>
     </template>
-    {{ t('objects.delete') }}
+    {{ t('reusable.delete') }}
   </wt-tooltip>
 </template>
 

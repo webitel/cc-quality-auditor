@@ -14,12 +14,12 @@
       <wt-button
         color="secondary"
         @click="confirm"
-      >{{ t('objects.yes') }}
+      >{{ t('vocabulary.yes') }}
       </wt-button>
       <wt-button
         color="danger"
         @click="close"
-      >{{ t('objects.no') }}
+      >{{ t('vocabulary.no') }}
       </wt-button>
     </template>
   </wt-popup>

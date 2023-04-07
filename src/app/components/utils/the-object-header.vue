@@ -15,7 +15,7 @@
           :disabled="primaryDisabled"
           @click="primaryAction"
         >
-          {{ primaryText || t('objects.add') }}
+          {{ primaryText || t('reusable.add') }}
         </wt-button>
       </slot>
       <wt-button
@@ -23,7 +23,7 @@
         color="secondary"
         @click="secondaryAction"
       >
-        {{ t('objects.delete') }}
+        {{ t('reusable.delete') }}
       </wt-button>
     </template>
   </wt-headline>

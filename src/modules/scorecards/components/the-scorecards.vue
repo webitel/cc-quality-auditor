@@ -129,8 +129,8 @@ const headers = computed(() => {
   }));
 });
 const path = computed(() => [
-  { name: t('reusable.audit'), route: '' },
-  { name: t('scorecards.scorecards'), route: '/' },
+  { name: t('webitelUI.appNavigator.audit'), route: '/' },
+  { name: t('scorecards.scorecards'), route: '/scorecards' },
 ]);
 
 async function loadData() {
@@ -155,6 +155,10 @@ async function setItemId(payload) {
 
 async function patchProperty(payload) {
   await store.dispatch(`${namespace}/PATCH_ITEM_PROPERTY`, payload);
+}
+
+async function sort(...params) {
+  await store.dispatch('scorecards/SORT', { header: params[0], nextSortOrder: params[1] }, { root: true });
 }
 
 function prettifyDateTime(timestamp) {

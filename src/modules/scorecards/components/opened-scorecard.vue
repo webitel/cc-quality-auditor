@@ -11,7 +11,7 @@
             :color="disabledSave && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
-          >{{ t('objects.save') }}
+          >{{ t('reusable.save') }}
           </wt-button-select>
         </template>
         <wt-headline-nav :path="path"></wt-headline-nav>
@@ -71,11 +71,11 @@ const path = computed(() => {
   const baseUrl = 'audit/scorecards';
 
   return [
-    { name: t('reusable.audit') },
+    { name: t('webitelUI.appNavigator.audit') },
     { name: t('scorecards.scorecards'), route: '/scorecards' },
     {
-      name: id.value ? pathName.value.slice(0, pathName.value.lenght) : t('objects.new'),
-      route: id.value ? `${baseUrl}/${id.value}` : `${baseUrl}/new`,
+      name: id.value ? pathName.value : t('reusable.new'),
+      route: id.value ? `/scorecards/${id.value}` : `${baseUrl}/new`,
     },
   ];
 });
@@ -140,7 +140,7 @@ function saveAs() {
 
 const saveOptions = computed(() => {
   const saveAsNew = {
-    text: t('objects.saveAs'),
+    text: t('reusable.saveAs'),
     callback: saveAs,
   };
   return [saveAsNew];

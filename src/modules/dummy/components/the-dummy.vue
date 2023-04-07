@@ -6,7 +6,7 @@
     <h1 class="dummy_title">{{ t('scorecards.dummy') }}</h1>
     <wt-button
       @click="add"
-    >{{ t('objects.add') }}
+    >{{ t('reusable.add') }}
     </wt-button>
   </div>
 </template>
