@@ -105,13 +105,13 @@
 import { onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
+import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '../../../app/composables/useTableStore';
-import { useDeleteConfirmationPopup } from '../../../app/composables/useDeleteConfirmationPopup';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import EditAction from '../../../app/components/actions/edit-action.vue';
 import DeleteAction from '../../../app/components/actions/delete-action.vue';
-import DeleteConfirmationPopup from '../../../app/components/utils/delete-confirmation-popup.vue';
 import FiltersPanel from '../../_shared/filters/components/filters-panel.vue';
 
 const { t } = useI18n();
