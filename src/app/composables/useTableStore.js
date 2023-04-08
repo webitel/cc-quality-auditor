@@ -13,7 +13,7 @@ export const useTableStore = (namespace) => {
 
   const isLoaded = computed(() => getNamespacedState(store.state, tableNamespace).isLoading);
 
-  const headersValue = computed(() => getNamespacedState(store.state, tableNamespace).headers);
+  const headers = computed(() => getNamespacedState(store.state, tableNamespace).headers);
 
   const isNext = computed(() => getNamespacedState(store.state, tableNamespace).isNext);
 
@@ -52,7 +52,7 @@ export const useTableStore = (namespace) => {
   return {
     dataList,
     isLoaded,
-    headersValue,
+    headers,
     isNext,
     page,
     size,

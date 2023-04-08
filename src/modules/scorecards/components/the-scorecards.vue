@@ -42,7 +42,7 @@
             @sort="sort"
           >
             <template v-slot:name="{ item }">
-              <span class="name-link" @click="openAuditView(item.id)">
+              <span class="name-link" @click="openAuditView(item)">
                 {{ item.name }}
               </span>
             </template>
@@ -121,7 +121,7 @@ const namespace = 'scorecards';
 const {
   dataList,
   isLoaded,
-  headersValue,
+  headers,
   isNext,
   page,
   size,
@@ -147,13 +147,6 @@ const {
 
 const isEmptyWorkspace = computed(() => !dataList.value.length);
 
-const headers = computed(() => {
-  if (!headersValue.value.length) return [];
-  return headersValue.value.map((header) => ({
-    ...header,
-    text: typeof header.locale === 'string' ? t(header.locale) : t(...header.locale),
-  }));
-});
 const path = computed(() => [
   { name: t('webitelUI.appNavigator.audit'), route: '/' },
   { name: t('scorecards.scorecards'), route: '/scorecards' },
@@ -164,7 +157,7 @@ function prettifyDateTime(timestamp) {
   return new Date(+timestamp).toLocaleString();
 }
 
-function openAuditView(id) {
+function openAuditView({ id }) {
   return router.push({ name: `${namespace}-edit`, params: { id } });
 }
 

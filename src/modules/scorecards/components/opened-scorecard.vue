@@ -41,21 +41,28 @@
 <script setup>
 import { computed, onMounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import { useCardStore } from '../../../app/composables/useCardStore';
+import { useCardPage } from '../../../app/composables/useCardPage';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 
 const { t } = useI18n();
-const store = useStore();
-const route = useRoute();
-const router = useRouter();
-const namespace = '/audit/scorecard';
+const namespace = 'scorecards';
 const currentTab = reactive({});
 
-const id = computed(() => store.state.scorecards.card.itemId);
-const pathName = computed(() => store.state.scorecards.card.itemInstance.name);
+const {
+  setId,
+} = useCardStore(namespace);
+
+const {
+  id,
+  itemInstance,
+
+  save,
+  close,
+} = useCardPage(namespace);
+
 const tabs = computed(() => [
   {
     text: t('objects.general'),
@@ -67,6 +74,7 @@ const tabs = computed(() => [
     namespace: `${namespace}/criteria`,
   },
 ]);
+
 const path = computed(() => {
   const baseUrl = 'audit/scorecards';
 
@@ -74,67 +82,19 @@ const path = computed(() => {
     { name: t('webitelUI.appNavigator.audit') },
     { name: t('scorecards.scorecards'), route: '/scorecards' },
     {
-      name: id.value ? pathName.value : t('reusable.new'),
+      name: id.value ? itemInstance.value.name : t('reusable.new'),
       route: id.value ? `/scorecards/${id.value}` : `${baseUrl}/new`,
     },
   ];
 });
+
 const component = computed(() => {
-  if (currentTab.value) {
-    if (currentTab.value.value === 'general') {
-      return General;
-    }
-    return Criterias;
-  }
+  if (currentTab.value?.value === 'criteria') return Criterias;
+  return General;
 });
 
-function updateItem(payload) {
-  store.dispatch('scorecards/card/UPDATE_ITEM', payload);
-}
-
-function addItem(payload) {
-  store.dispatch('scorecards/card/ADD_ITEM', payload);
-}
-
-function loadItem(payload) {
-  store.dispatch('scorecards/card/LOAD_ITEM', payload);
-}
-
-async function setItemId(payload) {
-  await store.dispatch('scorecards/card/SET_ITEM_ID', payload);
-}
-
-function close() {
-  router.go(-1);
-}
-
-function redirectToEdit() {
-  const routeName = route.name.replace('-new', '-edit');
-  return router.replace({
-    name: routeName,
-    params: { id },
-    hash: route.hash,
-  });
-}
-
-async function save() {
-  if (id.value) {
-    await updateItem();
-  } else {
-    try {
-      await addItem();
-      if (this.id) {
-        await redirectToEdit();
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
-}
-
 function saveAs() {
-  setItemId({ prop: 'name', value: '' });
-  setItemId(null);
+  setId(null);
   save();
 }
 
@@ -150,13 +110,12 @@ function changeTab(tab) {
   currentTab.value = tab;
 }
 
-function setInitialTab() {
-  if (tabs.value) changeTab(tabs.value[0]);
+function initializeTab() {
+  changeTab(tabs.value[0]);
 }
 
 onMounted(() => {
-  loadItem(id);
-  setInitialTab();
+  initializeTab();
 });
 </script>
 
