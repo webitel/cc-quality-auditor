@@ -1,7 +1,7 @@
 import TableStoreModule
-  from '@webitel/ui-sdk/src/store/BaseStoreModules/TableStoreModule';
+  from '@webitel/ui-sdk/src/modules/TableStoreModule/store/TableStoreModule';
 import CardStoreModule
-  from '@webitel/ui-sdk/src/store/BaseStoreModules/CardStoreModule';
+  from '@webitel/ui-sdk/src/modules/CardStoreModule/store/CardStoreModule';
 import BaseStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
 import ApiStoreModule

@@ -1,6 +1,6 @@
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useCardStore } from './useCardStore';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useClose } from './useClose';
 
 // eslint-disable-next-line import/prefer-default-export

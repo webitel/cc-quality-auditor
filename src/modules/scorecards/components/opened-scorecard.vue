@@ -1,7 +1,7 @@
 <template>
   <wt-page-wrapper :actions-panel="false">
     <template v-slot:header>
-      <object-header
+      <wt-page-header
         :primary-action="save"
         :secondary-action="close"
       >
@@ -15,7 +15,7 @@
           </wt-button-select>
         </template>
         <wt-headline-nav :path="path"></wt-headline-nav>
-      </object-header>
+      </wt-page-header>
     </template>
 
     <template v-slot:main>
@@ -41,9 +41,8 @@
 <script setup>
 import { computed, onMounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useCardStore } from '../../../app/composables/useCardStore';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useCardPage } from '../../../app/composables/useCardPage';
-import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 
