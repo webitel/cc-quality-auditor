@@ -22,18 +22,31 @@
           <h3 class="content-title">
             {{ t('objects.all', { entity: t('scorecards.scorecards', 2) }) }}
           </h3>
-          <filters-panel
-            :headers="headers"
-            :namespace="namespace"
-          ></filters-panel>
+          <div class="content-header__actions-wrap">
+            <filter-search></filter-search>
+            <wt-table-actions
+              :icons="['refresh']"
+              @input="loadData"
+            >
+              <wt-table-column-select
+                :headers="headers"
+                :static-headers="staticHeaders"
+                @change="setHeaders"
+              ></wt-table-column-select>
+            </wt-table-actions>
+          </div>
+<!--          <filters-panel-->
+<!--            :headers="headers"-->
+<!--            :namespace="namespace"-->
+<!--          ></filters-panel>-->
         </header>
 
-        <wt-loader v-show="isLoaded"></wt-loader>
+        <wt-loader v-show="isLoading"></wt-loader>
 
         <div v-if="isEmptyWorkspace" class="scorecards__dummy">
           <the-dummy :namespace="namespace"></the-dummy>
         </div>
-        <div v-show="!isLoaded">
+        <div v-show="!isLoading">
           <wt-table
             :headers="headers"
             :data="dataList"
@@ -112,7 +125,7 @@ import TheDummy from '../../dummy/components/the-dummy.vue';
 import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import EditAction from '../../../app/components/actions/edit-action.vue';
 import DeleteAction from '../../../app/components/actions/delete-action.vue';
-import FiltersPanel from '../../_shared/filters/components/filters-panel.vue';
+import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -120,7 +133,7 @@ const namespace = 'scorecards';
 
 const {
   dataList,
-  isLoaded,
+  isLoading,
   headers,
   isNext,
   page,
@@ -133,6 +146,7 @@ const {
   patchProperty,
   deleteItem,
   sort,
+  setHeaders,
 } = useTableStore(namespace);
 
 const {
@@ -146,7 +160,7 @@ const {
 } = useDeleteConfirmationPopup();
 
 const isEmptyWorkspace = computed(() => !dataList.value.length);
-
+const staticHeaders = ['name'];
 const path = computed(() => [
   { name: t('webitelUI.appNavigator.audit'), route: '/' },
   { name: t('scorecards.scorecards'), route: '/scorecards' },

@@ -39,7 +39,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive } from 'vue';
+import {
+  computed, onMounted, onUnmounted, reactive,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCardStore } from '../../../app/composables/useCardStore';
 import { useCardPage } from '../../../app/composables/useCardPage';
@@ -53,6 +55,8 @@ const currentTab = reactive({});
 
 const {
   setId,
+
+  resetItem,
 } = useCardStore(namespace);
 
 const {
@@ -117,6 +121,8 @@ function initializeTab() {
 onMounted(() => {
   initializeTab();
 });
+
+onUnmounted(() => resetItem());
 </script>
 
 <style scope>

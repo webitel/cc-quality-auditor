@@ -35,8 +35,12 @@ const defaultListObject = {
   question: '',
 };
 
+const defaultSingleObject = {
+  enabled: false,
+};
+
 const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, { defaultListObject });
-const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
+const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm, { defaultSingleObject });
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
 const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, { fieldsToSend });

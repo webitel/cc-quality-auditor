@@ -13,10 +13,13 @@ export default {
     modifiedBy: 'Modified By',
     generalInfo: 'General info',
     general: 'General',
-    criteria: 'Criterias',
+    criteria: 'Criteria',
     deleteConfirmation: {
       title: 'Delete Scorecard',
       askingAlert: 'Are you sure?',
+    },
+    filters: {
+      settingsHint: 'Search mode',
     },
   },
 };
