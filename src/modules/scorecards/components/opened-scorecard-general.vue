@@ -39,8 +39,8 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import teamLookupApi from '@/modules/_shared/lookups/api/teamLookupApi';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useCardPage } from '../../../app/composables/useCardPage';
-import { useCardStore } from '../../../app/composables/useCardStore';
 
 const namespace = 'scorecards';
 

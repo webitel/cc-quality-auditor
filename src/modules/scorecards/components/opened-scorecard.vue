@@ -121,7 +121,7 @@ onMounted(() => {
   initializeTab();
 });
 
-onUnmounted(() => resetItem());
+// onUnmounted(() => resetItem());
 </script>
 
 <style scope>

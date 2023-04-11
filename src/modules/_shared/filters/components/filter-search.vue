@@ -35,7 +35,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n/index.mjs';
-import { useTableStore } from '../../../../app/composables/useTableStore';
+import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import SearchMode from '../enums/SearchMode.enum';
 
 const { t } = useI18n();
