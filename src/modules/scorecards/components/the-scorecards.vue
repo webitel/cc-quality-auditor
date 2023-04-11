@@ -1,12 +1,12 @@
 <template>
   <wt-page-wrapper class="scorecards" :actions-panel="false">
     <template v-slot:header>
-      <object-header
+      <wt-page-header
         :primary-action="create"
         :secondary-action="close"
       >
         <wt-headline-nav :path="path"></wt-headline-nav>
-      </object-header>
+      </wt-page-header>
     </template>
     <template v-slot:main>
       <delete-confirmation-popup
@@ -120,9 +120,8 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
-import { useTableStore } from '../../../app/composables/useTableStore';
+import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import TheDummy from '../../dummy/components/the-dummy.vue';
-import ObjectHeader from '../../../app/components/utils/the-object-header.vue';
 import EditAction from '../../../app/components/actions/edit-action.vue';
 import DeleteAction from '../../../app/components/actions/delete-action.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
