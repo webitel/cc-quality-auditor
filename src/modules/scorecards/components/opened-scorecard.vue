@@ -40,7 +40,7 @@
 
 <script setup>
 import {
-  computed, onMounted, onUnmounted, reactive,
+  computed, onMounted, reactive,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
@@ -54,8 +54,6 @@ const currentTab = reactive({});
 
 const {
   setId,
-
-  resetItem,
 } = useCardStore(namespace);
 
 const {
@@ -120,8 +118,6 @@ function initializeTab() {
 onMounted(() => {
   initializeTab();
 });
-
-// onUnmounted(() => resetItem());
 </script>
 
 <style scope>

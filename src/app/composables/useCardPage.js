@@ -1,4 +1,4 @@
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useClose } from './useClose';
@@ -16,6 +16,7 @@ export const useCardPage = (namespace) => {
     addItem,
     updateItem,
     setId,
+    resetState,
   } = useCardStore(namespace);
 
   const { close } = useClose();
@@ -47,6 +48,7 @@ export const useCardPage = (namespace) => {
   }
 
   onMounted(() => initializeCard());
+  onUnmounted(() => resetState());
 
   return {
     id,
