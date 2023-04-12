@@ -190,4 +190,8 @@ onMounted(() => loadData());
 .content-header__actions-wrap {
   margin-left: auto;
 }
+
+.scorecards-main-section {
+  width: 100%;
+}
 </style>
