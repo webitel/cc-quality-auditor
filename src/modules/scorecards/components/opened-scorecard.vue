@@ -40,7 +40,7 @@
 
 <script setup>
 import {
-  computed, onMounted, reactive,
+  computed, onMounted, ref,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
@@ -50,7 +50,7 @@ import General from './opened-scorecard-general.vue';
 
 const { t } = useI18n();
 const namespace = 'scorecards';
-const currentTab = reactive({});
+const currentTab = ref({});
 
 const {
   setId,
@@ -120,6 +120,8 @@ onMounted(() => {
 });
 </script>
 
-<style scope>
-
+<style lang="scss" scoped>
+.main-container {
+  width: 100%;
+}
 </style>
