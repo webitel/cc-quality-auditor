@@ -3,9 +3,9 @@
     <wt-search-bar
       :value="search"
       debounce
-      @enter="loadList"
+      @enter="loadData"
       @input="setSearch"
-      @search="loadList"
+      @search="loadData"
     >
     </wt-search-bar>
     <wt-context-menu
@@ -25,7 +25,7 @@
       <template v-slot:option="{ value, text }">
         <wt-radio
           :label="text"
-          :selected="filterQuery === value"
+          :selected="value === SearchMode.NAME"
           :value="true"
         ></wt-radio>
       </template>
@@ -34,32 +34,19 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n/index.mjs';
+import { useI18n } from 'vue-i18n';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import SearchMode from '../enums/SearchMode.enum';
 
 const { t } = useI18n();
 const namespace = 'scorecards';
 const {
-  headers,
   search,
-  isLoading,
 
   loadData,
-  setHeaders,
-  setLoading,
   setSearch,
 } = useTableStore(namespace);
 
-async function loadList() {
-  setLoading(true);
-  try {
-    loadData();
-  } catch (error) {
-  } finally {
-    setLoading(false);
-  }
-}
 const searchModeOptions = computed(() => [
   {
     value: SearchMode.NAME,

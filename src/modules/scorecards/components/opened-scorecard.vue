@@ -3,15 +3,15 @@
     <template v-slot:header>
       <wt-page-header
         :primary-action="save"
+        :primary-text="saveText"
         :secondary-action="close"
       >
         <template v-slot:primary-action>
           <wt-button-select
             :options="saveOptions"
-            :color="disabledSave && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
-          >{{ t('reusable.save') }}
+          >{{ $t('reusable.save') }}
           </wt-button-select>
         </template>
         <wt-headline-nav :path="path"></wt-headline-nav>
@@ -39,11 +39,10 @@
 </template>
 
 <script setup>
-import {
-  computed, onMounted, ref,
-} from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
@@ -53,24 +52,25 @@ const namespace = 'scorecards';
 const currentTab = ref({});
 
 const {
-  setId,
-} = useCardStore(namespace);
-
-const {
   id,
   itemInstance,
 
   save,
-  close,
 } = useCardPage(namespace);
+
+const {
+  setId,
+} = useCardStore(namespace);
+
+const { close } = useClose();
 
 const tabs = computed(() => [
   {
-    text: t('objects.general'),
+    text: t('reusable.general'),
     value: 'general',
     namespace,
   }, {
-    text: t('objects.criteria'),
+    text: t('objects.criterion'),
     value: 'criteria',
     namespace: `${namespace}/criteria`,
   },
@@ -94,6 +94,10 @@ const component = computed(() => {
   return General;
 });
 
+const saveText = computed(() => {
+  id.value ? t('reusable.saved') : t('reusable.save');
+});
+
 function saveAs() {
   setId(null);
   save();
@@ -115,9 +119,7 @@ function initializeTab() {
   changeTab(tabs.value[0]);
 }
 
-onMounted(() => {
-  initializeTab();
-});
+onMounted(() => initializeTab());
 </script>
 
 <style lang="scss" scoped>

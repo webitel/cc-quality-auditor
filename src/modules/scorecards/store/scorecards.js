@@ -14,7 +14,7 @@ const cardState = {
     name: '',
     description: '',
     team: [],
-    enabled: false,
+    enabled: true,
     questions: [],
   },
 };

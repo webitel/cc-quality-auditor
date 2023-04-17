@@ -3,8 +3,11 @@
     <template v-slot:header>
       <wt-page-header
         :primary-action="create"
-        :secondary-action="close"
-      >
+        :secondary-text="$t('reusable.delete')"
+        :secondary-action="() => askDeleteConfirmation({
+                  deleted: selectedRows,
+                  callback: () => deleteData([...selectedRows]),
+                })">
         <wt-headline-nav :path="path"></wt-headline-nav>
       </wt-page-header>
     </template>
@@ -13,14 +16,13 @@
         v-show="isDeleteConfirmationPopup"
         :delete-count="deleteCount"
         :callback="deleteCallback"
-        @confirm="confirmDelete"
         @close="closeDelete"
       ></delete-confirmation-popup>
 
       <div class="scorecards-main-section">
         <header class="content-header">
           <h3 class="content-title">
-            {{ t('objects.all', { entity: t('scorecards.scorecards', 2) }) }}
+            {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
             <filter-search></filter-search>
@@ -31,7 +33,7 @@
               <wt-table-column-select
                 :headers="headers"
                 :static-headers="staticHeaders"
-                @change="setHeaders"
+                @change="changeHeaders"
               ></wt-table-column-select>
             </wt-table-actions>
           </div>
@@ -85,16 +87,18 @@
               ></wt-switcher>
             </template>
             <template v-slot:actions="{ item }">
-              <edit-action
+              <wt-icon-action
+                action="edit"
                 class="scorecards-editing"
                 @click="openAuditView(item)"
-              ></edit-action>
-              <delete-action
+              ></wt-icon-action>
+              <wt-icon-action
+                action="delete"
                 @click="askDeleteConfirmation({
-                  deleted: [item.id],
-                  callback: deleteItem,
+                  deleted: [item],
+                  callback: () => deleteData(item),
                 })"
-              ></delete-action>
+              ></wt-icon-action>
             </template>
           </wt-table>
           <wt-pagination
@@ -122,8 +126,6 @@ import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmat
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import TheDummy from '../../dummy/components/the-dummy.vue';
-import EditAction from '../../../app/components/actions/edit-action.vue';
-import DeleteAction from '../../../app/components/actions/delete-action.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 
 const { t } = useI18n();
@@ -143,7 +145,7 @@ const {
   nextPage,
   prevPage,
   patchProperty,
-  deleteItem,
+  deleteData,
   sort,
   setHeaders,
 } = useTableStore(namespace);
@@ -154,7 +156,6 @@ const {
   deleteCallback,
 
   askDeleteConfirmation,
-  confirmDelete,
   closeDelete,
 } = useDeleteConfirmationPopup();
 
@@ -178,11 +179,28 @@ function create() {
   return router.push({ name: `${namespace}-new` });
 }
 
-function close() {
-  router.go(-1);
+const selectedRows = computed(() => dataList.value.filter((item) => item._isSelected));
+
+function updateHeaders() {
+  const headersValue = localStorage.getItem('filter-fields');
+  const value = headers.value.map((header) => ({
+    ...header,
+    show: headersValue.includes(header.value),
+  }));
+  setHeaders(value);
 }
 
-onMounted(() => loadData());
+function changeHeaders(value) {
+  setHeaders(value);
+  const visibleHeaders = value.filter((item) => item.show);
+  const filter = visibleHeaders.map((item) => item.value);
+  localStorage.setItem('filter-fields', filter);
+}
+
+onMounted(() => {
+  loadData();
+  updateHeaders();
+});
 
 </script>
 

@@ -3,19 +3,17 @@
     <div class="dummy_pic">
       <img src="../assets/the-dummy.svg" alt="Workspace is empty" />
     </div>
-    <h1 class="dummy_title">{{ t('scorecards.dummy') }}</h1>
+    <h1 class="dummy_title">{{ $t('scorecards.dummy') }}</h1>
     <wt-button
       @click="add"
-    >{{ t('reusable.add') }}
+    >{{ $t('reusable.add') }}
     </wt-button>
   </div>
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
-const { t } = useI18n();
 const router = useRouter();
 
 const props = defineProps({

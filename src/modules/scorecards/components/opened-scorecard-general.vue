@@ -1,7 +1,7 @@
 <template>
   <section>
     <header class="content-header">
-      <h3 class="content-title">{{ $t('objects.generalInfo') }}</h3>
+      <h3 class="content-title">{{ $t('reusable.generalInfo') }}</h3>
     </header>
     <div class="object-input-grid">
       <wt-input

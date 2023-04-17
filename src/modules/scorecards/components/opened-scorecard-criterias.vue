@@ -1,7 +1,7 @@
 <template>
   <div>
     <audit-form
-      :questions="itemInstance.questions"
+      v-model:questions="itemInstance.questions"
       mode="create"
       @update:questions="setItemProp({ prop: 'question', value: $event })"
     ></audit-form>
