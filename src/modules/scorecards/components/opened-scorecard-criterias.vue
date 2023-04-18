@@ -26,4 +26,7 @@ const {
 </script>
 
 <style scoped>
+.audit-form {
+  margin-top: var(--spacing-sm);
+}
 </style>

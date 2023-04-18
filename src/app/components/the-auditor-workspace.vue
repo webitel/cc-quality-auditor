@@ -1,18 +1,21 @@
 <template>
-  <main class="main">
-    <wt-app-header>
-      <wt-notifications-bar></wt-notifications-bar>
-      <wt-navigation-bar :current-app="currentApp" :nav="nav"></wt-navigation-bar>
-      <wt-app-navigator :apps="apps" :current-app="currentApp"></wt-app-navigator>
-      <wt-header-actions
-        :build-info="{ release, build }"
-        :user="userinfo"
-        class="test"
-        @logout="logoutUser"
-        @settings="settings"
-      />
-    </wt-app-header>
-    <router-view />
+  <main class="object-wrap">
+    <section class="object">
+      <wt-app-header>
+        <wt-notifications-bar></wt-notifications-bar>
+        <wt-navigation-bar :current-app="currentApp" :nav="nav"></wt-navigation-bar>
+        <wt-app-navigator :apps="apps" :current-app="currentApp"></wt-app-navigator>
+        <wt-header-actions
+          :build-info="{ release, build }"
+          :user="userinfo"
+          @logout="logoutUser"
+          @settings="settings"
+        />
+      </wt-app-header>
+      <div class="object-content-wrap">
+        <router-view />
+      </div>
+    </section>
   </main>
 </template>
 

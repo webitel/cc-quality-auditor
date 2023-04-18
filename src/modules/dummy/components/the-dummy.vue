@@ -5,7 +5,7 @@
     </div>
     <h1 class="dummy_title">{{ $t('scorecards.dummy') }}</h1>
     <wt-button
-      @click="add"
+      @click="create"
     >{{ $t('reusable.add') }}
     </wt-button>
   </div>
@@ -22,8 +22,8 @@ const props = defineProps({
   },
 });
 
-function add() {
-  router.push({ name: `${props.namespace}-new` });
+function create() {
+  return router.push({ name: `${props.namespace}-new` });
 }
 </script>
 
@@ -37,7 +37,7 @@ function add() {
   justify-content: center;
 
   &_title {
-    //@extend %typo-body-1;
+    @extend %typo-body-1;
     margin-bottom: var(--spacing-sm);
   }
 

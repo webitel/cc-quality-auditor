@@ -24,6 +24,7 @@
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
       ></wt-select>
+      <div></div>
       <wt-switcher
         :disabled="disableUserInput"
         :label="$t('reusable.state')"

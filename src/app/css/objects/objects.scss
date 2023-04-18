@@ -1,63 +1,25 @@
-// ----- new styles
+.object-wrap {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  overflow-y: scroll;
+}
 
-.tabs-page-wrapper {
+.object {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-height: 100%;
+}
+
+.object-content-wrap {
+  flex-grow: 1;
+  display: flex;
 }
 
 .wt-page-wrapper {
-  width: 100%;
-
-  .main-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    & > section {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-  }
-}
-
-// table name highlight with link to edit
-.nameLink {
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-// ----- old styles
-
-// inner content section
-.object-content {
-  box-sizing: border-box;
+  flex-grow: 1;
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 65vh;
-  padding: 30px;
-  background: #fff;
-  border-radius: var(--border-radius);
-
-  .pagination {
-    padding-top: 28px;
-    margin: auto 0 0 auto;
-  }
-}
-
-.main-section__wrapper {
-  width: 100%;
-}
-
-.btn-controls {
-  .btn {
-    margin-left: 28px;
-  }
 }
 
 // SECTION HEADING
@@ -71,16 +33,13 @@
 
   .content-title {
     @extend %typo-heading-3;
-
-    + .hint {
-      top: -2px;
-    }
   }
 
   // WRAP FOR SEARCH INPUT
   .content-header__actions-wrap {
     display: flex;
     align-items: center;
+    margin-left: auto;
     gap: var(--table-actions-icon-gap);
   }
 }
@@ -89,76 +48,10 @@
 .object-input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-auto-rows: minmax(85px, auto);
+  //grid-auto-rows: minmax(85px, auto);
   grid-column-gap: 20px;
   grid-row-gap: 10px;
   align-items: flex-start;
-
-  &__1-col {
-    grid-template-columns: 1fr;
-  }
-
-  &__w50 {
-    width: 50%;
-  }
-}
-
-.grid-w100 {
-  .object-input-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.grid-w50 {
-  .object-input-grid {
-    grid-template-columns: 50%;
-  }
-}
-
-.value-pair {
-  display: grid;
-  align-items: center;
-  grid-template-columns: 1fr 1fr 24px;
-  grid-gap: 20px;
-  margin-bottom: 20px;
-}
-
-.module-new .object-input-grid .select-preview {
-  margin-bottom: 20px;
-}
-
-.module-new {
-  .new_w50 {
-    width: 50%;
-
-    .form-input {
-      margin: 8px 0;
-    }
-  }
-
-  &.object-with-tabs {
-    padding-top: 28px;
-    padding-left: 0;
-    padding-right: 0;
-
-    .tabs-inner-component {
-      padding: 0 58px 38px 58px;
-    }
-  }
-}
-
-.opened-calendar-work-week {
-  .vuetable tr {
-    border-bottom: transparent;
-
-    &.day-start {
-      //border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    &:last-child {
-      //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-  }
 }
 
 .wt-page-wrapper {

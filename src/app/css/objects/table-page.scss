@@ -1,17 +1,3 @@
-
-.actions-panel-wrapper {
-  display: flex;
-
-  .filter-wrap {
-    flex: 1;
-  }
-
-  .wt-table-actions {
-    height: fit-content;
-    margin-top: 24px;
-  }
-}
-
 .table-wrapper {
   display: flex;
   flex-direction: column;
@@ -33,28 +19,14 @@
     margin-left: 10px;
   }
 
-  /*
-   wrapper class for table content overflow: visible preserving table scroll itself
-  .table-wrapper>.table-wrapper__visible-scroll-wrapper>.wt-table
-   */
-  .table-wrapper__visible-scroll-wrapper {
-    height: 100%;
-    overflow: visible;
+  .name-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
 
-    .wt-table {
-      overflow: visible;
-    }
-  }
-
-  .table-wrapper__scroll-wrapper {
-    @extend %wt-scrollbar;
-
-    height: 100%;
-    min-height: 0;
-    overflow: auto;
-
-    .wt-table {
-      overflow: visible;
+    &:hover {
+      text-decoration: underline;
     }
   }
 }

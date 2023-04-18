@@ -26,7 +26,7 @@ const routes = [
   {
     path: '/',
     name: 'auditor-workspace',
-    // redirect: { name: 'the-start-page' },
+    redirect: { name: AuditorSections.SCORECARDS },
     component: TheAuditorWorkspace,
     children: [{
       path: 'scorecards',

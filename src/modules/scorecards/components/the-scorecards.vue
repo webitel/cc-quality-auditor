@@ -19,7 +19,11 @@
         @close="closeDelete"
       ></delete-confirmation-popup>
 
-      <div class="scorecards-main-section">
+      <div v-if="isEmptyWorkspace && !isLoading" class="scorecards__dummy">
+        <the-dummy :namespace="namespace"></the-dummy>
+      </div>
+
+      <div v-if="!isEmptyWorkspace" class="scorecards-main-section">
         <header class="content-header">
           <h3 class="content-title">
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
@@ -45,10 +49,7 @@
 
         <wt-loader v-show="isLoading"></wt-loader>
 
-        <div v-if="isEmptyWorkspace" class="scorecards__dummy">
-          <the-dummy :namespace="namespace"></the-dummy>
-        </div>
-        <div v-show="!isLoading">
+        <div v-show="!isLoading" class="table-wrapper">
           <wt-table
             :headers="headers"
             :data="dataList"
@@ -89,7 +90,6 @@
             <template v-slot:actions="{ item }">
               <wt-icon-action
                 action="edit"
-                class="scorecards-editing"
                 @click="openAuditView(item)"
               ></wt-icon-action>
               <wt-icon-action
@@ -183,6 +183,7 @@ const selectedRows = computed(() => dataList.value.filter((item) => item._isSele
 
 function updateHeaders() {
   const headersValue = localStorage.getItem('filter-fields');
+  if (!headersValue) return;
   const value = headers.value.map((header) => ({
     ...header,
     show: headersValue.includes(header.value),
@@ -205,11 +206,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.content-header__actions-wrap {
-  margin-left: auto;
-}
-
 .scorecards-main-section {
   width: 100%;
+}
+
+.scorecards__dummy {
+  margin: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <form class="history-search">
+  <form class="filter-search">
     <wt-search-bar
       :value="search"
       debounce
@@ -16,6 +16,7 @@
         <wt-tooltip>
           <template v-slot:activator>
             <wt-icon-btn
+              v-if="!search"
               icon="filter"
             ></wt-icon-btn>
           </template>
@@ -65,5 +66,14 @@ function changeMode({ value }) {
 </script>
 
 <style lang="scss" scoped>
+.filter-search {
+  position: relative;
 
+  .wt-context-menu {
+    position: absolute;
+    top: 50%;
+    right: var(--spacing-xs);
+    transform: translateY(-50%);
+  }
+}
 </style>
