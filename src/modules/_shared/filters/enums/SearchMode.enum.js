@@ -1,6 +1,6 @@
 const SearchMode = Object.freeze({
-  NAME: 'name',
-  CRITERION: 'criterion',
+  NAME: 'q',
+  CRITERION: 'question',
 });
 
 export default SearchMode;

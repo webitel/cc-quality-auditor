@@ -24,6 +24,7 @@ const defaultListObject = {
   enabled: false,
   name: '',
   question: '',
+  q: '',
 };
 
 const defaultSingleObject = {

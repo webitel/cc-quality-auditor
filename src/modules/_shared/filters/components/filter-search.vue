@@ -1,11 +1,10 @@
 <template>
   <form class="filter-search">
     <wt-search-bar
-      :value="search"
+      :value="filterSchema.value"
       debounce
-      @enter="loadData"
-      @input="setSearch"
-      @search="loadData"
+      @input="setValue({ filter: filterQuery, value: $event })"
+      @search="setValueToQuery({ filterQuery, value: $event })"
     >
     </wt-search-bar>
     <wt-context-menu
@@ -16,7 +15,8 @@
         <wt-tooltip>
           <template v-slot:activator>
             <wt-icon-btn
-              v-if="!search"
+              v-if="!filterSchema.value"
+
               icon="filter"
             ></wt-icon-btn>
           </template>
@@ -26,7 +26,7 @@
       <template v-slot:option="{ value, text }">
         <wt-radio
           :label="text"
-          :selected="value === SearchMode.NAME"
+          :selected="filterQuery === value"
           :value="true"
         ></wt-radio>
       </template>
@@ -36,32 +36,31 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import SearchMode from '../enums/SearchMode.enum';
+import { useFilterStore } from '../../../../app/composables/useFilter';
 
 const { t } = useI18n();
 const namespace = 'scorecards';
-const {
-  search,
-
-  loadData,
-  setSearch,
-} = useTableStore(namespace);
 
 const searchModeOptions = computed(() => [
   {
     value: SearchMode.NAME,
-    text: t(`reusable.${SearchMode.NAME}`),
+    text: t('reusable.name'),
   },
   {
     value: SearchMode.CRITERION,
-    text: t(`objects.${SearchMode.CRITERION}`),
+    text: t('objects.criterion'),
   },
 ]);
 
-function changeMode({ value }) {
-  console.log(value);
-}
+const {
+  filterQuery,
+  filterSchema,
+
+  setValue,
+  setValueToQuery,
+  changeMode,
+} = useFilterStore(namespace);
 
 </script>
 

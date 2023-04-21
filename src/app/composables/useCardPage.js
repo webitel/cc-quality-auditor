@@ -34,9 +34,13 @@ export const useCardPage = (namespace) => {
     if (id.value) {
       await updateItem();
     } else {
-      await addItem();
-      if (id.value) {
-        await redirectToEdit();
+      try {
+        await addItem();
+        if (id.value) {
+          await redirectToEdit();
+        }
+      } catch (err) {
+        throw err;
       }
     }
   }

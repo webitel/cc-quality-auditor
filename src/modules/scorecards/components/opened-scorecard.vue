@@ -60,6 +60,7 @@ const {
 
 const {
   setId,
+  setItemProp,
 } = useCardStore(namespace);
 
 const { close } = useClose();
@@ -99,6 +100,11 @@ const saveText = computed(() => {
 });
 
 function saveAs() {
+  setItemProp({ prop: 'createdAt', value: '' });
+  setItemProp({ prop: 'createdBy', value: {} });
+  setItemProp({ prop: 'updatedAt', value: '' });
+  setItemProp({ prop: 'updatedBy', value: {} });
+  setItemProp({ prop: 'id', value: '' });
   setId(null);
   save();
 }

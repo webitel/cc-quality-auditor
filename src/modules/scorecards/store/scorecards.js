@@ -8,6 +8,7 @@ import ApiStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/ApiStoreModule';
 import AuditAPI from '../../../app/api/APIRepository';
 import headers from './_internals/headers';
+import filters from '../../_shared/filters/store/filters';
 
 const cardState = {
   itemInstance: {
@@ -24,7 +25,7 @@ const api = new ApiStoreModule()
   .getModule();
 
 const table = new TableStoreModule({ headers })
-  .setChildModules({ api })
+  .setChildModules({ api, filters })
   .getModule();
 
 const card = new CardStoreModule()
