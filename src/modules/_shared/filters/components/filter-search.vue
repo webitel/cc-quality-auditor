@@ -49,7 +49,7 @@ const searchModeOptions = computed(() => [
   },
   {
     value: SearchMode.CRITERION,
-    text: t('objects.criterion'),
+    text: t('objects.criterion', 1),
   },
 ]);
 

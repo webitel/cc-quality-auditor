@@ -37,7 +37,7 @@ const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
 const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, { fieldsToSend });
 const itemDeleter = new SdkDeleterApiConsumer(auditService.deleteAuditForm);
-const getAuditList = ((params) => listGetter.getList(params));
+const getAuditList = (params) => listGetter.getList(params);
 const getAudit = (params) => itemGetter.getItem(params);
 const addAudit = (params) => itemCreator.createItem(params);
 const updateAudit = (params) => itemUpdater.updateItem(params);

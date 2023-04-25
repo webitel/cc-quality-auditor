@@ -90,10 +90,12 @@
             <template v-slot:actions="{ item }">
               <wt-icon-action
                 action="edit"
+                :disabled="!item.editable"
                 @click="openAuditView(item)"
               ></wt-icon-action>
               <wt-icon-action
                 action="delete"
+                :disabled="!item.editable"
                 @click="askDeleteConfirmation({
                   deleted: [item],
                   callback: () => deleteData(item),
@@ -162,8 +164,8 @@ const {
 const isEmptyWorkspace = computed(() => !dataList.value.length);
 const staticHeaders = ['name'];
 const path = computed(() => [
-  { name: t('webitelUI.appNavigator.audit'), route: '/' },
-  { name: t('scorecards.scorecards'), route: '/scorecards' },
+  { name: t('audit'), route: '/' },
+  { name: t('scorecards.scorecards', 2), route: '/scorecards' },
 ]);
 
 function prettifyDateTime(timestamp) {

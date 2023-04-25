@@ -25,7 +25,7 @@ export const useCardPage = (namespace) => {
     const routeName = route.name.replace('-new', '-edit');
     return router.replace({
       name: routeName,
-      params: { id },
+      params: { id: id.value },
       hash: route.hash,
     });
   }

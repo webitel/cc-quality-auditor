@@ -100,8 +100,15 @@ function openSession() {
   return store.dispatch('OPEN_SESSION');
 }
 
+function setLanguage() {
+  const lang = localStorage.getItem('lang');
+  const { locale } = useI18n();
+  if (lang) locale.value = lang;
+}
+
 onMounted(() => {
   openSession();
+  setLanguage();
 });
 
 </script>

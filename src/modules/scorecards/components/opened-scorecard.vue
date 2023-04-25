@@ -2,16 +2,18 @@
   <wt-page-wrapper :actions-panel="false">
     <template v-slot:header>
       <wt-page-header
-        :primary-action="save"
+        :primary-action="saveChanges"
         :primary-text="saveText"
         :secondary-action="close"
+        :primary-disabled="isInvalidForm"
       >
-        <template v-slot:primary-action>
+        <template v-slot:primary-action v-if="itemInstance.editable">
           <wt-button-select
             :options="saveOptions"
+            :color="isInvalidForm && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
-          >{{ $t('reusable.save') }}
+          >{{ saveText }}
           </wt-button-select>
         </template>
         <wt-headline-nav :path="path"></wt-headline-nav>
@@ -30,6 +32,7 @@
         ></wt-tabs>
         <component
           :is="component"
+          :v="v$"
           :namespace="namespace"
         ></component>
         <input type="submit" hidden>
@@ -42,6 +45,8 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { useVuelidate } from '@vuelidate/core';
+import { required, minLength } from '@vuelidate/validators';
 import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
 import Criterias from './opened-scorecard-criterias.vue';
@@ -71,7 +76,7 @@ const tabs = computed(() => [
     value: 'general',
     namespace,
   }, {
-    text: t('objects.criterion'),
+    text: t('objects.criterion', 2),
     value: 'criteria',
     namespace: `${namespace}/criteria`,
   },
@@ -82,7 +87,7 @@ const path = computed(() => {
 
   return [
     { name: t('webitelUI.appNavigator.audit') },
-    { name: t('scorecards.scorecards'), route: '/scorecards' },
+    { name: t('scorecards.scorecards', 2), route: '/scorecards' },
     {
       name: id.value ? itemInstance.value.name : t('reusable.new'),
       route: id.value ? `/scorecards/${id.value}` : `${baseUrl}/new`,
@@ -90,14 +95,30 @@ const path = computed(() => {
   ];
 });
 
+const v$ = useVuelidate(computed(() => (
+  {
+    itemInstance: {
+      name: { required },
+      questions: {
+        required,
+        minLength: minLength(1),
+      },
+    },
+    $autoDirty: true,
+  })), { itemInstance });
+
 const component = computed(() => {
   if (currentTab.value?.value === 'criteria') return Criterias;
   return General;
 });
 
 const saveText = computed(() => {
-  id.value ? t('reusable.saved') : t('reusable.save');
+  if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
+  if (itemInstance.value._dirty) return t('reusable.save');
+  return t('reusable.saved');
 });
+
+const isInvalidForm = computed(() => (itemInstance.value._dirty ? !!v$.value.$errors.length : true));
 
 function saveAs() {
   setItemProp({ prop: 'createdAt', value: '' });
@@ -108,6 +129,11 @@ function saveAs() {
   setId(null);
   save();
 }
+
+const saveChanges = computed(() => {
+  if (!itemInstance.value.editable && id.value) return saveAs;
+  return save;
+});
 
 const saveOptions = computed(() => {
   const saveAsNew = {
