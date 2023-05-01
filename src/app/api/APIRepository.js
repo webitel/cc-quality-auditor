@@ -16,23 +16,32 @@ const fieldsToSend = [
   'name',
   'description',
   'enabled',
+  'teams',
   'question',
 ];
 
-const defaultListObject = {
-  description: '',
-  enabled: false,
-  name: '',
-  question: '',
-  q: '',
+const _getAuditList = (getList) => function ({
+  page = 1,
+  size = 10,
+  q,
+  sort,
+  fields = [],
+  id,
+  teamId,
+  enabled,
+  archive,
+  editable,
+  active,
+  question,
+}) {
+  const params = [
+    page, size, q, sort, fields, id, teamId, enabled, archive, editable, active,
+    question];
+  return getList(params);
 };
 
-const defaultSingleObject = {
-  enabled: false,
-};
-
-const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm, { defaultListObject });
-const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm, { defaultSingleObject });
+const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm).setGetListMethod(_getAuditList);
+const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
 const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, { fieldsToSend });
@@ -43,7 +52,6 @@ const addAudit = (params) => itemCreator.createItem(params);
 const updateAudit = (params) => itemUpdater.updateItem(params);
 const patchAudit = (params) => itemPatcher.patchItem(params);
 const deleteAudit = (params) => itemDeleter.deleteItem(params);
-// const getAuditFormsLookup = (params) => lookupListGetter.getList(params);
 
 const AuditAPI = {
   getList: getAuditList,

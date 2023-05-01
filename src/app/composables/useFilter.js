@@ -12,7 +12,6 @@ export const useFilterStore = (namespace) => {
   const router = useRouter();
   const route = useRoute();
   const filterNamespace = `${namespace}/table/filters`;
-
   const filterQuery = ref(SearchMode.NAME);
   const filterSchema = computed(() => {
     if (!store) throw new Error('Vuex is required for default filterSchema baseFilterMixin property');

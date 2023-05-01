@@ -16,7 +16,6 @@
           <template v-slot:activator>
             <wt-icon-btn
               v-if="!filterSchema.value"
-
               icon="filter"
             ></wt-icon-btn>
           </template>

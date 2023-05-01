@@ -4,9 +4,9 @@
       <wt-page-header
         :primary-action="create"
         :secondary-text="$t('reusable.delete')"
-        :secondary-action="() => askDeleteConfirmation({
-                  deleted: selectedRows,
-                  callback: () => deleteData([...selectedRows]),
+        :secondary-action="() => selectedItems.length && askDeleteConfirmation({
+                  deleted: selectedItems,
+                  callback: () => deleteData([...selectedItems]),
                 })">
         <wt-headline-nav :path="path"></wt-headline-nav>
       </wt-page-header>
@@ -41,10 +41,6 @@
               ></wt-table-column-select>
             </wt-table-actions>
           </div>
-<!--          <filters-panel-->
-<!--            :headers="headers"-->
-<!--            :namespace="namespace"-->
-<!--          ></filters-panel>-->
         </header>
 
         <wt-loader v-show="isLoading"></wt-loader>
@@ -114,16 +110,15 @@
             @prev="prevPage"
           ></wt-pagination>
         </div>
-
       </div>
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
@@ -132,7 +127,9 @@ import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
 const namespace = 'scorecards';
+const staticHeaders = ['name'];
 
 const {
   dataList,
@@ -141,6 +138,7 @@ const {
   isNext,
   page,
   size,
+  errors,
 
   loadData,
   setSize,
@@ -161,8 +159,10 @@ const {
   closeDelete,
 } = useDeleteConfirmationPopup();
 
-const isEmptyWorkspace = computed(() => !dataList.value.length);
-const staticHeaders = ['name'];
+const query = computed(() => route.query);
+const isEmptyWorkspace = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !query.value));
+const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
+const searchParams = computed(() => (query.value.q ? { q: query.value.q } : { question: query.value.question }));
 const path = computed(() => [
   { name: t('audit'), route: '/' },
   { name: t('scorecards.scorecards', 2), route: '/scorecards' },
@@ -180,8 +180,6 @@ function openAuditView({ id }) {
 function create() {
   return router.push({ name: `${namespace}-new` });
 }
-
-const selectedRows = computed(() => dataList.value.filter((item) => item._isSelected));
 
 function updateHeaders() {
   const headersValue = localStorage.getItem('filter-fields');
@@ -201,9 +199,11 @@ function changeHeaders(value) {
 }
 
 onMounted(() => {
-  loadData();
+  loadData(searchParams);
   updateHeaders();
 });
+
+watch(query, () => loadData(searchParams), { immediate: true });
 
 </script>
 

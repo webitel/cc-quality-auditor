@@ -130,10 +130,7 @@ function saveAs() {
   save();
 }
 
-const saveChanges = computed(() => {
-  if (!itemInstance.value.editable && id.value) return saveAs;
-  return save;
-});
+const saveChanges = computed(() => ((!itemInstance.value.editable && id.value) ? saveAs : save));
 
 const saveOptions = computed(() => {
   const saveAsNew = {
