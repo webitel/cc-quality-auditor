@@ -8,14 +8,23 @@ import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
 import OpenedScorecard
   from '../../modules/scorecards/components/opened-scorecard.vue';
 
-// const checkRouteAccess = ((to, from, next) => {
-//   const hasReadAccess = store.getters['userinfo/CHECK_OBJECT_ACCESS']({ route: to });
-//   if (hasReadAccess) {
-//     next();
-//   } else {
-//     next('/access-denied');
-//   }
-// });
+const checkAppAccess = (to, from, next) => {
+  const hasReadAccess = store.getters['userinfo/CHECK_APP_ACCESS'](store.getters['userinfo/THIS_APP']);
+  if (hasReadAccess) {
+    next();
+  } else {
+    next('/access-denied');
+  }
+};
+
+const checkRouteAccess = ((to, from, next) => {
+  const hasReadAccess = store.getters['userinfo/CHECK_OBJECT_ACCESS']({ route: to });
+  if (hasReadAccess) {
+    next();
+  } else {
+    next('/access-denied');
+  }
+});
 
 const routes = [
   {
@@ -28,23 +37,24 @@ const routes = [
     name: 'auditor-workspace',
     redirect: { name: AuditorSections.SCORECARDS },
     component: TheAuditorWorkspace,
+    beforeEnter: checkAppAccess,
     children: [{
       path: 'scorecards',
       name: AuditorSections.SCORECARDS,
       component: Scorecards,
-      // beforeEnter: checkRouteAccess,
+      beforeEnter: checkRouteAccess,
     },
     {
       path: 'scorecards/:id',
       name: `${AuditorSections.SCORECARDS}-edit`,
       component: OpenedScorecard,
-      // beforeEnter: checkRouteAccess,
+      beforeEnter: checkRouteAccess,
     },
     {
       path: 'scorecards/new',
       name: `${AuditorSections.SCORECARDS}-new`,
       component: OpenedScorecard,
-      // beforeEnter: checkRouteAccess,
+      beforeEnter: checkRouteAccess,
     },
     ],
   },
