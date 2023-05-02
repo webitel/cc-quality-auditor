@@ -7,6 +7,7 @@ import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
 import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
 import OpenedScorecard
   from '../../modules/scorecards/components/opened-scorecard.vue';
+import AccessDenied from '../components/utils/access-denied-component.vue';
 
 const checkAppAccess = (to, from, next) => {
   const hasReadAccess = store.getters['userinfo/CHECK_APP_ACCESS'](store.getters['userinfo/THIS_APP']);
@@ -57,6 +58,11 @@ const routes = [
       beforeEnter: checkRouteAccess,
     },
     ],
+  },
+  {
+    path: '/access-denied',
+    name: 'access-denied',
+    component: AccessDenied,
   },
 ];
 
