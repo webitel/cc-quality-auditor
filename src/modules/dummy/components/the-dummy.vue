@@ -3,28 +3,25 @@
     <div class="dummy_pic">
       <img src="../assets/the-dummy.svg" alt="Workspace is empty" />
     </div>
-    <h1 class="dummy_title">{{ $t('scorecards.dummy') }}</h1>
+    <h1 class="dummy_title">{{ $t('scorecards.dummy', { entity: props.entity.toLowerCase() }) }}</h1>
     <wt-button
-      @click="create"
+      @click="emits('create')"
     >{{ $t('reusable.add') }}
     </wt-button>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
 const props = defineProps({
-  namespace: {
+  entity: {
     type: String,
+    required: true,
   },
 });
 
-function create() {
-  return router.push({ name: `${props.namespace}-new` });
-}
+const emits = defineEmits([
+  'create',
+]);
 </script>
 
 <style lang="scss" scoped>

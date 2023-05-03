@@ -38,8 +38,23 @@ import { useI18n } from 'vue-i18n';
 import SearchMode from '../enums/SearchMode.enum';
 import { useFilterStore } from '../../../../app/composables/useFilter';
 
+const props = defineProps({
+  namespace: {
+    type: String,
+    required: true,
+  },
+});
+
+const {
+  filterQuery,
+  filterSchema,
+
+  setValue,
+  setValueToQuery,
+  changeMode,
+} = useFilterStore(props.namespace);
+
 const { t } = useI18n();
-const namespace = 'scorecards';
 
 const searchModeOptions = computed(() => [
   {
@@ -51,15 +66,6 @@ const searchModeOptions = computed(() => [
     text: t('objects.criterion', 1),
   },
 ]);
-
-const {
-  filterQuery,
-  filterSchema,
-
-  setValue,
-  setValueToQuery,
-  changeMode,
-} = useFilterStore(namespace);
 
 </script>
 

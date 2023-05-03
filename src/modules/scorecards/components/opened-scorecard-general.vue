@@ -36,8 +36,8 @@
 </template>
 
 <script setup>
-import teamLookupApi from '@/modules/_shared/lookups/api/teamLookupApi';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 
 const props = defineProps({
   namespace: {

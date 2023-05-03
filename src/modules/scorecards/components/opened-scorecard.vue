@@ -44,15 +44,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength } from '@vuelidate/validators';
+import { required } from '@vuelidate/validators';
 import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 
-const { t } = useI18n();
 const namespace = 'scorecards';
 const currentTab = ref({});
 
@@ -61,14 +59,20 @@ const {
   itemInstance,
 
   save,
-} = useCardPage(namespace);
-
-const {
   setId,
   setItemProp,
-} = useCardStore(namespace);
+} = useCardPage(namespace);
 
 const { close } = useClose();
+const { t } = useI18n();
+
+const v$ = useVuelidate(computed(() => (
+  {
+    itemInstance: {
+      name: { required },
+    },
+    $autoDirty: true,
+  })), { itemInstance });
 
 const tabs = computed(() => [
   {
@@ -95,18 +99,6 @@ const path = computed(() => {
   ];
 });
 
-const v$ = useVuelidate(computed(() => (
-  {
-    itemInstance: {
-      name: { required },
-      questions: {
-        required,
-        minLength: minLength(1),
-      },
-    },
-    $autoDirty: true,
-  })), { itemInstance });
-
 const component = computed(() => {
   if (currentTab.value?.value === 'criteria') return Criterias;
   return General;
@@ -118,7 +110,7 @@ const saveText = computed(() => {
   return t('reusable.saved');
 });
 
-const isInvalidForm = computed(() => (itemInstance.value._dirty ? !!v$.value.$errors.length : true));
+const isInvalidForm = computed(() => (itemInstance.value._dirty ? !!v$.value.$invalid : true));
 
 function saveAs() {
   setItemProp({ prop: 'createdAt', value: '' });

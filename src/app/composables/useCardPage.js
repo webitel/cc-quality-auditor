@@ -17,6 +17,7 @@ export const useCardPage = (namespace) => {
     updateItem,
     setId,
     resetState,
+    setItemProp,
   } = useCardStore(namespace);
 
   const { close } = useClose();
@@ -60,5 +61,7 @@ export const useCardPage = (namespace) => {
 
     save,
     close,
+    setId,
+    setItemProp,
   };
 };

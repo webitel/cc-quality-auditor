@@ -4,11 +4,8 @@
       <wt-page-header
         :primary-action="create"
         :secondary-text="$t('reusable.delete')"
-        :secondary-action="() => selectedItems.length && askDeleteConfirmation({
-                  deleted: selectedItems,
-                  callback: () => deleteData([...selectedItems]),
-                })">
-        <wt-headline-nav :path="path"></wt-headline-nav>
+        :secondary-action="deleteSelectedItems"
+      ><wt-headline-nav :path="path"></wt-headline-nav>
       </wt-page-header>
     </template>
     <template v-slot:main>
@@ -19,17 +16,20 @@
         @close="closeDelete"
       ></delete-confirmation-popup>
 
-      <div v-if="isEmptyWorkspace && !isLoading" class="scorecards__dummy">
-        <the-dummy :namespace="namespace"></the-dummy>
+      <div v-if="isEmptyData && !isLoading" class="scorecards__dummy">
+        <the-dummy
+          :entity="$t('scorecards.scorecards', 2)"
+          @create="create"
+        ></the-dummy>
       </div>
 
-      <div v-if="!isEmptyWorkspace" class="scorecards-main-section">
+      <div v-else class="scorecards-main-section">
         <header class="content-header">
           <h3 class="content-title">
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
-            <filter-search></filter-search>
+            <filter-search :namespace="namespace"></filter-search>
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
@@ -49,7 +49,6 @@
           <wt-table
             :headers="headers"
             :data="dataList"
-            :grid-actions="true"
             sortable
             @sort="sort"
           >
@@ -119,17 +118,18 @@
 import { onMounted, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
+import DeleteConfirmationPopup
+  from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 
+const namespace = 'scorecards';
+const staticHeaders = ['name'];
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const namespace = 'scorecards';
-const staticHeaders = ['name'];
 
 const {
   dataList,
@@ -160,9 +160,14 @@ const {
 } = useDeleteConfirmationPopup();
 
 const query = computed(() => route.query);
-const isEmptyWorkspace = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !query.value));
+
+const isEmptyData = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !query.value));
+
+/* selectedItems in the current implementation to include items for which there weren't ratings and they can be edited/deleted */
 const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
-const searchParams = computed(() => (query.value.q ? { q: query.value.q } : { question: query.value.question }));
+
+const searchQuery = computed(() => (query.value.q ? { q: query.value.q } : { question: query.value.question }));
+
 const path = computed(() => [
   { name: t('audit'), route: '/' },
   { name: t('scorecards.scorecards', 2), route: '/scorecards' },
@@ -198,12 +203,19 @@ function changeHeaders(value) {
   localStorage.setItem('filter-fields', filter);
 }
 
+function deleteSelectedItems() {
+  return selectedItems.value.length && askDeleteConfirmation({
+    deleted: selectedItems.value,
+    callback: () => deleteData([...selectedItems.value]),
+  });
+}
+
 onMounted(() => {
-  loadData(searchParams);
+  loadData(searchQuery);
   updateHeaders();
 });
 
-watch(query, () => loadData(searchParams), { immediate: true });
+watch(query, () => loadData(searchQuery), { immediate: true });
 
 </script>
 

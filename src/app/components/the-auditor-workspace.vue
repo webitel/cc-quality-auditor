@@ -34,12 +34,12 @@ const build = process.env.VUE_APP_BUILD_NUMBER;
 const store = useStore();
 const router = useRouter();
 
-const { userinfo } = store.state;
-const currentApp = userinfo.thisApp;
+const userinfo = computed(() => store.state);
+const currentApp = userinfo.value.thisApp;
 
 const checkAccess = store.getters['userinfo/CHECK_APP_ACCESS'];
 
-const hasAccess = computed(() => checkAccess(WebitelApplications.AUDIT));
+const hasAccess = computed(() => checkAccess(currentApp));
 
 const { t } = useI18n();
 
