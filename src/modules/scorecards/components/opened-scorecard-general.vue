@@ -7,26 +7,27 @@
       <wt-input
         :value="itemInstance.name"
         :label="$t('reusable.name')"
-        :disabled="disableUserInput"
+        :disabled="!hasSaveActionAccess"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
       ></wt-input>
       <wt-textarea
         :value="itemInstance.description"
         :label="$t('vocabulary.description')"
-        :disabled="disableUserInput"
+        :disabled="!hasSaveActionAccess"
         @input="setItemProp({ prop: 'description', value: $event })"
       ></wt-textarea>
       <wt-select
         :label="$t('objects.team',2)"
         :value="itemInstance.teams"
         :search-method="teamLookupApi"
+        :disabled="!hasSaveActionAccess"
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
       ></wt-select>
       <div></div>
       <wt-switcher
-        :disabled="disableUserInput"
+        :disabled="!hasSaveActionAccess"
         :label="$t('reusable.state')"
         :value="itemInstance.enabled"
         @change="setItemProp({ prop: 'enabled', value: $event })"
@@ -36,8 +37,8 @@
 </template>
 
 <script setup>
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
+import { useCardPage } from '../../../app/composables/useCardPage';
 
 const props = defineProps({
   namespace: {
@@ -49,7 +50,8 @@ const props = defineProps({
 const {
   itemInstance,
   setItemProp,
-} = useCardStore(props.namespace);
+  hasSaveActionAccess,
+} = useCardPage(props.namespace);
 
 </script>
 

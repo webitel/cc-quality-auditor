@@ -1,6 +1,7 @@
 <template>
   <div>
     <audit-form
+      v-if="hasSaveActionAccess"
       :questions="itemInstance.questions"
       mode="create"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
@@ -9,8 +10,8 @@
 </template>
 
 <script setup>
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
+import { useCardPage } from '../../../app/composables/useCardPage';
 
 const props = defineProps({
   namespace: {
@@ -21,8 +22,10 @@ const props = defineProps({
 
 const {
   itemInstance,
+  hasSaveActionAccess,
+
   setItemProp,
-} = useCardStore(props.namespace);
+} = useCardPage(props.namespace);
 </script>
 
 <style scoped>

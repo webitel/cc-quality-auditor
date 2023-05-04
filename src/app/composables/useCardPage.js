@@ -1,6 +1,7 @@
-import { onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { useAccess } from './useAccess';
 import { useClose } from './useClose';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -20,7 +21,17 @@ export const useCardPage = (namespace) => {
     setItemProp,
   } = useCardStore(namespace);
 
+  const {
+    hasCreateAccess,
+    hasEditAccess,
+  } = useAccess();
+
   const { close } = useClose();
+
+  const hasSaveActionAccess = computed(() => {
+    if (route.name.includes('-edit')) return hasEditAccess;
+    return hasCreateAccess;
+  });
 
   function redirectToEdit() {
     const routeName = route.name.replace('-new', '-edit');
@@ -58,6 +69,7 @@ export const useCardPage = (namespace) => {
   return {
     id,
     itemInstance,
+    hasSaveActionAccess,
 
     save,
     close,

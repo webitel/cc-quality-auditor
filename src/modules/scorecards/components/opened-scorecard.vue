@@ -5,6 +5,7 @@
         :primary-action="saveChanges"
         :primary-text="saveText"
         :secondary-action="close"
+        :hide-primary="!hasSaveActionAccess"
         :primary-disabled="isInvalidForm"
       >
         <template v-slot:primary-action v-if="itemInstance.editable">
@@ -57,6 +58,7 @@ const currentTab = ref({});
 const {
   id,
   itemInstance,
+  hasSaveActionAccess,
 
   save,
   setId,
