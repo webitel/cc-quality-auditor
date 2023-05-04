@@ -1,9 +1,9 @@
 <template>
   <div>
     <audit-form
-      v-model:questions="itemInstance.questions"
+      :questions="itemInstance.questions"
       mode="create"
-      @update:questions="setItemProp({ prop: 'question', value: $event })"
+      @update:questions="setItemProp({ prop: 'questions', value: $event })"
     ></audit-form>
   </div>
 </template>
