@@ -169,14 +169,10 @@ const {
   closeDelete,
 } = useDeleteConfirmationPopup();
 
-const query = computed(() => route.query);
-
-const isEmptyData = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !query.value));
+const isEmptyData = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !route.query));
 
 /* selectedItems in the current implementation to include items for which there weren't ratings and they can be edited/deleted */
 const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
-
-const searchQuery = computed(() => (query.value.q ? { q: query.value.q } : { question: query.value.question }));
 
 const path = computed(() => [
   { name: t('audit'), route: '/' },
@@ -221,15 +217,20 @@ function deleteSelectedItems() {
 }
 
 onMounted(() => {
-  loadData(searchQuery);
   updateHeaders();
 });
 
-watch(query, () => loadData(searchQuery), { immediate: true });
+watch(route.query, () => {
+  loadData(route.query);
+  }, { immediate: true });
 
 </script>
 
 <style lang="scss" scoped>
+.scorecards {
+  width: 100%;
+}
+
 .scorecards-main-section {
   width: 100%;
 }
