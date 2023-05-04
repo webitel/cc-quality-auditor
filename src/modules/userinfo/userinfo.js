@@ -16,35 +16,12 @@ const state = {
   thisApp: WebitelApplications.AUDIT,
 };
 
-const actions = {
-  /*
-  * copy-pasted OPEN_SESSION action from UserinfoStoreModule + added day-length token check
-  * suppose it would be better to add BEFORE/AFTER SET_SESSION HOOKS in UserinfoStoreModule
-  * and make this check in these hook instead of copy-paste overriding base action
-  * */
-  OPEN_SESSION: async (context) => {
-    const HOUR_LENGTH = 60 * 60 * 1000;
-
-    await context.dispatch('BEFORE_OPEN_SESSION_HOOK');
-    if (!localStorage.getItem('access-token')) {
-      context.dispatch('REDIRECT_TO_AUTH');
-      throw new Error('No access-token in localStorage');
-    }
-    const session = await userinfoAPI.getSession();
-
-    if ((session.expiresAt - Date.now() < HOUR_LENGTH)) {
-      await authAPI.logout();
-      await router.replace('/auth');
-      throw new Error(`Session expires soon ${session.expiresAt}`);
-    }
-
-    await context.dispatch('SET_SESSION', session);
-    const access = await userinfoAPI.getApplicationsAccess();
-    await context.dispatch('SET_APPLICATIONS_ACCESS', new ApplicationsAccess({ access }).getAccess());
-    await context.dispatch('AFTER_OPEN_SESSION_HOOK');
-  },
+const getters = {
+  GET_OBJECT_SCOPE_BY_NAME: (state) => (name) => (
+    Object.values(state.scope).find((object) => name === object.class)
+  ),
 };
 
-const userinfo = new UserinfoStoreModule().getModule({ state, actions });
+const userinfo = new UserinfoStoreModule().getModule({ state, getters });
 
 export default userinfo;

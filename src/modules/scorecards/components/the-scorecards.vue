@@ -5,7 +5,10 @@
         :primary-action="create"
         :secondary-text="$t('reusable.delete')"
         :secondary-action="deleteSelectedItems"
-      ><wt-headline-nav :path="path"></wt-headline-nav>
+        :hide-primary="!hasCreateAccess"
+        :hide-secondary="!hasDeleteAccess"
+      >
+        <wt-headline-nav :path="path"></wt-headline-nav>
       </wt-page-header>
     </template>
     <template v-slot:main>
@@ -124,6 +127,7 @@ import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
+import { useAccess } from '../../../app/composables/useAccess';
 
 const namespace = 'scorecards';
 const staticHeaders = ['name'];
@@ -149,6 +153,12 @@ const {
   sort,
   setHeaders,
 } = useTableStore(namespace);
+
+const {
+  hasCreateAccess,
+  hasEditAccess,
+  hasDeleteAccess,
+} = useAccess();
 
 const {
   isVisible: isDeleteConfirmationPopup,
