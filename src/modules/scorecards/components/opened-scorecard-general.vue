@@ -7,27 +7,27 @@
       <wt-input
         :value="itemInstance.name"
         :label="$t('reusable.name')"
-        :disabled="!hasSaveActionAccess"
+        :disabled="!hasModifyAccess"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
       ></wt-input>
       <wt-textarea
         :value="itemInstance.description"
         :label="$t('vocabulary.description')"
-        :disabled="!hasSaveActionAccess"
+        :disabled="!hasModifyAccess"
         @input="setItemProp({ prop: 'description', value: $event })"
       ></wt-textarea>
       <wt-select
         :label="$t('objects.team',2)"
         :value="itemInstance.teams"
         :search-method="teamLookupApi"
-        :disabled="!hasSaveActionAccess"
+        :disabled="!hasModifyAccess"
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
       ></wt-select>
       <div></div>
       <wt-switcher
-        :disabled="!hasSaveActionAccess"
+        :disabled="!hasModifyAccess"
         :label="$t('reusable.state')"
         :value="itemInstance.enabled"
         @change="setItemProp({ prop: 'enabled', value: $event })"
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { useAccess } from '../../../app/composables/useAccess';
 import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 import { useCardPage } from '../../../app/composables/useCardPage';
 
@@ -50,8 +51,11 @@ const props = defineProps({
 const {
   itemInstance,
   setItemProp,
-  hasSaveActionAccess,
 } = useCardPage(props.namespace);
+
+const {
+  hasModifyAccess,
+} = useAccess();
 
 </script>
 

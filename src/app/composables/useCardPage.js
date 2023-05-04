@@ -21,18 +21,6 @@ export const useCardPage = (namespace) => {
     setItemProp,
   } = useCardStore(namespace);
 
-  const {
-    hasCreateAccess,
-    hasEditAccess,
-  } = useAccess();
-
-  const { close } = useClose();
-
-  const hasSaveActionAccess = computed(() => {
-    if (route.name.includes('-edit')) return hasEditAccess;
-    return hasCreateAccess;
-  });
-
   function redirectToEdit() {
     const routeName = route.name.replace('-new', '-edit');
     return router.replace({
@@ -69,10 +57,8 @@ export const useCardPage = (namespace) => {
   return {
     id,
     itemInstance,
-    hasSaveActionAccess,
 
     save,
-    close,
     setId,
     setItemProp,
   };

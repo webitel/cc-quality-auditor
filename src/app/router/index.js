@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AuditorSections
   from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
+import { useAccess } from '../composables/useAccess';
 import store from '../store';
 import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
 import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
@@ -46,16 +47,22 @@ const routes = [
       beforeEnter: checkRouteAccess,
     },
     {
-      path: 'scorecards/:id',
+      path: ':id',
       name: `${AuditorSections.SCORECARDS}-edit`,
       component: OpenedScorecard,
       beforeEnter: checkRouteAccess,
+      meta: {
+        modifyMode: 'edit',
+      },
     },
     {
-      path: 'scorecards/new',
+      path: 'new',
       name: `${AuditorSections.SCORECARDS}-new`,
       component: OpenedScorecard,
       beforeEnter: checkRouteAccess,
+      meta: {
+        modifyMode: 'create',
+      },
     },
     ],
   },

@@ -54,6 +54,7 @@
           <wt-table
             :headers="headers"
             :data="dataList"
+            :grid-actions="hasEditAccess || hasDeleteAccess"
             sortable
             @sort="sort"
           >
@@ -84,16 +85,19 @@
             <template v-slot:state="{ item, index }">
               <wt-switcher
                 :value="item.enabled"
+                :disabled="!hasEditAccess"
                 @change="patchProperty({ item, index, prop: 'enabled', value: $event })"
               ></wt-switcher>
             </template>
             <template v-slot:actions="{ item }">
               <wt-icon-action
+                v-if="hasEditAccess"
                 action="edit"
                 :disabled="!item.editable"
                 @click="openAuditView(item)"
               ></wt-icon-action>
               <wt-icon-action
+                v-if="hasDeleteAccess"
                 action="delete"
                 :disabled="!item.editable"
                 @click="askDeleteConfirmation({

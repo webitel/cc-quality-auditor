@@ -5,10 +5,13 @@
         :primary-action="saveChanges"
         :primary-text="saveText"
         :secondary-action="close"
-        :hide-primary="!hasSaveActionAccess"
+        :hide-primary="!hasModifyAccess"
         :primary-disabled="isInvalidForm"
       >
-        <template v-slot:primary-action v-if="itemInstance.editable">
+        <template
+          v-slot:primary-action
+          v-if="itemInstance.editable"
+        >
           <wt-button-select
             :options="saveOptions"
             :color="isInvalidForm && 'secondary'"
@@ -47,6 +50,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
+import { useAccess } from '../../../app/composables/useAccess';
 import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
 import Criterias from './opened-scorecard-criterias.vue';
@@ -58,12 +62,16 @@ const currentTab = ref({});
 const {
   id,
   itemInstance,
-  hasSaveActionAccess,
 
   save,
   setId,
   setItemProp,
 } = useCardPage(namespace);
+
+const {
+  hasModifyAccess,
+} = useAccess();
+
 
 const { close } = useClose();
 const { t } = useI18n();

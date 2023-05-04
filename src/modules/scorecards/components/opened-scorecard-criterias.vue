@@ -1,9 +1,9 @@
 <template>
   <div>
     <audit-form
-      v-if="hasSaveActionAccess"
       :questions="itemInstance.questions"
       mode="create"
+      :readonly="!hasModifyAccess"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
     ></audit-form>
   </div>
@@ -11,6 +11,7 @@
 
 <script setup>
 import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
+import { useAccess } from '../../../app/composables/useAccess';
 import { useCardPage } from '../../../app/composables/useCardPage';
 
 const props = defineProps({
@@ -22,10 +23,13 @@ const props = defineProps({
 
 const {
   itemInstance,
-  hasSaveActionAccess,
 
   setItemProp,
 } = useCardPage(props.namespace);
+
+const {
+  hasModifyAccess,
+} = useAccess();
 </script>
 
 <style scoped>
