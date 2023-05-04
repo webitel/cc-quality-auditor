@@ -33,10 +33,13 @@
   </form>
 </template>
 <script setup>
-import { computed } from 'vue';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import deepEqual from 'deep-equal';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import SearchMode from '../enums/SearchMode.enum';
-import { useFilterStore } from '../../../../app/composables/useFilter';
 
 const props = defineProps({
   namespace: {
@@ -45,15 +48,9 @@ const props = defineProps({
   },
 });
 
-const {
-  filterQuery,
-  filterSchema,
-
-  setValue,
-  setValueToQuery,
-  changeMode,
-} = useFilterStore(props.namespace);
-
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 
 const searchModeOptions = computed(() => [
@@ -67,6 +64,74 @@ const searchModeOptions = computed(() => [
   },
 ]);
 
+const filterNamespace = `${props.namespace}/filters`;
+const filterQuery = ref(SearchMode.NAME);
+const filterSchema = computed(() => {
+  if (!store) throw new Error('Vuex is required for default filterSchema baseFilterMixin property');
+  return getNamespacedState(store.state, `${filterNamespace}`)[filterQuery.value];
+});
+
+function setValue(payload) {
+  if (!store) throw new Error('Vuex is required for default filterSchema baseFilterMixin property');
+  return store.dispatch(`${filterNamespace}/SET_FILTER`, payload);
+}
+
+function changeRouteQuery({ filterQuery, value }) {
+  const query = value ? { ...route.query } : {};
+  if (value) query[filterQuery] = value;
+  return router.replace({
+    name: router.currentRoute.value.name,
+    query,
+  });
+}
+
+function setValueToQuery({ filterQuery, value, storedProp = 'id' }) {
+  let newValue = '';
+  if (Array.isArray(value)) {
+    if (value.length && typeof value[0] !== 'object') {
+      newValue = value;
+    } else {
+      newValue = value.map((item) => item[storedProp]);
+    }
+  } else if (typeof value === 'object' && value !== null) {
+    newValue = value[storedProp];
+  } else {
+    newValue = value;
+  }
+  if (!deepEqual(route.query[filterQuery], newValue)) {
+    changeRouteQuery({
+      value: newValue,
+      filterQuery,
+    });
+  }
+}
+
+function changeMode({ value }) {
+  setValue({ filter: filterQuery.value, value: '' });
+  setValueToQuery({ filterQuery: filterQuery.value, value: '' });
+  filterQuery.value = value;
+}
+
+function getValueFromQuery({ filterQuery }) {
+  return route.query[filterQuery];
+}
+
+function updateValueFromUrl() {
+  const name = getValueFromQuery({ filterQuery: SearchMode.NAME });
+  if (name) {
+    filterQuery.value = SearchMode.NAME;
+    setValue({ filter: SearchMode.NAME, value: name });
+    return;
+  }
+
+  const criterion = getValueFromQuery({ filterQuery: SearchMode.CRITERION });
+  if (criterion) {
+    filterQuery.value = SearchMode.CRITERION;
+    setValue({ filter: SearchMode.CRITERION, value: criterion });
+  }
+}
+
+onMounted(() => updateValueFromUrl());
 </script>
 
 <style lang="scss" scoped>

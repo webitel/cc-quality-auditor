@@ -32,7 +32,9 @@
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
-            <filter-search :namespace="namespace"></filter-search>
+            <filter-search
+              :namespace="tableNamespace"
+            ></filter-search>
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
@@ -136,6 +138,8 @@ const router = useRouter();
 const route = useRoute();
 
 const {
+  namespace: tableNamespace,
+
   dataList,
   isLoading,
   headers,
@@ -220,7 +224,7 @@ onMounted(() => {
   updateHeaders();
 });
 
-watch(route.query, () => {
+watch(() => route.query, () => {
   loadData(route.query);
   }, { immediate: true });
 
