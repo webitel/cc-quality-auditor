@@ -2,7 +2,7 @@
   <div>
     <audit-form
       :questions="itemInstance.questions"
-      mode="create"
+      :mode="hasModifyAccess ? 'create' : 'fill'"
       :readonly="!hasModifyAccess"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
     ></audit-form>
