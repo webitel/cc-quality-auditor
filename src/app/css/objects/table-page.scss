@@ -18,15 +18,4 @@
   .table-action {
     margin-left: 10px;
   }
-
-  .name-link {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: var(--transition);
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }

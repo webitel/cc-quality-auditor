@@ -37,8 +37,8 @@
 </template>
 
 <script setup>
-import { useAccess } from '../../../app/composables/useAccess';
 import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
+import { useAccess } from '../../../app/composables/useAccess';
 import { useCardPage } from '../../../app/composables/useCardPage';
 
 const props = defineProps({

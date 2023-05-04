@@ -59,9 +59,10 @@
             @sort="sort"
           >
             <template v-slot:name="{ item }">
-              <span class="name-link" @click="openAuditView(item)">
-                {{ item.name }}
-              </span>
+              <wt-item-link
+                :id="item.id"
+                :route-name="namespace"
+              >{{ item.name }}</wt-item-link>
             </template>
             <template v-slot:description="{ item }">
               {{ item.description }}
@@ -150,7 +151,7 @@ const {
   isNext,
   page,
   size,
-  errors,
+  error,
 
   loadData,
   setSize,
@@ -177,7 +178,7 @@ const {
   closeDelete,
 } = useDeleteConfirmationPopup();
 
-const isEmptyData = computed(() => (!dataList.value.length && !errors) || (!dataList.value.length && !route.query));
+const isEmptyData = computed(() => (!dataList.value.length && !error) || (!dataList.value.length && !route.query));
 
 /* selectedItems in the current implementation to include items for which there weren't ratings and they can be edited/deleted */
 const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
@@ -190,10 +191,6 @@ const path = computed(() => [
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
   return new Date(+timestamp).toLocaleString();
-}
-
-function openAuditView({ id }) {
-  return router.push({ name: `${namespace}-edit`, params: { id } });
 }
 
 function create() {
@@ -230,7 +227,7 @@ onMounted(() => {
 
 watch(() => route.query, () => {
   loadData(route.query);
-  }, { immediate: true });
+}, { immediate: true });
 
 </script>
 

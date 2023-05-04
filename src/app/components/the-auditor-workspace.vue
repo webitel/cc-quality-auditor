@@ -34,12 +34,10 @@ const build = process.env.VUE_APP_BUILD_NUMBER;
 const store = useStore();
 const router = useRouter();
 
-const userinfo = computed(() => store.state);
+const userinfo = computed(() => store.state.userinfo);
 const currentApp = userinfo.value.thisApp;
 
 const checkAccess = store.getters['userinfo/CHECK_APP_ACCESS'];
-
-const hasAccess = computed(() => checkAccess(currentApp));
 
 const { t } = useI18n();
 
@@ -79,7 +77,7 @@ const apps = computed(() => {
 const nav = computed(() => {
   const scorecards = {
     value: AuditorSections.SCORECARDS,
-    name: t(`WebitelApplications.${WebitelApplications.AUDIT}.section.${AuditorSections.SCORECARDS}`),
+    name: t(`WebitelApplications.${WebitelApplications.AUDIT}.sections.${AuditorSections.SCORECARDS}`),
     route: '/scorecards',
   };
   const nav = [scorecards];

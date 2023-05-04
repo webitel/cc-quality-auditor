@@ -72,7 +72,6 @@ const {
   hasModifyAccess,
 } = useAccess();
 
-
 const { close } = useClose();
 const { t } = useI18n();
 

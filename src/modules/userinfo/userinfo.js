@@ -1,4 +1,3 @@
-import ApplicationsAccess from '@webitel/ui-sdk/src/modules/Userinfo/classes/ApplicationsAccess';
 import UserinfoStoreModule from '@webitel/ui-sdk/src/modules/Userinfo/store/UserinfoStoreModule';
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 
@@ -6,8 +5,6 @@ import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/W
 import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
 import userinfoAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/userinfo';
 import instance from '../../app/api/instance';
-
-import router from '../../app/router';
 
 authAPI.setInstance(instance);
 userinfoAPI.setInstance(instance);
