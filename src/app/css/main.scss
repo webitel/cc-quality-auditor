@@ -1,38 +1,29 @@
 @import '~@webitel/ui-sdk/src/css/main';
+@import './objects/table-page';
+@import './objects/objects';
 
-
-html {
-  height: 100%;
-}
-
+//disables scrollbar on 100vh auth on small laptops
 body {
   @extend %typo-body-1;
+  display: flex;
+  min-width: 100%;
   min-height: 100%;
-  height: 100%;
-  margin: 0;
-  font-size: 100%;
-  background: var(--page-bg-color);
+}
+
+#app {
+  min-width: 100%;
+  min-height: 100%;
 }
 
 * {
   box-sizing: border-box;
 }
 
-main {
-  min-height: 100%;
-  height: 100%;
-}
-
-h1, h2, h3, h4, h5, h6, p {
-  margin: 0;
-  font-weight: normal;
-}
-
 //reset ul styles
 ul {
-  padding: 0;
   margin: 0;
-  list-style: none;
+  padding: 0;
+  list-style-type: none;
 }
 
 iframe {
@@ -40,11 +31,11 @@ iframe {
   outline: none;
 }
 
-a {
-  color: #000;
-  text-decoration: none;
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
 }
 
-img {
-  width: 100%;
+a {
+  text-decoration: none;
+  color: #000;
 }
