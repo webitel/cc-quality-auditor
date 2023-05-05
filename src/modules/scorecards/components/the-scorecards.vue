@@ -39,11 +39,11 @@
               :icons="['refresh']"
               @input="loadData"
             >
-              <wt-table-column-select
+              <filter-fields
                 :headers="headers"
-                :static-headers="staticHeaders"
-                @change="changeHeaders"
-              ></wt-table-column-select>
+                :static-headers="['name']"
+                @change="setHeaders"
+              ></filter-fields>
             </wt-table-actions>
           </div>
         </header>
@@ -132,12 +132,12 @@ import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteCo
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
+import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/filter-table-fields.vue';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 import { useAccess } from '../../../app/composables/useAccess';
 
 const namespace = 'scorecards';
-const staticHeaders = ['name'];
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
@@ -197,33 +197,12 @@ function create() {
   return router.push({ name: `${namespace}-new` });
 }
 
-function updateHeaders() {
-  const headersValue = localStorage.getItem('filter-fields');
-  if (!headersValue) return;
-  const value = headers.value.map((header) => ({
-    ...header,
-    show: headersValue.includes(header.value),
-  }));
-  setHeaders(value);
-}
-
-function changeHeaders(value) {
-  setHeaders(value);
-  const visibleHeaders = value.filter((item) => item.show);
-  const filter = visibleHeaders.map((item) => item.value);
-  localStorage.setItem('filter-fields', filter);
-}
-
 function deleteSelectedItems() {
   return selectedItems.value.length && askDeleteConfirmation({
     deleted: selectedItems.value,
     callback: () => deleteData([...selectedItems.value]),
   });
 }
-
-onMounted(() => {
-  updateHeaders();
-});
 
 watch(() => route.query, () => {
   loadData(route.query);
