@@ -12,9 +12,7 @@
           @settings="settings"
         />
       </wt-app-header>
-      <div class="object-content-wrap">
-        <router-view />
-      </div>
+      <router-view />
     </section>
   </main>
 </template>

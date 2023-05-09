@@ -37,9 +37,9 @@
 </template>
 
 <script setup>
-import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useAccess } from '../../../app/composables/useAccess';
-import { useCardPage } from '../../../app/composables/useCardPage';
+import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 
 const props = defineProps({
   namespace: {
@@ -51,7 +51,7 @@ const props = defineProps({
 const {
   itemInstance,
   setItemProp,
-} = useCardPage(props.namespace);
+} = useCardStore(props.namespace);
 
 const {
   hasModifyAccess,

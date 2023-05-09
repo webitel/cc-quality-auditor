@@ -38,6 +38,7 @@
           :is="component"
           :v="v$"
           :namespace="namespace"
+          @update:validation="isInvalidFormQuestions = $event.invalid"
         ></component>
         <input type="submit" hidden>
       </form>
@@ -49,7 +50,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { required, minLength } from '@vuelidate/validators';
 import { useAccess } from '../../../app/composables/useAccess';
 import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
@@ -58,6 +59,7 @@ import General from './opened-scorecard-general.vue';
 
 const namespace = 'scorecards';
 const currentTab = ref({});
+const isInvalidFormQuestions = ref(false);
 
 const {
   id,
@@ -74,11 +76,16 @@ const {
 
 const { close } = useClose();
 const { t } = useI18n();
-
+/* When open the scorecard, we check for the presence of at least 1 question.
+When open criteria tab, we use deeper validation from the library "@webitel/ui-sdk" */
 const v$ = useVuelidate(computed(() => (
   {
     itemInstance: {
       name: { required },
+      questions: {
+        required,
+        minLength: minLength(1),
+      },
     },
     $autoDirty: true,
   })), { itemInstance });
@@ -113,13 +120,13 @@ const component = computed(() => {
   return General;
 });
 
+const isInvalidForm = computed(() => (itemInstance.value._dirty ? (v$.value.$invalid || isInvalidFormQuestions.value) : true));
+
 const saveText = computed(() => {
   if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
-  if (itemInstance.value._dirty) return t('reusable.save');
+  if (!isInvalidForm.value) return t('reusable.save');
   return t('reusable.saved');
 });
-
-const isInvalidForm = computed(() => (itemInstance.value._dirty ? !!v$.value.$invalid : true));
 
 function saveAs() {
   setItemProp({ prop: 'createdAt', value: '' });

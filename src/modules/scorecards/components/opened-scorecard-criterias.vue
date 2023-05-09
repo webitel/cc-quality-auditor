@@ -4,6 +4,7 @@
       :questions="itemInstance.questions"
       :mode="hasModifyAccess ? 'create' : 'fill'"
       :readonly="!hasModifyAccess"
+      @update:validation="emits('update:validation', $event)"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
     ></audit-form>
   </div>
@@ -11,8 +12,8 @@
 
 <script setup>
 import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 import { useAccess } from '../../../app/composables/useAccess';
-import { useCardPage } from '../../../app/composables/useCardPage';
 
 const props = defineProps({
   namespace: {
@@ -25,11 +26,15 @@ const {
   itemInstance,
 
   setItemProp,
-} = useCardPage(props.namespace);
+} = useCardStore(props.namespace);
 
 const {
   hasModifyAccess,
 } = useAccess();
+
+const emits = defineEmits([
+  'update:validation',
+]);
 </script>
 
 <style scoped>
