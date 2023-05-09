@@ -91,12 +91,17 @@
               ></wt-switcher>
             </template>
             <template v-slot:actions="{ item }">
-              <wt-icon-action
-                v-if="hasEditAccess"
-                action="edit"
+              <wt-item-link
+                :id="item.id"
+                :route-name="namespace"
                 :disabled="!item.editable"
-                @click="openAuditView(item)"
-              ></wt-icon-action>
+              >
+                <wt-icon-action
+                  v-if="hasEditAccess"
+                  :disabled="!item.editable"
+                  action="edit"
+                ></wt-icon-action>
+              </wt-item-link>
               <wt-icon-action
                 v-if="hasDeleteAccess"
                 action="delete"
@@ -125,7 +130,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
