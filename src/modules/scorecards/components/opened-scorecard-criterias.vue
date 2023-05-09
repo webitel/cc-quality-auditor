@@ -22,6 +22,10 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits([
+  'update:validation',
+]);
+
 const {
   itemInstance,
 
@@ -32,9 +36,6 @@ const {
   hasModifyAccess,
 } = useAccess();
 
-const emits = defineEmits([
-  'update:validation',
-]);
 </script>
 
 <style scoped>
