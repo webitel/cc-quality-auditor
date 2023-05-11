@@ -12,7 +12,9 @@
           @settings="settings"
         />
       </wt-app-header>
-      <router-view />
+      <div class="object-content-wrap">
+        <router-view />
+      </div>
     </section>
   </main>
 </template>
@@ -110,6 +112,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.object-content-wrap {
+  flex-grow: 1;
+  display: flex;
+}
+
 .wt-navigation-bar {
   margin-right: auto;
 }
