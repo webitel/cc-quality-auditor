@@ -87,8 +87,7 @@ const v$ = useVuelidate(computed(() => (
         minLength: minLength(1),
       },
     },
-    $autoDirty: true,
-  })), { itemInstance });
+  })), { itemInstance }, { $autoDirty: true });
 
 const tabs = computed(() => [
   {
@@ -120,12 +119,11 @@ const component = computed(() => {
   return General;
 });
 
-const isInvalidForm = computed(() => {
+const isInvalidForm = computed(() =>
   // eslint-disable-next-line no-underscore-dangle
-  return itemInstance.value._dirty
+  (itemInstance.value._dirty
     ? (v$.value.$invalid || isInvalidFormQuestions.value)
-    : true;
-});
+    : true));
 
 const saveText = computed(() => {
   if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
@@ -161,7 +159,10 @@ function initializeTab() {
   changeTab(tabs.value[0]);
 }
 
-onMounted(() => initializeTab());
+onMounted(() => {
+  initializeTab();
+  v$.value.$touch();
+});
 </script>
 
 <style lang="scss" scoped>

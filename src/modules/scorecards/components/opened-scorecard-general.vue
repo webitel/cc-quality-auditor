@@ -7,6 +7,7 @@
       <wt-input
         :value="itemInstance.name"
         :label="$t('reusable.name')"
+        :v="v.itemInstance.name"
         :disabled="!hasModifyAccess"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
@@ -45,6 +46,9 @@ const props = defineProps({
   namespace: {
     type: String,
     required: true,
+  },
+  v: {
+    type: Object,
   },
 });
 
