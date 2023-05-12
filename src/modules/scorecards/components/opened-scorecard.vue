@@ -121,7 +121,6 @@ const component = computed(() => {
 });
 
 const isInvalidForm = computed(() => {
-  console.info(itemInstance, v$.value.$invalid, isInvalidFormQuestions);
   // eslint-disable-next-line no-underscore-dangle
   return itemInstance.value._dirty
     ? (v$.value.$invalid || isInvalidFormQuestions.value)
