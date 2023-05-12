@@ -46,6 +46,7 @@ export default [
   {
     value: 'state',
     locale: 'reusable.state',
+    width: '100px',
     show: true,
     field: 'enabled',
     sort: SortSymbols.NONE,
