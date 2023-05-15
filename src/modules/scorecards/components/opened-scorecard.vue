@@ -14,6 +14,7 @@
         >
           <wt-button-select
             :options="saveOptions"
+            :disabled="isInvalidForm"
             :color="isInvalidForm && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
