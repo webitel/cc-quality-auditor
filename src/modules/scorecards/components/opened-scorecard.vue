@@ -48,13 +48,19 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import {
+  computed,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength } from '@vuelidate/validators';
 import { useAccess } from '../../../app/composables/useAccess';
 import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
+import { usePathName } from '../../../app/composables/usePathName';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 
@@ -75,6 +81,10 @@ const {
   hasModifyAccess,
 } = useAccess();
 
+const {
+  pathName,
+} = usePathName(itemInstance);
+
 const { close } = useClose();
 const { t } = useI18n();
 /* When open the scorecard, we check for the presence of at least 1 question.
@@ -82,13 +92,17 @@ When open criteria tab, we use deeper validation from the library "@webitel/ui-s
 const v$ = useVuelidate(computed(() => (
   {
     itemInstance: {
-      name: { required },
+      name: {
+        required,
+        minLength: minLength(3),
+      },
       questions: {
         required,
         minLength: minLength(1),
       },
     },
   })), { itemInstance }, { $autoDirty: true });
+
 
 const tabs = computed(() => [
   {
@@ -109,7 +123,7 @@ const path = computed(() => {
     { name: t('webitelUI.appNavigator.audit') },
     { name: t('scorecards.scorecards', 2), route: '/scorecards' },
     {
-      name: id.value ? itemInstance.value.name : t('reusable.new'),
+      name: id.value ? pathName.value : t('reusable.new'),
       route: id.value ? `/scorecards/${id.value}` : `${baseUrl}/new`,
     },
   ];
@@ -120,11 +134,9 @@ const component = computed(() => {
   return General;
 });
 
-const isInvalidForm = computed(() =>
-  // eslint-disable-next-line no-underscore-dangle
-  (itemInstance.value._dirty
-    ? (v$.value.$invalid || isInvalidFormQuestions.value)
-    : true));
+const isInvalidForm = computed(() => (itemInstance.value._dirty
+  ? (v$.value.$invalid || isInvalidFormQuestions.value)
+  : true));
 
 const saveText = computed(() => {
   if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
