@@ -19,7 +19,7 @@
         @input="setItemProp({ prop: 'description', value: $event })"
       ></wt-textarea>
       <wt-select
-        :label="$t('objects.team',2)"
+        :label="$t('objects.team',1)"
         :value="itemInstance.teams"
         :search-method="teamLookupApi"
         :disabled="!hasModifyAccess"

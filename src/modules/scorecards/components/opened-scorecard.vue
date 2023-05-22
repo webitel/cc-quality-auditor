@@ -120,7 +120,7 @@ const path = computed(() => {
   const baseUrl = 'audit/scorecards';
 
   return [
-    { name: t('webitelUI.appNavigator.audit') },
+    { name: t('audit') },
     { name: t('scorecards.scorecards', 2), route: '/scorecards' },
     {
       name: id.value ? pathName.value : t('reusable.new'),
