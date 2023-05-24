@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 // FIXME move to webitel-ui, copied from admin
 
-const defaultSearchRegex = /(\?|\&)(q|name)\=([^&]+)/gs;
+const defaultSearchRegex = /(\?|\&)(q|name|question)\=([^&]+)/gs;
 
 const onFulfilled = (searchRegex = defaultSearchRegex) => (request) => {
   if (request.method === 'get') {
