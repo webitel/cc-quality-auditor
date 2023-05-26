@@ -183,7 +183,13 @@ const {
   closeDelete,
 } = useDeleteConfirmationPopup();
 
-const isEmptyData = computed(() => (!dataList.value.length && !error.value) || (!dataList.value.length && !route.query));
+const isEmptyData = computed(() => {
+  if (dataList.value.length) return false;
+  if (error.value) return false;
+  if (route.query.q && !dataList.value.length) return false;
+  if (route.query.question && !dataList.value.length) return false;
+  return true;
+});
 
 /* selectedItems in the current implementation to include items for which there weren't ratings and they can be edited/deleted */
 const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
