@@ -3,7 +3,7 @@
     <div class="dummy_pic">
       <img src="../assets/the-dummy.svg" alt="Workspace is empty" />
     </div>
-    <h1 class="dummy_title">{{ $t('scorecards.dummy', { entity: props.entity.toLowerCase() }) }}</h1>
+    <h1 class="dummy_title">{{ dummyTitle }}</h1>
     <wt-button
       @click="emits('create')"
     >{{ $t('reusable.add') }}
@@ -12,6 +12,9 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 const props = defineProps({
   entity: {
     type: String,
@@ -22,6 +25,13 @@ const props = defineProps({
 const emits = defineEmits([
   'create',
 ]);
+
+const { t } = useI18n();
+
+const dummyTitle = computed(() => {
+  const text = t('scorecards.dummy', { entity: props.entity.toLowerCase() });
+  return text[0].toUpperCase() + text.slice(1);
+});
 </script>
 
 <style lang="scss" scoped>
