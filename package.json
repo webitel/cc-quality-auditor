@@ -1,6 +1,6 @@
 {
   "name": "cc-quality-auditor",
-  "version": "0.1.0",
+  "version": "23.05.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
