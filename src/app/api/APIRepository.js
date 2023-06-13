@@ -1,4 +1,5 @@
-import { AuditFormServiceApiFactory } from 'webitel-sdk';
+import { required } from '@vuelidate/validators';
+import { AuditFormServiceApiFactory, EngineAuditQuestionType } from 'webitel-sdk';
 import {
   SdkCreatorApiConsumer,
   SdkDeleterApiConsumer,
@@ -11,6 +12,42 @@ import instance from './instance';
 import configuration from './interceptors/utils/openAPIConfig';
 
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
+
+const itemResponseHandler = (response) => {
+  const defaultSingleObject = {
+    name: '',
+    createdAt: '',
+    createdBy: {},
+    editable: false,
+    enabled: false,
+    questions: [],
+    updatedAt: '',
+    updatedBy: {},
+  };
+
+  response.questions = response.questions.map((question) => {
+    if (question.type === EngineAuditQuestionType.Score) {
+      return {
+        type: question.type,
+        max: question.max || 1,
+        min: question.min || 0,
+        required: question.required || false,
+        question: question.question || '',
+      };
+    }
+    if (question.type === EngineAuditQuestionType.Option) {
+      return {
+        ...question,
+        options: question.options.map((option) => ({
+          name: option.name || '',
+          score: option.score || 0,
+        })),
+      };
+    }
+    return question;
+  });
+  return { ...defaultSingleObject, ...response };
+};
 
 const fieldsToSend = [
   'name',
@@ -40,8 +77,9 @@ const _getAuditList = (getList) => function ({
   return getList(params);
 };
 
-const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm).setGetListMethod(_getAuditList);
-const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm);
+const listGetter = new SdkListGetterApiConsumer(auditService.searchAuditForm)
+  .setGetListMethod(_getAuditList);
+const itemGetter = new SdkGetterApiConsumer(auditService.readAuditForm, { itemResponseHandler });
 const itemCreator = new SdkCreatorApiConsumer(auditService.createAuditForm);
 const itemUpdater = new SdkUpdaterApiConsumer(auditService.updateAuditForm);
 const itemPatcher = new SdkPatcherApiConsumer(auditService.patchAuditForm, { fieldsToSend });
