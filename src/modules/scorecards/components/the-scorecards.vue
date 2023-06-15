@@ -39,11 +39,11 @@
               :icons="['refresh']"
               @input="loadData"
             >
-              <filter-fields
-                :headers="headers"
-                :static-headers="['name']"
-                @change="setHeaders"
-              ></filter-fields>
+<!--              <filter-fields-->
+<!--                :headers="headers"-->
+<!--                :static-headers="['name']"-->
+<!--                @change="setHeaders"-->
+<!--              ></filter-fields>-->
             </wt-table-actions>
           </div>
         </header>
@@ -51,6 +51,11 @@
         <wt-loader v-show="isLoading"></wt-loader>
 
         <div v-show="!isLoading" class="table-wrapper">
+          <filter-fields
+            :headers="headers"
+            :static-headers="['name']"
+            @change="setHeaders"
+          ></filter-fields>
           <wt-table
             :headers="headers"
             :data="dataList"
@@ -137,7 +142,7 @@ import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteCo
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
-import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/filter-table-fields.vue';
+import FilterFields from './filter-fields.vue';
 import TheDummy from '../../dummy/components/the-dummy.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 import { useAccess } from '../../../app/composables/useAccess';
