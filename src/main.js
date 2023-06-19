@@ -10,7 +10,7 @@ const fetchConfig = async () => {
   return response.json();
 };
 
-const initApp = ()=> createApp(App)
+const initApp = () => createApp(App)
   .use(store)
   .use(router)
   .use(i18n)
