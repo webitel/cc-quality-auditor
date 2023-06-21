@@ -137,6 +137,7 @@ onMounted(() => updateValueFromUrl());
 <style lang="scss" scoped>
 .filter-search {
   position: relative;
+  z-index: 1;
 
   .wt-context-menu {
     position: absolute;
