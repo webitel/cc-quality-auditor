@@ -1,4 +1,4 @@
 import { objCamelToSnake } from '@webitel/ui-sdk/src/scripts/caseConverters';
 
-const camelToSnakeTranformer = (skipKeys) => (obj) => objCamelToSnake(skipKeys, obj);
-export default camelToSnakeTranformer;
+const camelToSnakeTransformer = (skipKeys) => (obj) => objCamelToSnake(obj, skipKeys);
+export default camelToSnakeTransformer;
