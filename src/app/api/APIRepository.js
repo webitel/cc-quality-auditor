@@ -1,4 +1,4 @@
-import { AuditFormServiceApiFactory } from 'webitel-sdk';
+import { AuditFormServiceApiFactory, EngineAuditQuestionType } from 'webitel-sdk';
 import applyTransform, {
   log,
   merge,
@@ -25,6 +25,47 @@ const fieldsToSend = [
   'teams',
   'questions',
 ];
+
+const itemResponseHandler = (response) => {
+  const defaultSingleObject = {
+    name: '',
+    createdAt: '',
+    createdBy: {},
+    editable: false,
+    enabled: false,
+    questions: [],
+    updatedAt: '',
+    updatedBy: {},
+  };
+
+  const newResponseObject = {
+    ...response,
+    questions: response.questions.map((question) => {
+      if (question.type === EngineAuditQuestionType.Score) {
+        return {
+          ...question,
+          max: question.max || 1,
+          min: question.min || 0,
+          required: question.required || false,
+          question: question.question || '',
+        };
+      }
+      if (question.type === EngineAuditQuestionType.Option) {
+        return {
+          ...question,
+          options: question.options.map((option) => ({
+            ...option,
+            name: option.name || '',
+            score: option.score || 0,
+          })),
+        };
+      }
+      return question;
+    }),
+  };
+
+  return { ...defaultSingleObject, ...newResponseObject };
+};
 
 const getAuditList = async (params) => {
   const {
@@ -81,6 +122,7 @@ const getAudit = async ({ itemId: id }) => {
     const response = await auditService.readAuditForm(id);
     return applyTransform(response.data, [
       snakeToCamel(),
+      itemResponseHandler(),
       merge(defaultObject),
     ]);
   } catch (err) {
