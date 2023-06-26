@@ -27,7 +27,7 @@ const itemResponseHandler = (response) => {
   response.questions = response.questions.map((question) => {
     if (question.type === EngineAuditQuestionType.Score) {
       return {
-        type: question.type,
+        ...question,
         max: question.max || 1,
         min: question.min || 0,
         required: question.required || false,
@@ -38,6 +38,7 @@ const itemResponseHandler = (response) => {
       return {
         ...question,
         options: question.options.map((option) => ({
+          ...option,
           name: option.name || '',
           score: option.score || 0,
         })),
