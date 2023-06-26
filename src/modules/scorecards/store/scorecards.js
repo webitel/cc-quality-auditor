@@ -14,7 +14,7 @@ const cardState = {
   itemInstance: {
     name: '',
     description: '',
-    team: [],
+    teams: [],
     enabled: true,
     questions: [],
   },
