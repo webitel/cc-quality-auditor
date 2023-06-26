@@ -1,11 +1,3 @@
-import axios from 'axios';
+import generateInstance from '@webitel/ui-sdk/src/api/axios/generateInstance';
 
-// 'X-Webitel-Access' ~ 'X-Access-Token'
-const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
-  headers: {
-    'X-Webitel-Access': localStorage.getItem('access-token') || '',
-  },
-});
-
-export default instance;
+export default generateInstance();

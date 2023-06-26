@@ -1,8 +1,4 @@
 import { AuditFormServiceApiFactory } from 'webitel-sdk';
-import getDefaultGetListResponse from './defaults/getDefaultGetListResponse';
-import getDefaultGetParams from './defaults/getDefaultGetParams';
-import instance from './instance';
-import configuration from './openAPIConfig';
 import applyTransform, {
   log,
   merge,
@@ -12,7 +8,13 @@ import applyTransform, {
   handleUnauthorized,
   notify,
   sanitize,
-} from './transformers';
+} from '@webitel/ui-sdk/src/api/transformers';
+import {
+  getDefaultGetListResponse,
+  getDefaultGetParams,
+} from '@webitel/ui-sdk/src/api/defaults';
+import instance from './instance';
+import configuration from './openAPIConfig';
 
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
