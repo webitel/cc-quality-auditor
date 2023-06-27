@@ -121,8 +121,8 @@ const getAudit = async ({ itemId: id }) => {
   try {
     const response = await auditService.readAuditForm(id);
     return applyTransform(response.data, [
+      itemResponseHandler,
       snakeToCamel(),
-      itemResponseHandler(),
       merge(defaultObject),
     ]);
   } catch (err) {
