@@ -27,16 +27,6 @@ const fieldsToSend = [
 ];
 
 const itemResponseHandler = (response) => {
-  const defaultSingleObject = {
-    name: '',
-    createdAt: '',
-    createdBy: {},
-    editable: false,
-    enabled: false,
-    questions: [],
-    updatedAt: '',
-    updatedBy: {},
-  };
 
   const newResponseObject = {
     ...response,
@@ -64,7 +54,7 @@ const itemResponseHandler = (response) => {
     }),
   };
 
-  return { ...defaultSingleObject, ...newResponseObject };
+  return { ...newResponseObject };
 };
 
 const getAuditList = async (params) => {
@@ -117,13 +107,25 @@ const getAuditList = async (params) => {
   }
 };
 const getAudit = async ({ itemId: id }) => {
-  const defaultObject = { team: {} };
+  const defaultObject = {
+    team: {},
+    data: {
+      name: '',
+      createdAt: '',
+      createdBy: {},
+      editable: false,
+      enabled: false,
+      questions: [],
+      updatedAt: '',
+      updatedBy: {},
+    },
+  };
   try {
     const response = await auditService.readAuditForm(id);
     return applyTransform(response.data, [
+      merge(defaultObject),
       itemResponseHandler,
       snakeToCamel(),
-      merge(defaultObject),
     ]);
   } catch (err) {
     throw applyTransform(err, [
