@@ -18,14 +18,14 @@
         :callback="deleteCallback"
         @close="closeDelete"
       ></delete-confirmation-popup>
-
-      <div v-if="isEmptyData && !isLoading" class="scorecards__dummy">
-        <the-dummy
-          :entity="$t('scorecards.scorecards', 2)"
-          @create="create"
-        ></the-dummy>
-      </div>
-
+      <wt-dummy
+        v-if="isEmptyData && !isLoading"
+        :src="dummyPic"
+        :text="$t('scorecards.emptyWorkspace')"
+        show-action
+        @create="create"
+        class="scorecards__dummy"
+      ></wt-dummy>
       <div v-else class="scorecards-main-section">
         <header class="content-header">
           <h3 class="content-title">
@@ -138,9 +138,9 @@ import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/comp
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/filter-table-fields.vue';
-import TheDummy from '../../dummy/components/the-dummy.vue';
 import FilterSearch from '../../_shared/filters/components/filter-search.vue';
 import { useAccess } from '../../../app/composables/useAccess';
+import dummyPic from '../../../app/assets/audit-dummy.svg';
 
 const namespace = 'scorecards';
 const { t } = useI18n();
