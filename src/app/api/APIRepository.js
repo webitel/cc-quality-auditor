@@ -105,13 +105,9 @@ const getAudit = async ({ itemId: id }) => {
   const defaultObject = {
     team: {},
     name: '',
-    createdAt: '',
-    createdBy: {},
     editable: false,
     enabled: false,
     questions: [],
-    updatedAt: '',
-    updatedBy: {},
   };
   try {
     const response = await auditService.readAuditForm(id);
