@@ -27,7 +27,6 @@ const fieldsToSend = [
 ];
 
 const itemResponseHandler = (response) => {
-
   const newResponseObject = {
     ...response,
     questions: response.questions.map((question) => {
@@ -54,7 +53,7 @@ const itemResponseHandler = (response) => {
     }),
   };
 
-  return { ...newResponseObject };
+  return newResponseObject;
 };
 
 const getAuditList = async (params) => {
