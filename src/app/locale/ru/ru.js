@@ -2,7 +2,7 @@ export default {
   audit: 'Aудит',
   scorecards: {
     scorecards: 'Анкета | Анкеты',
-    dummy: '{ entity } еще не созданы',
+    emptyWorkspace: 'Анкеты еще не созданы',
   },
   objects: {
     criterion: 'Критерий | Критерии',
