@@ -104,23 +104,21 @@ const getAuditList = async (params) => {
 const getAudit = async ({ itemId: id }) => {
   const defaultObject = {
     team: {},
-    data: {
-      name: '',
-      createdAt: '',
-      createdBy: {},
-      editable: false,
-      enabled: false,
-      questions: [],
-      updatedAt: '',
-      updatedBy: {},
-    },
+    name: '',
+    createdAt: '',
+    createdBy: {},
+    editable: false,
+    enabled: false,
+    questions: [],
+    updatedAt: '',
+    updatedBy: {},
   };
   try {
     const response = await auditService.readAuditForm(id);
     return applyTransform(response.data, [
+      snakeToCamel(),
       merge(defaultObject),
       itemResponseHandler,
-      snakeToCamel(),
     ]);
   } catch (err) {
     throw applyTransform(err, [
