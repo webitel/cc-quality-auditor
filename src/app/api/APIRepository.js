@@ -69,6 +69,7 @@ const getAuditList = async (params) => {
   } = applyTransform(params, [
     merge(getDefaultGetParams()),
     starToSearch('q'),
+    starToSearch('question'),
     camelToSnake(),
   ]);
   try {
