@@ -13,8 +13,8 @@ import {
   getDefaultGetListResponse,
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
-import instance from './instance';
-import configuration from './openAPIConfig';
+import instance from '../../../app/api/instance';
+import configuration from '../../../app/api/openAPIConfig';
 
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
@@ -53,6 +53,20 @@ const itemResponseHandler = (response) => ({
 });
 
 const getAuditList = async (params) => {
+  const fieldsToSend = [
+    'page',
+    'size',
+    'q',
+    'sort',
+    'fields',
+    'id',
+    'teamId',
+    'enabled',
+    'archive',
+    'editable',
+    'active',
+    'question',
+  ];
   const {
     page,
     size,
@@ -70,6 +84,7 @@ const getAuditList = async (params) => {
     merge(getDefaultGetParams()),
     starToSearch('q'),
     starToSearch('question'),
+    sanitize(fieldsToSend),
     camelToSnake(),
   ]);
   try {

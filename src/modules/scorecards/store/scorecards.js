@@ -6,9 +6,9 @@ import BaseStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
 import ApiStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/ApiStoreModule';
-import AuditAPI from '../../../app/api/APIRepository';
+import AuditAPI from '../api/ScorecardsAPI';
 import headers from './_internals/headers';
-import filters from '../../_shared/filters/store/filters';
+import filters from '../modules/filters/store/filters';
 
 const cardState = {
   itemInstance: {

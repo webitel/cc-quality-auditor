@@ -32,18 +32,18 @@
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
-            <filter-search
-              :namespace="tableNamespace"
-            ></filter-search>
+<!--            <filter-search-->
+<!--              :namespace="tableNamespace"-->
+<!--            ></filter-search>-->
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
             >
-              <filter-fields
-                :headers="headers"
-                :static-headers="['name']"
-                @change="setHeaders"
-              ></filter-fields>
+<!--              <filter-fields-->
+<!--                :headers="headers"-->
+<!--                :static-headers="['name']"-->
+<!--                @change="setHeaders"-->
+<!--              ></filter-fields>-->
             </wt-table-actions>
           </div>
         </header>
@@ -61,7 +61,7 @@
             <template v-slot:name="{ item }">
               <wt-item-link
                 :id="item.id"
-                :route-name="namespace"
+                :route-name="AuditorSections.SCORECARDS"
               >{{ item.name }}</wt-item-link>
             </template>
             <template v-slot:description="{ item }">
@@ -93,7 +93,7 @@
             <template v-slot:actions="{ item }">
               <wt-item-link
                 :id="item.id"
-                :route-name="namespace"
+                :route-name="AuditorSections.SCORECARDS"
                 :disabled="!item.editable"
               >
                 <wt-icon-action
@@ -113,16 +113,10 @@
               ></wt-icon-action>
             </template>
           </wt-table>
-          <wt-pagination
-            :next="isNext"
-            :prev="page > 1"
-            :size="size"
-            debounce
-            @change="loadData"
-            @input="setSize"
-            @next="nextPage"
-            @prev="prevPage"
-          ></wt-pagination>
+          <filter-pagination
+            :namespace="filtersNamespace"
+            :is-next="isNext"
+          ></filter-pagination>
         </div>
       </div>
     </template>
@@ -137,36 +131,33 @@ import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteCo
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
+import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/filter-table-fields.vue';
-import FilterSearch from '../../_shared/filters/components/filter-search.vue';
+import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
+import FilterSearch from '../modules/filters/components/filter-search.vue';
 import { useAccess } from '../../../app/composables/useAccess';
 import dummyPic from '../../../app/assets/audit-dummy.svg';
 
-const namespace = 'scorecards';
+const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
 const {
-  namespace: tableNamespace,
+  namespace,
 
   dataList,
   isLoading,
   headers,
   isNext,
-  page,
-  size,
   error,
 
   loadData,
-  setSize,
-  nextPage,
-  prevPage,
   patchProperty,
   deleteData,
   sort,
   setHeaders,
-} = useTableStore(namespace);
+} = useTableStore(baseNamespace);
 
 const {
   hasCreateAccess,
@@ -182,6 +173,8 @@ const {
   askDeleteConfirmation,
   closeDelete,
 } = useDeleteConfirmationPopup();
+
+const filtersNamespace = computed(() => `${namespace}/filters`);
 
 const isEmptyData = computed(() => {
   if (dataList.value.length) return false;
@@ -205,7 +198,7 @@ function prettifyDateTime(timestamp) {
 }
 
 function create() {
-  return router.push({ name: `${namespace}-new` });
+  return router.push({ name: `${AuditorSections.SCORECARDS}-new` });
 }
 
 function deleteSelectedItems() {
