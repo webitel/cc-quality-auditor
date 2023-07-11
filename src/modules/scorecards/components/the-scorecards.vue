@@ -32,18 +32,19 @@
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
-<!--            <filter-search-->
-<!--              :namespace="tableNamespace"-->
-<!--            ></filter-search>-->
+            <filter-search
+              :namespace="filtersNamespace"
+            ></filter-search>
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
             >
-<!--              <filter-fields-->
-<!--                :headers="headers"-->
-<!--                :static-headers="['name']"-->
-<!--                @change="setHeaders"-->
-<!--              ></filter-fields>-->
+              <filter-fields
+                :namespace="filtersNamespace"
+                :headers="headers"
+                :static-headers="['name']"
+                @change="setHeaders"
+              ></filter-fields>
             </wt-table-actions>
           </div>
         </header>
@@ -62,7 +63,8 @@
               <wt-item-link
                 :id="item.id"
                 :route-name="AuditorSections.SCORECARDS"
-              >{{ item.name }}</wt-item-link>
+              >{{ item.name }}
+              </wt-item-link>
             </template>
             <template v-slot:description="{ item }">
               {{ item.description }}
@@ -124,10 +126,13 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
+import { useStore } from 'vuex';
+import {
+  useDeleteConfirmationPopup,
+} from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
@@ -142,6 +147,7 @@ const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 
 const {
   namespace,
@@ -192,6 +198,10 @@ const path = computed(() => [
   { name: t('scorecards.scorecards', 2), route: '/scorecards' },
 ]);
 
+function restoreFilters(payload) {
+  return store.dispatch(`${filtersNamespace.value}/RESTORE_FILTERS`, payload);
+}
+
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
   return new Date(+timestamp).toLocaleString();
@@ -208,9 +218,7 @@ function deleteSelectedItems() {
   });
 }
 
-watch(() => route.query, () => {
-  loadData(route.query);
-}, { immediate: true });
+onMounted(() => restoreFilters());
 
 </script>
 
