@@ -14,7 +14,7 @@
         <wt-tooltip>
           <template v-slot:activator>
             <wt-icon-btn
-              v-if="!filterSchema.value"
+              v-if="!localValue"
               icon="filter"
             ></wt-icon-btn>
           </template>
