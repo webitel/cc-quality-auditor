@@ -126,14 +126,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import {
   useDeleteConfirmationPopup,
 } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
+import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
@@ -147,7 +147,6 @@ const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const store = useStore();
 
 const {
   namespace,
@@ -166,6 +165,10 @@ const {
 } = useTableStore(baseNamespace);
 
 const {
+  filtersNamespace,
+} = useTableFilters(namespace);
+
+const {
   hasCreateAccess,
   hasEditAccess,
   hasDeleteAccess,
@@ -180,8 +183,7 @@ const {
   closeDelete,
 } = useDeleteConfirmationPopup();
 
-const filtersNamespace = computed(() => `${namespace}/filters`);
-
+// FIXME: refactor me!
 const isEmptyData = computed(() => {
   if (dataList.value.length) return false;
   if (error.value) return false;
@@ -190,17 +192,17 @@ const isEmptyData = computed(() => {
   return true;
 });
 
-/* selectedItems in the current implementation to include items for which there weren't ratings and they can be edited/deleted */
-const selectedItems = computed(() => dataList.value.filter((item) => item._isSelected && item.editable));
+/*
+selectedItems in the current implementation to include items
+ for which there weren't ratings and they can be edited/deleted
+  */
+const selectedItems = computed(() => (
+  dataList.value.filter((item) => item._isSelected && item.editable)));
 
 const path = computed(() => [
   { name: t('audit'), route: '/' },
   { name: t('scorecards.scorecards', 2), route: '/scorecards' },
 ]);
-
-function restoreFilters(payload) {
-  return store.dispatch(`${filtersNamespace.value}/RESTORE_FILTERS`, payload);
-}
 
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
@@ -217,9 +219,6 @@ function deleteSelectedItems() {
     callback: () => deleteData([...selectedItems.value]),
   });
 }
-
-onMounted(() => restoreFilters());
-
 </script>
 
 <style lang="scss" scoped>
