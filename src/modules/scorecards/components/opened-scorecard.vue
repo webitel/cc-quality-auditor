@@ -103,7 +103,6 @@ const v$ = useVuelidate(computed(() => (
     },
   })), { itemInstance }, { $autoDirty: true });
 
-
 const tabs = computed(() => [
   {
     text: t('reusable.general'),
