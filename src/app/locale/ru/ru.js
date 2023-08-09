@@ -6,8 +6,5 @@ export default {
   },
   objects: {
     criterion: 'Критерий | Критерии',
-    filters: {
-      settingsHint: 'Настройки поиска',
-    },
   },
 };
