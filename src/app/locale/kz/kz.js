@@ -5,9 +5,9 @@ export default {
     emptyWorkspace: 'Сауалнамалар әлі жасалмады',
   },
   objects: {
-    criterion: 'Критерий | Критерилер',
+    criterion: 'Критерий | Критерийлер',
     filters: {
-      settingsHint: 'Іздеу параметрлері',
+      settingsHint: 'Іздеуді баптау',
     },
   },
 };
