@@ -180,5 +180,8 @@ onMounted(() => {
 <style lang="scss" scoped>
 .main-container {
   width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 </style>

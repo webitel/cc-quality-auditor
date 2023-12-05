@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import userinfo from '../../modules/userinfo/userinfo';
+import appearance from '../../modules/appearance/store/appearance';
 import scorecards from '../../modules/scorecards/store/scorecards';
 
 export default createStore({
@@ -26,6 +27,7 @@ export default createStore({
   },
   modules: {
     userinfo,
+    appearance,
     scorecards,
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="opened-scorecard-criterias">
     <audit-form
       :questions="itemInstance.questions"
       :mode="hasModifyAccess ? 'create' : 'fill'"
@@ -39,7 +39,16 @@ const {
 </script>
 
 <style scoped>
-.audit-form {
+.opened-scorecard-criterias {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   margin-top: var(--spacing-sm);
+}
+
+.audit-form {
+  @extend %wt-scrollbar;
+  min-height: 0;
+  overflow-y: scroll;
 }
 </style>
