@@ -8,7 +8,9 @@
           :nav="nav"
           :dark-mode="darkMode"
         ></wt-navigation-bar>
-        <wt-dark-mode-switcher />
+        <wt-logo
+          :dark-mode="darkMode"
+        /><wt-dark-mode-switcher />
         <wt-app-navigator
           :apps="apps"
           :current-app="currentApp"
