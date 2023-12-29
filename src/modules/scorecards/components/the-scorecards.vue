@@ -20,7 +20,7 @@
       ></delete-confirmation-popup>
       <wt-dummy
         v-if="isEmptyData && !isLoading"
-        :src="dummyPic"
+        :src="darkMode ? dummyDark : dummyLight"
         :text="$t('scorecards.emptyWorkspace')"
         show-action
         @create="create"
@@ -128,6 +128,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import {
   useDeleteConfirmationPopup,
@@ -141,12 +142,14 @@ import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/fi
 import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
 import FilterSearch from '../modules/filters/components/filter-search.vue';
 import { useAccess } from '../../../app/composables/useAccess';
-import dummyPic from '../../../app/assets/audit-dummy.svg';
+import dummyLight from '../../../app/assets/dummy-light.svg';
+import dummyDark from '../../../app/assets/dummy-dark.svg';
 
 const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 
 const {
   namespace,
@@ -187,8 +190,8 @@ const {
 const isEmptyData = computed(() => {
   if (dataList.value.length) return false;
   if (error.value) return false;
-  if (route.query.q && !dataList.value.length) return false;
-  if (route.query.question && !dataList.value.length) return false;
+  if (route.query.q && dataList.value.length) return false;
+  if (route.query.question && dataList.value.length) return false;
   return true;
 });
 
@@ -198,6 +201,7 @@ selectedItems in the current implementation to include items
   */
 const selectedItems = computed(() => (
   dataList.value.filter((item) => item._isSelected && item.editable)));
+const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const path = computed(() => [
   { name: t('audit'), route: '/' },
