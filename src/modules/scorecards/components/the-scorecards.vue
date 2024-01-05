@@ -190,8 +190,8 @@ const {
 const isEmptyData = computed(() => {
   if (dataList.value.length) return false;
   if (error.value) return false;
-  if (route.query.q && dataList.value.length) return false;
-  if (route.query.question && dataList.value.length) return false;
+  if (route.query.q && !dataList.value.length) return false;
+  if (route.query.question && !dataList.value.length) return false;
   return true;
 });
 
