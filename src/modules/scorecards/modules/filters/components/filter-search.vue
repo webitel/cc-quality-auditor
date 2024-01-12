@@ -1,33 +1,34 @@
 <template>
   <form
+    class="filter-search"
     @submit.prevent
-    class="filter-search">
+  >
     <wt-search-bar
       v-model="localValue"
       debounce
       @search="setValue({ filter: filterQuery, value: localValue })"
     >
-      <template v-slot:additional-actions>
+      <template #additional-actions>
         <wt-context-menu
           :options="searchModeOptions"
           @click="changeMode($event.option)"
         >
-          <template v-slot:activator>
+          <template #activator>
             <wt-tooltip>
-              <template v-slot:activator>
+              <template #activator>
                 <wt-icon-btn
                   icon="filter"
-                ></wt-icon-btn>
+                />
               </template>
               {{ $t('webitelUI.searchBar.settingsHint') }}
             </wt-tooltip>
           </template>
-          <template v-slot:option="{ value, text }">
+          <template #option="{ value, text }">
             <wt-radio
               :label="text"
               :selected="filterQuery === value"
               :value="true"
-            ></wt-radio>
+            />
           </template>
         </wt-context-menu>
       </template>

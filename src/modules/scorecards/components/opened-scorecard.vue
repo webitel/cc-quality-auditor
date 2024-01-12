@@ -1,6 +1,6 @@
 <template>
   <wt-page-wrapper :actions-panel="false">
-    <template v-slot:header>
+    <template #header>
       <wt-page-header
         :primary-action="saveChanges"
         :primary-text="saveText"
@@ -9,8 +9,8 @@
         :primary-disabled="isInvalidForm"
       >
         <template
-          v-slot:primary-action
           v-if="itemInstance.editable"
+          #primary-action
         >
           <wt-button-select
             :options="saveOptions"
@@ -18,14 +18,15 @@
             :color="isInvalidForm && 'secondary'"
             @click="save"
             @click:option="({ callback }) => callback()"
-          >{{ saveText }}
+          >
+            {{ saveText }}
           </wt-button-select>
         </template>
-        <wt-headline-nav :path="path"></wt-headline-nav>
+        <wt-headline-nav :path="path" />
       </wt-page-header>
     </template>
 
-    <template v-slot:main>
+    <template #main>
       <form
         class="main-container"
         @submit.prevent="save"
@@ -34,14 +35,17 @@
           :current="currentTab"
           :tabs="tabs"
           @change="changeTab"
-        ></wt-tabs>
+        />
         <component
           :is="component"
           :v="v$"
           :namespace="namespace"
           @update:validation="isInvalidFormQuestions = $event.invalid"
-        ></component>
-        <input type="submit" hidden>
+        />
+        <input
+          type="submit"
+          hidden
+        >
       </form>
     </template>
   </wt-page-wrapper>

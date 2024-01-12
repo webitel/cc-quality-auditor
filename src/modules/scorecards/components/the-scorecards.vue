@@ -1,6 +1,9 @@
 <template>
-  <wt-page-wrapper class="scorecards" :actions-panel="false">
-    <template v-slot:header>
+  <wt-page-wrapper
+    class="scorecards"
+    :actions-panel="false"
+  >
+    <template #header>
       <wt-page-header
         :primary-action="create"
         :secondary-text="$t('reusable.delete')"
@@ -8,25 +11,28 @@
         :hide-primary="!hasCreateAccess"
         :hide-secondary="!hasDeleteAccess"
       >
-        <wt-headline-nav :path="path"></wt-headline-nav>
+        <wt-headline-nav :path="path" />
       </wt-page-header>
     </template>
-    <template v-slot:main>
+    <template #main>
       <delete-confirmation-popup
         v-show="isDeleteConfirmationPopup"
         :delete-count="deleteCount"
         :callback="deleteCallback"
         @close="closeDelete"
-      ></delete-confirmation-popup>
+      />
       <wt-dummy
         v-if="isEmptyData && !isLoading"
         :src="darkMode ? dummyDark : dummyLight"
         :text="$t('scorecards.emptyWorkspace')"
         show-action
-        @create="create"
         class="scorecards__dummy"
-      ></wt-dummy>
-      <div v-else class="scorecards-main-section">
+        @create="create"
+      />
+      <div
+        v-else
+        class="scorecards-main-section"
+      >
         <header class="content-header">
           <h3 class="content-title">
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
@@ -34,7 +40,7 @@
           <div class="content-header__actions-wrap">
             <filter-search
               :namespace="filtersNamespace"
-            ></filter-search>
+            />
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
@@ -44,14 +50,17 @@
                 :headers="headers"
                 :static-headers="['name']"
                 @change="setHeaders"
-              ></filter-fields>
+              />
             </wt-table-actions>
           </div>
         </header>
 
-        <wt-loader v-show="isLoading"></wt-loader>
+        <wt-loader v-show="isLoading" />
 
-        <div v-show="!isLoading" class="table-wrapper">
+        <div
+          v-show="!isLoading"
+          class="table-wrapper"
+        >
           <wt-table
             :headers="headers"
             :data="dataList"
@@ -59,40 +68,41 @@
             sortable
             @sort="sort"
           >
-            <template v-slot:name="{ item }">
+            <template #name="{ item }">
               <wt-item-link
                 :id="item.id"
                 :route-name="AuditorSections.SCORECARDS"
-              >{{ item.name }}
+              >
+                {{ item.name }}
               </wt-item-link>
             </template>
-            <template v-slot:description="{ item }">
+            <template #description="{ item }">
               {{ item.description }}
             </template>
-            <template v-slot:createdAt="{ item }">
+            <template #createdAt="{ item }">
               {{ prettifyDateTime(item.createdAt) }}
             </template>
-            <template v-slot:createdBy="{ item }">
+            <template #createdBy="{ item }">
               <div v-if="item.createdBy">
                 {{ item.createdBy.name }}
               </div>
             </template>
-            <template v-slot:modifiedAt="{ item }">
+            <template #modifiedAt="{ item }">
               {{ prettifyDateTime(item.updatedAt) }}
             </template>
-            <template v-slot:modifiedBy="{ item }">
+            <template #modifiedBy="{ item }">
               <div v-if="item.updatedBy">
                 {{ item.updatedBy.name }}
               </div>
             </template>
-            <template v-slot:state="{ item, index }">
+            <template #state="{ item, index }">
               <wt-switcher
                 :value="item.enabled"
                 :disabled="!hasEditAccess"
                 @change="patchProperty({ item, index, prop: 'enabled', value: $event })"
-              ></wt-switcher>
+              />
             </template>
-            <template v-slot:actions="{ item }">
+            <template #actions="{ item }">
               <wt-item-link
                 :id="item.id"
                 :route-name="AuditorSections.SCORECARDS"
@@ -102,7 +112,7 @@
                   v-if="hasEditAccess"
                   :disabled="!item.editable"
                   action="edit"
-                ></wt-icon-action>
+                />
               </wt-item-link>
               <wt-icon-action
                 v-if="hasDeleteAccess"
@@ -112,13 +122,13 @@
                   deleted: [item],
                   callback: () => deleteData(item),
                 })"
-              ></wt-icon-action>
+              />
             </template>
           </wt-table>
           <filter-pagination
             :namespace="filtersNamespace"
             :is-next="isNext"
-          ></filter-pagination>
+          />
         </div>
       </div>
     </template>
