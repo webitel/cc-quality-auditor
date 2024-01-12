@@ -1,4 +1,4 @@
-import WebitelUI from '@webitel/ui-sdk/dist/ui-sdk.umd';
+import WebitelUI from '@webitel/ui-sdk/dist/ui-sdk.mjs';
 import WebitelUIEn from '@webitel/ui-sdk/src/locale/en/en';
 import WebitelUIRu from '@webitel/ui-sdk/src/locale/ru/ru';
 import WebitelUIUa from '@webitel/ui-sdk/src/locale/ua/ua';
@@ -9,7 +9,7 @@ import '@webitel/ui-sdk/dist/ui-sdk.css';
 import '@webitel/ui-sdk/dist/img/sprite';
 
 const globals = {
-  $baseURL: process.env.BASE_URL,
+  $baseURL: import.meta.env.BASE_URL,
 };
 
 i18n.global.mergeLocaleMessage('en', WebitelUIEn);
