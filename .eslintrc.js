@@ -8,8 +8,8 @@ module.exports = {
     'plugin:vue/vue3-recommended',
   ],
   rules: {
-    'no-console': import.meta.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-console': 'off',
+    'no-debugger': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
   },

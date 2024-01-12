@@ -1,7 +1,9 @@
 <template>
   <section>
     <header class="content-header">
-      <h3 class="content-title">{{ $t('reusable.generalInfo') }}</h3>
+      <h3 class="content-title">
+        {{ $t('reusable.generalInfo') }}
+      </h3>
     </header>
     <div class="object-input-grid">
       <wt-input
@@ -11,13 +13,13 @@
         :disabled="!hasModifyAccess"
         required
         @input="setItemProp({ prop: 'name', value: $event })"
-      ></wt-input>
+      />
       <wt-textarea
         :value="itemInstance.description"
         :label="$t('vocabulary.description')"
         :disabled="!hasModifyAccess"
         @input="setItemProp({ prop: 'description', value: $event })"
-      ></wt-textarea>
+      />
       <wt-select
         :label="$t('objects.team', 1)"
         :value="itemInstance.teams"
@@ -25,14 +27,14 @@
         :disabled="!hasModifyAccess"
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
-      ></wt-select>
-      <div></div>
+      />
+      <div />
       <wt-switcher
         :disabled="!hasModifyAccess"
         :label="$t('reusable.state')"
         :value="itemInstance.enabled"
         @change="setItemProp({ prop: 'enabled', value: $event })"
-      ></wt-switcher>
+      />
     </div>
   </section>
 </template>

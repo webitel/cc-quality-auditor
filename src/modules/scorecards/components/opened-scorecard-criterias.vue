@@ -6,7 +6,7 @@
       :readonly="!hasModifyAccess"
       @update:validation="emits('update:validation', $event)"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
-    ></audit-form>
+    />
   </div>
 </template>
 
