@@ -8,9 +8,12 @@
           :nav="nav"
           :dark-mode="darkMode"
         />
-        <wt-logo
-          :dark-mode="darkMode"
-        /><wt-dark-mode-switcher />
+        <a :href="startPageHref">
+          <wt-logo
+            :dark-mode="darkMode"
+          />
+        </a>
+        <wt-dark-mode-switcher />
         <wt-app-navigator
           :apps="apps"
           :current-app="currentApp"
@@ -53,6 +56,8 @@ const checkAccess = computed(() => store.getters['userinfo/CHECK_APP_ACCESS']);
 const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const { t } = useI18n();
+
+const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 
 const apps = computed(() => {
   const agent = {
