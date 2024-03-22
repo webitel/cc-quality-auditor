@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import userinfo from '../../modules/userinfo/userinfo';
 import appearance from '../../modules/appearance/store/appearance';
 import scorecards from '../../modules/scorecards/store/scorecards';
+import instance from '../api/instance';
 
 export default createStore({
   state: {},
@@ -13,7 +14,7 @@ export default createStore({
   },
   actions: {
     OPEN_SESSION: async (context) => {
-      await context.dispatch('userinfo/OPEN_SESSION', null, { root: true });
+      await context.dispatch('userinfo/OPEN_SESSION', { instance }, { root: true });
     },
     LOAD_DATA: (
       context,
