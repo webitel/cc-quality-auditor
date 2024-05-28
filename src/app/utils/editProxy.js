@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+ 
 const proxy = (item) => {
   Object.assign(item, { _dirty: false });
   return new Proxy(item, {
