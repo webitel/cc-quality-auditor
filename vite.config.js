@@ -25,6 +25,8 @@ export default ({ mode }) => {
       },
     },
     resolve: {
+      // deduping compat is needed for audit form to prevent vue instance duplicating
+      dedupe: ['vue', '@vue/compat'],
       alias: {
         vue: '@vue/compat',
       },
