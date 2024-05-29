@@ -4,45 +4,19 @@
     @submit.prevent
   >
     <wt-search-bar
-      v-model="localValue"
-      debounce
-      @search="setValue({ filter: filterQuery, value: localValue })"
-    >
-      <template #additional-actions>
-        <wt-context-menu
-          :options="searchModeOptions"
-          @click="changeMode($event.option)"
-        >
-          <template #activator>
-            <wt-tooltip>
-              <template #activator>
-                <wt-icon-btn
-                  icon="filter"
-                />
-              </template>
-              {{ $t('webitelUI.searchBar.settingsHint') }}
-            </wt-tooltip>
-          </template>
-          <template #option="{ value, text }">
-            <wt-radio
-              :label="text"
-              :selected="filterQuery === value"
-              :value="true"
-            />
-          </template>
-        </wt-context-menu>
-      </template>
-    </wt-search-bar>
+      :searchMode="filterQuery"
+      :searchModeOptions="searchModeOptions"
+      :value="localValue"
+      @input="localValue = $event"
+      @search="setValue({ name: filterQuery, value: localValue })"
+      @change:search-mode="changeMode"
+    />
   </form>
 </template>
+
 <script setup>
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import {
-  watch,
-  computed,
-  ref,
-  onMounted,
-} from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import SearchMode from '../enums/SearchMode.enum';
@@ -83,7 +57,7 @@ function setValue(payload) {
 }
 
 function changeMode({ value }) {
-  setValue({ filter: filterQuery.value, value: '' });
+  setValue({ name: filterQuery.value, value: '' });
   filterQuery.value = value;
 }
 

@@ -1,15 +1,20 @@
 import { createStore } from 'vuex';
-import userinfo from '../../modules/userinfo/userinfo';
 import appearance from '../../modules/appearance/store/appearance';
 import scorecards from '../../modules/scorecards/store/scorecards';
+import userinfo from '../../modules/userinfo/userinfo';
 import instance from '../api/instance';
 
 export default createStore({
-  state: {},
+  state: {
+    router: null,
+  },
   getters: {},
   mutations: {
     SET_APP_STATE: (state, appState) => {
       state.state = appState;
+    },
+    SET_ROUTER: (state, router) => {
+      state.router = router;
     },
   },
   actions: {
