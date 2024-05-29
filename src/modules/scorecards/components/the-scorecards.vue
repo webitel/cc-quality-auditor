@@ -40,6 +40,8 @@
           <div class="content-header__actions-wrap">
             <filter-search
               :namespace="filtersNamespace"
+              :search-mode-opts="searchOpts"
+              multisearch
             />
             <wt-table-actions
               :icons="['refresh']"
@@ -142,6 +144,7 @@ import {
   useDeleteConfirmationPopup,
 } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
+import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue';
 import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
 import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
@@ -152,7 +155,7 @@ import { useStore } from 'vuex';
 import dummyDark from '../../../app/assets/dummy-dark.svg';
 import dummyLight from '../../../app/assets/dummy-light.svg';
 import { useAccess } from '../../../app/composables/useAccess';
-import FilterSearch from '../modules/filters/components/filter-search.vue';
+import SearchMode from '../modules/filters/enums/SearchMode.enum.js';
 
 const baseNamespace = 'scorecards';
 const { t } = useI18n();
@@ -219,6 +222,17 @@ const isEmptyData = computed(() => {
   if (route.query.question && !dataList.value.length) return false;
   return true;
 });
+
+const searchOpts = computed(() => [
+  {
+    value: SearchMode.NAME,
+    text: t('reusable.name'),
+  },
+  {
+    value: SearchMode.CRITERION,
+    text: t('objects.criterion', 1),
+  },
+]);
 
 /*
 selectedItems in the current implementation to include items
