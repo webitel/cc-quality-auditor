@@ -1,12 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router';
 import AuditorSections
   from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
-import store from '../store';
-import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
-import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 import OpenedScorecard
   from '../../modules/scorecards/components/opened-scorecard.vue';
+import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
+import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
 import AccessDenied from '../components/utils/access-denied-component.vue';
+import store from '../store';
 
 const checkAppAccess = (to, from, next) => {
   const hasReadAccess = store.getters['userinfo/CHECK_APP_ACCESS'](store.getters['userinfo/THIS_APP']);
@@ -33,30 +33,19 @@ const routes = [
     redirect: { name: AuditorSections.SCORECARDS },
     component: TheAuditorWorkspace,
     beforeEnter: checkAppAccess,
-    children: [{
-      path: 'scorecards',
-      name: AuditorSections.SCORECARDS,
-      component: Scorecards,
-      beforeEnter: checkRouteAccess,
-    },
-    {
-      path: 'scorecards/:id',
-      name: `${AuditorSections.SCORECARDS}-edit`,
-      component: OpenedScorecard,
-      beforeEnter: checkRouteAccess,
-      meta: {
-        modifyMode: 'edit',
+    children: [
+      {
+        path: 'scorecards',
+        name: AuditorSections.SCORECARDS,
+        component: Scorecards,
+        beforeEnter: checkRouteAccess,
       },
-    },
-    {
-      path: 'scorecards/new',
-      name: `${AuditorSections.SCORECARDS}-new`,
-      component: OpenedScorecard,
-      beforeEnter: checkRouteAccess,
-      meta: {
-        modifyMode: 'create',
+      {
+        path: 'scorecards/:id',
+        name: `${AuditorSections.SCORECARDS}-card`,
+        component: OpenedScorecard,
+        beforeEnter: checkRouteAccess,
       },
-    },
     ],
   },
   {
@@ -76,7 +65,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (!localStorage.getItem('access-token') && !to.query.accessToken) {
-    const desiredUrl =  encodeURIComponent(window.location.href);
+    const desiredUrl = encodeURIComponent(window.location.href);
     const authUrl = import.meta.env.VITE_AUTH_URL;
     window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
   } else if (to.query.accessToken) {

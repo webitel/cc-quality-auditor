@@ -1,41 +1,40 @@
 {
   "name": "cc-quality-auditor",
-  "version": "24.04.0",
+  "version": "24.04-1.0",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint:fix": "eslint --fix --ext .js,.vue src"
+    "lint:fix": "eslint --fix src"
   },
+  "type": "module",
   "dependencies": {
-    "@vue/compat": "^3.3.9",
-    "@vuelidate/core": "^2.0.0",
-    "@vuelidate/validators": "^2.0.2",
-    "@webitel/ui-sdk": "=24.4.39",
-    "axios": "^1.6.5",
+    "@vue/compat": "^3.4.27",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "@webitel/ui-sdk": "^24.6.43",
+    "axios": "^1.7.2",
     "deep-equal": "^2.2.0",
     "deepmerge": "^4.3.1",
     "lodash": "^4.17.21",
-    "vue": "^3.3.9",
-    "vue-i18n": "^9.2.2",
-    "vue-router": "^4.0.3",
+    "vue": "^3.4.27",
+    "vue-i18n": "^9.13.1",
+    "vue-router": "^4.3.2",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^0.1.185"
+    "webitel-sdk": "^24.2.16"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.3",
-    "@vitest/coverage-v8": "^1.1.3",
-    "@vue/test-utils": "^2.0.0-0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.20.0",
-    "sass": "^1.32.7",
-    "vite": "^5.0.11",
-    "vite-plugin-node-polyfills": "^0.19.0",
-    "vite-plugin-svg-sprite": "^0.5.1",
-    "vitest": "^1.1.3"
-  },
-  "overrides": {
-    "axios": "^1.6.5"
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitest/coverage-v8": "^2.0.0-beta.3",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.3.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "sass": "^1.77.2",
+    "tslib": "^2.6.2",
+    "vite": "^5.2.12",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-svg-sprite": "^0.5.2",
+    "vitest": "^2.0.0-beta.3"
   }
 }

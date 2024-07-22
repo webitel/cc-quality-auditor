@@ -1,14 +1,14 @@
-import TableStoreModule
-  from '@webitel/ui-sdk/src/modules/TableStoreModule/store/TableStoreModule';
 import CardStoreModule
   from '@webitel/ui-sdk/src/modules/CardStoreModule/store/CardStoreModule';
-import BaseStoreModule
-  from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
+import TableStoreModule
+  from '@webitel/ui-sdk/src/modules/TableStoreModule/store/TableStoreModule';
 import ApiStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/ApiStoreModule';
+import BaseStoreModule
+  from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
 import AuditAPI from '../api/ScorecardsAPI';
-import headers from './_internals/headers';
 import filters from '../modules/filters/store/filters';
+import headers from './_internals/headers';
 
 const cardState = {
   itemInstance: {
@@ -20,17 +20,13 @@ const cardState = {
   },
 };
 
-const tableGetters = {
-  REQUIRED_FIELDS: () => ['id', 'editable'],
-};
-
 const api = new ApiStoreModule()
   .generateAPIActions(AuditAPI)
   .getModule();
 
 const table = new TableStoreModule({ headers })
   .setChildModules({ api, filters })
-  .getModule({ getters: tableGetters });
+.getModule();
 
 const card = new CardStoreModule()
   .setChildModules({ api })
@@ -39,4 +35,5 @@ const card = new CardStoreModule()
 const scorecards = new BaseStoreModule()
   .setChildModules({ table, card })
   .getModule();
+
 export default scorecards;

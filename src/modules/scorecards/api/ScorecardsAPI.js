@@ -1,19 +1,22 @@
-import { AuditFormServiceApiFactory, EngineAuditQuestionType } from 'webitel-sdk';
-import applyTransform, {
-  log,
-  merge,
-  starToSearch,
-  camelToSnake,
-  snakeToCamel,
-  notify,
-  sanitize,
-} from '@webitel/ui-sdk/src/api/transformers';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults';
-import instance from '../../../app/api/instance';
-import configuration from '../../../app/api/openAPIConfig';
+} from '@webitel/ui-sdk/src/api/defaults/index.js';
+import applyTransform, {
+  camelToSnake,
+  log,
+  merge,
+  notify,
+  sanitize,
+  snakeToCamel,
+  starToSearch,
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
+import {
+  AuditFormServiceApiFactory,
+  EngineAuditQuestionType,
+} from 'webitel-sdk';
+import instance from '../../../app/api/instance.js';
+import configuration from '../../../app/api/openAPIConfig.js';
 
 const auditService = new AuditFormServiceApiFactory(configuration, '', instance);
 
@@ -92,13 +95,11 @@ const getAuditList = async (params) => {
       size,
       q,
       sort,
-      fields,
+      ['id', 'editable', ...fields],
       id,
       teamId,
       enabled,
-      archive,
       editable,
-      active,
       question,
     );
     const { items, next } = applyTransform(response.data, [
@@ -138,17 +139,13 @@ const getAudit = async ({ itemId: id }) => {
 };
 const addAudit = async ({ itemInstance }) => {
   const item = applyTransform(itemInstance, [
-    log,
     sanitize(fieldsToSend),
-    log,
     camelToSnake(),
-    log,
   ]);
   try {
     const response = await auditService.createAuditForm(item);
     return applyTransform(response.data, [
       snakeToCamel(),
-      log,
     ]);
   } catch (err) {
     throw applyTransform(err, [
@@ -158,16 +155,13 @@ const addAudit = async ({ itemInstance }) => {
 };
 const updateAudit = async ({ itemInstance, itemId: id }) => {
   const item = applyTransform(itemInstance, [
-    log,
     sanitize(fieldsToSend),
     camelToSnake(),
-    log,
   ]);
   try {
     const response = await auditService.updateAuditForm(id, item);
     return applyTransform(response.data, [
       snakeToCamel(),
-      log,
     ]);
   } catch (err) {
     throw applyTransform(err, [
@@ -196,7 +190,6 @@ const deleteAudit = async ({ id }) => {
   try {
     const response = await auditService.deleteAuditForm(id);
     return applyTransform(response.data, [
-      log,
     ]);
   } catch (err) {
     throw applyTransform(err, [

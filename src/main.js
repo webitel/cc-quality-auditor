@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
 import App from './app.vue';
-import router from './app/router';
 import i18n from './app/locale/i18n';
 import WebitelUi from './app/plugins/webitel-ui';
+import router from './app/router';
 import store from './app/store';
 
 const setTokenFromUrl = () => {
@@ -39,6 +39,7 @@ const initApp = () => createApp(App)
   try {
     setTokenFromUrl();
     config = await fetchConfig();
+    store.commit('SET_ROUTER', router);
     await store.dispatch('OPEN_SESSION');
   } catch (err) {
     console.error('before app mount error:', err);

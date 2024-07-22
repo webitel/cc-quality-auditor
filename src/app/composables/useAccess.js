@@ -1,6 +1,6 @@
 import { computed } from 'vue';
-import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useAccess = () => {
@@ -15,7 +15,7 @@ export const useAccess = () => {
   hasModifyAccess depends on route meta param and wraps access logic to show if inputs should be disabled
    */
   const hasModifyAccess = computed(() => {
-    const modifyMode = route.meta.modifyMode;
+    const modifyMode = route.params.id === 'new' ? 'create' : 'edit';
     if (modifyMode === 'edit') return hasEditAccess.value;
     if (modifyMode === 'create') return hasCreateAccess.value;
     return false;

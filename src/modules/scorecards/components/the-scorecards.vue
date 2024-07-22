@@ -1,15 +1,15 @@
 <template>
   <wt-page-wrapper
-    class="scorecards"
     :actions-panel="false"
+    class="scorecards"
   >
     <template #header>
       <wt-page-header
-        :primary-action="create"
-        :secondary-text="$t('reusable.delete')"
-        :secondary-action="deleteSelectedItems"
         :hide-primary="!hasCreateAccess"
         :hide-secondary="!hasDeleteAccess"
+        :primary-action="create"
+        :secondary-action="deleteSelectedItems"
+        :secondary-text="$t('reusable.delete')"
       >
         <wt-headline-nav :path="path" />
       </wt-page-header>
@@ -17,16 +17,16 @@
     <template #main>
       <delete-confirmation-popup
         v-show="isDeleteConfirmationPopup"
-        :delete-count="deleteCount"
         :callback="deleteCallback"
+        :delete-count="deleteCount"
         @close="closeDelete"
       />
       <wt-dummy
         v-if="isEmptyData && !isLoading"
         :src="darkMode ? dummyDark : dummyLight"
         :text="$t('scorecards.emptyWorkspace')"
-        show-action
         class="scorecards__dummy"
+        show-action
         @create="create"
       />
       <div
@@ -40,16 +40,17 @@
           <div class="content-header__actions-wrap">
             <filter-search
               :namespace="filtersNamespace"
+              :search-mode-opts="searchOpts"
+              multisearch
             />
             <wt-table-actions
               :icons="['refresh']"
               @input="loadData"
             >
               <filter-fields
-                :namespace="filtersNamespace"
                 :headers="headers"
+                :namespace="filtersNamespace"
                 :static-headers="['name']"
-                @change="setHeaders"
               />
             </wt-table-actions>
           </div>
@@ -62,16 +63,17 @@
           class="table-wrapper"
         >
           <wt-table
-            :headers="headers"
             :data="dataList"
             :grid-actions="hasEditAccess || hasDeleteAccess"
+            :headers="headers"
+            :selected="selected"
             sortable
             @sort="sort"
+            @update:selected="setSelected"
           >
             <template #name="{ item }">
               <wt-item-link
-                :id="item.id"
-                :route-name="AuditorSections.SCORECARDS"
+                :link="`${AuditorSections.SCORECARDS}/${item.id}`"
               >
                 {{ item.name }}
               </wt-item-link>
@@ -97,16 +99,15 @@
             </template>
             <template #state="{ item, index }">
               <wt-switcher
-                :value="item.enabled"
                 :disabled="!hasEditAccess"
+                :value="item.enabled"
                 @change="patchProperty({ item, index, prop: 'enabled', value: $event })"
               />
             </template>
             <template #actions="{ item }">
               <wt-item-link
-                :id="item.id"
-                :route-name="AuditorSections.SCORECARDS"
                 :disabled="!item.editable"
+                :link="`${AuditorSections.SCORECARDS}/${item.id}`"
               >
                 <wt-icon-action
                   v-if="hasEditAccess"
@@ -116,8 +117,8 @@
               </wt-item-link>
               <wt-icon-action
                 v-if="hasDeleteAccess"
-                action="delete"
                 :disabled="!item.editable"
+                action="delete"
                 @click="askDeleteConfirmation({
                   deleted: [item],
                   callback: () => deleteData(item),
@@ -126,8 +127,8 @@
             </template>
           </wt-table>
           <filter-pagination
-            :namespace="filtersNamespace"
             :is-next="isNext"
+            :namespace="filtersNamespace"
           />
         </div>
       </div>
@@ -136,24 +137,25 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum.js';
+import DeleteConfirmationPopup
+  from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import {
   useDeleteConfirmationPopup,
 } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
-import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
-import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
-import DeleteConfirmationPopup
-  from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
-import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
-import FilterFields from '@webitel/ui-sdk/src/modules/QueryFilters/components/filter-table-fields.vue';
 import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
-import FilterSearch from '../modules/filters/components/filter-search.vue';
-import { useAccess } from '../../../app/composables/useAccess';
-import dummyLight from '../../../app/assets/dummy-light.svg';
+import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue';
+import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
+import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
+import { useTableStore } from '@webitel/ui-sdk/src/modules/TableStoreModule/composables/useTableStore';
+import { computed, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import dummyDark from '../../../app/assets/dummy-dark.svg';
+import dummyLight from '../../../app/assets/dummy-light.svg';
+import { useAccess } from '../../../app/composables/useAccess';
+import SearchMode from '../modules/filters/enums/SearchMode.enum.js';
 
 const baseNamespace = 'scorecards';
 const { t } = useI18n();
@@ -169,17 +171,33 @@ const {
   headers,
   isNext,
   error,
+  selected,
 
   loadData,
   patchProperty,
   deleteData,
   sort,
-  setHeaders,
+  setSelected,
+  onFilterEvent,
 } = useTableStore(baseNamespace);
 
 const {
-  filtersNamespace,
+  namespace: filtersNamespace,
+  subscribe,
+  flushSubscribers,
+  restoreFilters,
 } = useTableFilters(namespace);
+
+subscribe({
+  event: '*',
+  callback: onFilterEvent,
+});
+
+restoreFilters();
+
+onUnmounted(() => {
+  flushSubscribers();
+});
 
 const {
   hasCreateAccess,
@@ -205,12 +223,23 @@ const isEmptyData = computed(() => {
   return true;
 });
 
+const searchOpts = computed(() => [
+  {
+    value: SearchMode.NAME,
+    text: t('reusable.name'),
+  },
+  {
+    value: SearchMode.CRITERION,
+    text: t('objects.criterion', 1),
+  },
+]);
+
 /*
 selectedItems in the current implementation to include items
  for which there weren't ratings and they can be edited/deleted
   */
-const selectedItems = computed(() => (
-  dataList.value.filter((item) => item._isSelected && item.editable)));
+const selectedItems = computed(() => selected.value.filter((item) => item.editable));
+
 const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const path = computed(() => [
@@ -224,7 +253,10 @@ function prettifyDateTime(timestamp) {
 }
 
 function create() {
-  return router.push({ name: `${AuditorSections.SCORECARDS}-new` });
+  return router.push({
+    name: `${AuditorSections.SCORECARDS}-card`,
+    params: { id: 'new' },
+  });
 }
 
 function deleteSelectedItems() {
