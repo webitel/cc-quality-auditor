@@ -13,7 +13,7 @@
     "@vue/compat": "^3.4.27",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "@webitel/ui-sdk": "^24.8.8",
+    "@webitel/ui-sdk": "^24.8.22",
     "axios": "^1.7.2",
     "deep-equal": "^2.2.0",
     "deepmerge": "^4.3.1",
@@ -36,5 +36,8 @@
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-svg-sprite": "^0.5.2",
     "vitest": "^2.0.0-beta.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
