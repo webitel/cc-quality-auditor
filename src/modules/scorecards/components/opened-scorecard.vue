@@ -4,7 +4,7 @@
       <wt-page-header
         :primary-action="saveChanges"
         :primary-text="saveText"
-        :secondary-action="close"
+        :secondary-action="() => close(routeName)"
         :hide-primary="!hasModifyAccess"
         :primary-disabled="isInvalidForm"
       >
@@ -58,7 +58,11 @@ import {
   ref,
   watch,
 } from 'vue';
+import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
+import AuditorSections
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import { useI18n } from 'vue-i18n';
+import { useRouter, useRoute } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength } from '@vuelidate/validators';
 import { useAccess } from '../../../app/composables/useAccess';
@@ -69,8 +73,10 @@ import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 
 const namespace = 'scorecards';
-const currentTab = ref({});
 const isInvalidFormQuestions = ref(false);
+const routeName = AuditorSections.SCORECARDS;
+const router = useRouter();
+const route = useRoute();
 
 const {
   id,
@@ -111,10 +117,12 @@ const tabs = computed(() => [
   {
     text: t('reusable.general'),
     value: 'general',
+    pathName: ScorerecordTabNames.GENERAL,
     namespace,
   }, {
     text: t('objects.criterion', 2),
     value: 'criteria',
+    pathName: ScorerecordTabNames.CRITERIAS,
     namespace: `${namespace}/criteria`,
   },
 ]);
@@ -127,9 +135,16 @@ const path = computed(() => {
     { name: t('scorecards.scorecards', 2), route: '/scorecards' },
     {
       name: id.value ? pathName.value : t('reusable.new'),
-      route: id.value ? `/scorecards/${id.value}` : `${baseUrl}/new`,
+      route: {
+        name: currentTab.value.pathName,
+        query: route.query,
+      },
     },
   ];
+});
+
+const currentTab = computed(() => {
+  return tabs.value.find(({pathName}) => route.name === pathName);
 });
 
 const component = computed(() => {
@@ -168,15 +183,10 @@ const saveOptions = computed(() => {
 });
 
 function changeTab(tab) {
-  currentTab.value = tab;
-}
-
-function initializeTab() {
-  changeTab(tabs.value[0]);
+  router.push({ ...route, name: tab.pathName });
 }
 
 onMounted(() => {
-  initializeTab();
   v$.value.$touch();
 });
 </script>

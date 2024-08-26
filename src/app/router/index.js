@@ -1,11 +1,14 @@
 import AuditorSections
   from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import { createRouter, createWebHistory } from 'vue-router';
+import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 import OpenedScorecard
   from '../../modules/scorecards/components/opened-scorecard.vue';
 import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
 import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
 import AccessDenied from '../components/utils/access-denied-component.vue';
+const Criterias = import('../../modules/scorecards/components/opened-scorecard-criterias.vue');
+const General = import('../../modules/scorecards/components/opened-scorecard-general.vue');
 import store from '../store';
 
 const checkAppAccess = (to, from, next) => {
@@ -44,7 +47,19 @@ const routes = [
         path: 'scorecards/:id',
         name: `${AuditorSections.SCORECARDS}-card`,
         component: OpenedScorecard,
+        redirect: { name: ScorerecordTabName.GENERAL },
         beforeEnter: checkRouteAccess,
+        children: [
+          {
+            path: 'general',
+            name: ScorerecordTabName.GENERAL,
+            component: General,
+          },{
+            path: 'criterias',
+            name: ScorerecordTabName.CRITERIAS,
+            component: Criterias,
+          }
+        ],
       },
     ],
   },

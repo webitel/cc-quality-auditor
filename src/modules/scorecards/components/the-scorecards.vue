@@ -16,7 +16,7 @@
     </template>
     <template #main>
       <delete-confirmation-popup
-        v-show="isDeleteConfirmationPopup"
+        :shown="isDeleteConfirmationPopup"
         :callback="deleteCallback"
         :delete-count="deleteCount"
         @close="closeDelete"
