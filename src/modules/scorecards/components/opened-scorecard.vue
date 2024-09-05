@@ -16,7 +16,7 @@
             :options="saveOptions"
             :disabled="isInvalidForm"
             :color="isInvalidForm && 'secondary'"
-            @click="save"
+            @click="saveAction"
             @click:option="({ callback }) => callback()"
           >
             {{ saveText }}
@@ -29,7 +29,7 @@
     <template #main>
       <form
         class="main-container"
-        @submit.prevent="save"
+        @submit.prevent="saveAction"
       >
         <wt-tabs
           :current="currentTab"
@@ -56,7 +56,6 @@ import {
   computed,
   onMounted,
   ref,
-  watch,
 } from 'vue';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import AuditorSections
@@ -128,8 +127,6 @@ const tabs = computed(() => [
 ]);
 
 const path = computed(() => {
-  const baseUrl = 'audit/scorecards';
-
   return [
     { name: t('audit') },
     { name: t('scorecards.scorecards', 2), route: '/scorecards' },
@@ -162,6 +159,11 @@ const saveText = computed(() => {
   return t('reusable.saved');
 });
 
+function saveAction() {
+  if (isInvalidForm.value) return;
+  save();
+}
+
 function saveAs() {
   setItemProp({ prop: 'createdAt', value: '' });
   setItemProp({ prop: 'createdBy', value: {} });
@@ -169,10 +171,10 @@ function saveAs() {
   setItemProp({ prop: 'updatedBy', value: {} });
   setItemProp({ prop: 'id', value: '' });
   setId(null);
-  save();
+  saveAction();
 }
 
-const saveChanges = computed(() => ((!itemInstance.value.editable && id.value) ? saveAs : save));
+const saveChanges = computed(() => ((!itemInstance.value.editable && id.value) ? saveAs : saveAction));
 
 const saveOptions = computed(() => {
   const saveAsNew = {
