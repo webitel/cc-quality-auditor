@@ -1,6 +1,6 @@
 {
   "name": "cc-quality-auditor",
-  "version": "24.08.0",
+  "version": "24.10.0",
   "private": true,
   "scripts": {
     "dev": "vite",
