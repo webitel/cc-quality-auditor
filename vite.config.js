@@ -2,6 +2,7 @@ import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
+import {resolve} from 'path';
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -20,7 +21,7 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "./src/app/css/main.scss";`,
+          additionalData: `@use "@/app/css/main.scss" as *;`,
         },
       },
     },
@@ -29,6 +30,7 @@ export default ({ mode }) => {
       dedupe: ['vue', '@vue/compat'],
       alias: {
         vue: '@vue/compat',
+        '@': resolve(__dirname, 'src'),
       },
     },
     plugins: [
