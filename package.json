@@ -13,7 +13,7 @@
     "@vue/compat": "^3.5.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "@webitel/ui-sdk": "^24.10.77",
+    "@webitel/ui-sdk": "^24.12.43",
     "axios": "^1.7.7",
     "deep-equal": "^2.2.0",
     "deepmerge": "^4.3.1",
