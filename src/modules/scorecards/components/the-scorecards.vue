@@ -148,7 +148,7 @@ import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-
 import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
 import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
-import {computed, onUnmounted, watch} from 'vue';
+import {computed, onUnmounted} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -179,12 +179,10 @@ const {
   sort,
   setSelected,
   onFilterEvent,
-  resetState,
 } = useTableStore(baseNamespace);
 
 const {
   namespace: filtersNamespace,
-  filtersValue,
 
   subscribe,
   flushSubscribers,
@@ -200,7 +198,6 @@ restoreFilters();
 
 onUnmounted(() => {
   flushSubscribers();
-  resetState();
 });
 
 const {
@@ -269,13 +266,6 @@ function deleteSelectedItems() {
     callback: () => deleteData([...selectedItems.value]),
   });
 }
-
-watch(() => filtersValue.value, () => {
-  // https://webitel.atlassian.net/browse/WTEL-5744
-  // because 'selected' value needs cleaned when changing filters
-
-  resetState();
-});
 </script>
 
 <style lang="scss" scoped>
