@@ -7,12 +7,12 @@
           :current-app="currentApp"
           :nav="nav"
           :dark-mode="darkMode"
+          :logo-route="RoutePaths.Scorecards"
         />
-        <a :href="startPageHref">
-          <wt-logo
-            :dark-mode="darkMode"
-          />
-        </a>
+        <wt-logo
+          :dark-mode="darkMode"
+          :logo-href="startPageHref"
+        />
         <wt-dark-mode-switcher />
         <wt-app-navigator
           :apps="apps"
@@ -41,6 +41,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+import RoutePaths from '../router/_internals/RoutePaths.enum';
 
 const release = process.env.npm_package_version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
