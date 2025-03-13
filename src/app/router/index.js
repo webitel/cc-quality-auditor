@@ -1,5 +1,6 @@
 import AuditorSections
   from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
+import RoutePaths from './_internals/RoutePaths.enum';
 import { createRouter, createWebHistory } from 'vue-router';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 import OpenedScorecard
@@ -38,7 +39,7 @@ const routes = [
     beforeEnter: checkAppAccess,
     children: [
       {
-        path: 'scorecards',
+        path: RoutePaths.Scorecards,
         name: AuditorSections.SCORECARDS,
         component: Scorecards,
         beforeEnter: checkRouteAccess,
