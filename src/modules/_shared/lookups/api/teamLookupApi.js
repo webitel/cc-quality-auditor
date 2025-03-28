@@ -6,6 +6,7 @@ import applyTransform, {
   camelToSnake, merge, notify, snakeToCamel, starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { AgentTeamServiceApiFactory } from 'webitel-sdk';
+
 import instance from '../../../../app/api/instance';
 import configuration from '../../../../app/api/openAPIConfig';
 

@@ -34,13 +34,14 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted } from 'vue';
-import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+import { computed, inject, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
 import RoutePaths from '../router/_internals/RoutePaths.enum';
 
 const release = process.env.npm_package_version;

@@ -52,22 +52,23 @@
 </template>
 
 <script setup>
+import { useVuelidate } from '@vuelidate/core';
+import { minLength,required } from '@vuelidate/validators';
+import AuditorSections
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import {
   computed,
   onMounted,
   ref,
 } from 'vue';
-import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
-import AuditorSections
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
 import { useI18n } from 'vue-i18n';
-import { useRouter, useRoute } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
-import { required, minLength } from '@vuelidate/validators';
+import { useRoute,useRouter } from 'vue-router';
+
 import { useAccess } from '../../../app/composables/useAccess';
-import { useClose } from '../../../app/composables/useClose';
 import { useCardPage } from '../../../app/composables/useCardPage';
+import { useClose } from '../../../app/composables/useClose';
 import { usePathName } from '../../../app/composables/usePathName';
+import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
 

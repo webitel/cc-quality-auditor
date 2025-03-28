@@ -1,13 +1,14 @@
 import AuditorSections
   from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
-import RoutePaths from './_internals/RoutePaths.enum';
 import { createRouter, createWebHistory } from 'vue-router';
-import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
+
 import OpenedScorecard
   from '../../modules/scorecards/components/opened-scorecard.vue';
 import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
 import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
 import AccessDenied from '../components/utils/access-denied-component.vue';
+import RoutePaths from './_internals/RoutePaths.enum';
+import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 const Criterias = import('../../modules/scorecards/components/opened-scorecard-criterias.vue');
 const General = import('../../modules/scorecards/components/opened-scorecard-general.vue');
 import store from '../store';

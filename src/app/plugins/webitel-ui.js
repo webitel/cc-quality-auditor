@@ -1,11 +1,13 @@
+import '@webitel/ui-sdk/dist/ui-sdk.css';
+
 import WebitelUI from '@webitel/ui-sdk/dist/ui-sdk.js';
 import WebitelUIEn from '@webitel/ui-sdk/src/locale/en/en.js';
 import WebitelUIKz from '@webitel/ui-sdk/src/locale/kz/kz.js';
 import WebitelUIRu from '@webitel/ui-sdk/src/locale/ru/ru.js';
 import WebitelUIUa from '@webitel/ui-sdk/src/locale/ua/ua.js';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
+
 import i18n from '../locale/i18n.js';
-import '@webitel/ui-sdk/dist/ui-sdk.css';
 
 const globals = {
   $baseURL: import.meta.env.BASE_URL,

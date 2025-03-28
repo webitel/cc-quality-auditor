@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+
 import App from './app.vue';
 import i18n from './app/locale/i18n';
 import WebitelUi from './app/plugins/webitel-ui';

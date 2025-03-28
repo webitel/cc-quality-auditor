@@ -41,6 +41,7 @@
 
 <script setup>
 import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+
 import { useAccess } from '../../../app/composables/useAccess';
 import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 

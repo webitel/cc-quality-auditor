@@ -152,6 +152,7 @@ import {computed, onUnmounted} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+
 import dummyDark from '../../../app/assets/dummy-dark.svg';
 import dummyLight from '../../../app/assets/dummy-light.svg';
 import { useAccess } from '../../../app/composables/useAccess';

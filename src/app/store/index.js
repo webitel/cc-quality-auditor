@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+
 import appearance from '../../modules/appearance/store/appearance';
 import scorecards from '../../modules/scorecards/store/scorecards';
 import userinfo from '../../modules/userinfo/userinfo';
