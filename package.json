@@ -1,6 +1,6 @@
 {
   "name": "cc-quality-auditor",
-  "version": "25.02.0",
+  "version": "25.04.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -26,7 +26,6 @@
     "webitel-sdk": "^24.10.2"
   },
   "devDependencies": {
-
     "@eslint/js": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -39,7 +38,6 @@
     "typescript-eslint": "^8.26.1",
     "prettier": "^3.5.3",
     "prettier-plugin-css-order": "^2.1.2",
-
     "@vitejs/plugin-vue": "^5.1.3",
     "@vitest/coverage-v8": "^2.0.5",
     "@vue/test-utils": "^2.4.6",
