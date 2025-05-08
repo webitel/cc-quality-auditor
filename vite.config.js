@@ -1,8 +1,9 @@
 import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
-import {resolve} from 'path';
+import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -11,8 +12,9 @@ export default ({ mode }) => {
   return defineConfig({
     base: '/audit',
     define: {
-      'process.env': JSON.parse(JSON.stringify(env)
-      .replaceAll('VITE_', 'VUE_APP_')),
+      'process.env': JSON.parse(
+        JSON.stringify(env).replaceAll('VITE_', 'VUE_APP_'),
+      ),
     },
     server: {
       host: true,
@@ -55,6 +57,9 @@ export default ({ mode }) => {
       createSvgSpritePlugin({
         include: '**/sprite/*.svg',
       }),
+      vueDevTools({
+        launchEditor: 'webstorm',
+      }),
     ],
     test: {
       globals: true,
@@ -66,4 +71,4 @@ export default ({ mode }) => {
       setupFiles: ['./tests/config/config.js'],
     },
   });
-}
+};
