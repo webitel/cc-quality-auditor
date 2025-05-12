@@ -16,6 +16,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@webitel/ui-sdk": "^25.6.7",
+    "@morev/vue-transitions": "^3.0.5",
     "axios": "^1.7.7",
     "deep-equal": "^2.2.0",
     "deepmerge": "^4.3.1",
