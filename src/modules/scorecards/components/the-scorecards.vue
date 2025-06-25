@@ -105,18 +105,12 @@
               />
             </template>
             <template #actions="{ item }">
-              <wt-item-link
-                :disabled="!item.editable"
-                :link="`${AuditorSections.SCORECARDS}/${item.id}`"
-              >
-                <wt-icon-action
-                  v-if="hasEditAccess"
-                  :disabled="!item.editable"
-                  action="edit"
-                />
-              </wt-item-link>
               <wt-icon-action
-                v-if="hasDeleteAccess"
+                :disabled="!item.editable"
+                action="edit"
+                @click="edit(item)"
+              />
+              <wt-icon-action
                 :disabled="!item.editable"
                 action="delete"
                 @click="askDeleteConfirmation({
@@ -258,6 +252,13 @@ function create() {
   return router.push({
     name: `${AuditorSections.SCORECARDS}-card`,
     params: { id: 'new' },
+  });
+}
+
+function edit(item) {
+  return router.push({
+    name: `${AuditorSections.SCORECARDS}-card`,
+    params: { id: item.id },
   });
 }
 
