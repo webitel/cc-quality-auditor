@@ -6,6 +6,9 @@ import kz from './kz/kz';
 import ro from './ro/ro';
 import ru from './ru/ru';
 import uk from './uk/uk';
+import pl from './pl/pl';
+import uz from './uz/uz';
+import vi from './vi/vi';
 
 const messages = {
   en,
@@ -14,6 +17,9 @@ const messages = {
   kz,
   es,
   ro,
+  pl,
+  uz,
+  vi,
 };
 
 export default createI18n({
