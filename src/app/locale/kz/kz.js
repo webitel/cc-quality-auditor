@@ -6,8 +6,5 @@ export default {
   },
   objects: {
     criterion: 'Критерий | Критерийлер',
-    filters: {
-      settingsHint: 'Іздеуді баптау',
-    },
   },
 };
