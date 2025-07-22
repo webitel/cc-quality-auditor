@@ -22,9 +22,12 @@ const messages = {
   vi,
 };
 
+const locale = localStorage.getItem('lang') || 'en';
+const fallbackLocale = localStorage.getItem('fallbackLang') || 'en';
+
 export default createI18n({
   legacy: false,
-  locale: 'en',
-  fallbackLocale: 'en',
+  locale,
+  fallbackLocale,
   messages,
 });
