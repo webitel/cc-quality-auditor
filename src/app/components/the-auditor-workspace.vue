@@ -56,7 +56,7 @@ const currentApp = userinfo.value.thisApp;
 const checkAccess = computed(() => store.getters['userinfo/CHECK_APP_ACCESS']);
 const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
-const { t } = useI18n();
+const { t, locale, fallbackLocale } = useI18n();
 
 const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 
@@ -126,8 +126,10 @@ function openSession() {
 
 function setLanguage() {
   const lang = localStorage.getItem('lang');
-  const { locale } = useI18n();
   if (lang) locale.value = lang;
+
+  const fallbackLang = localStorage.getItem('fallbackLang');
+  if (fallbackLang) fallbackLocale.value = fallbackLang;
 }
 
 onMounted(() => {
