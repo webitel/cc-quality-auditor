@@ -1,5 +1,5 @@
 {
-  "name": "cc-quality-auditor",
+  "name": "@webitel/quality-auditor",
   "version": "25.05.0",
   "private": true,
   "scripts": {
