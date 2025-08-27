@@ -1,6 +1,6 @@
 {
-  "name": "cc-quality-auditor",
-  "version": "25.05.0",
+  "name": "@webitel/quality-auditor",
+  "version": "25.08.0",
   "private": true,
   "scripts": {
     "dev": "vite",

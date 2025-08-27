@@ -11,7 +11,7 @@
         :secondary-action="deleteSelectedItems"
         :secondary-text="$t('reusable.delete')"
       >
-        <wt-headline-nav :path="path" />
+        <wt-breadcrumb :path="path" />
       </wt-page-header>
     </template>
     <template #main>
