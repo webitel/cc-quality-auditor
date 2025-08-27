@@ -32,8 +32,8 @@
       <wt-switcher
         :disabled="!hasModifyAccess"
         :label="$t('reusable.state')"
-        :value="itemInstance.enabled"
-        @change="setItemProp({ prop: 'enabled', value: $event })"
+        :model-value="itemInstance.enabled"
+        @update:model-value="setItemProp({ prop: 'enabled', value: $event })"
       />
     </div>
   </section>
