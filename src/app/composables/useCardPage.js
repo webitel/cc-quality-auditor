@@ -6,6 +6,9 @@ import { useRoute, useRouter } from 'vue-router';
 export const useCardPage = (namespace) => {
   const router = useRouter();
   const route = useRoute();
+  const errorRedirectMap = {
+    404: '/404',
+  }
 
   const {
     id,
@@ -49,7 +52,9 @@ export const useCardPage = (namespace) => {
     try {
       return await loadItem();
     } catch (err) {
-      router.push('/404');
+      if (errorRedirectMap[err.response.status])
+        router.push(errorRedirectMap[err.response.status]);
+
     }
   }
 

@@ -1,14 +1,14 @@
 <template>
   <wt-error-page
     type="404"
-    @back="$router.replace('/scorecards')"
+    @back="router.replace('/scorecards')"
   />
 </template>
 
-<script>
-export default {
-  name: 'TheNotFoundComponent',
-};
+<script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>
