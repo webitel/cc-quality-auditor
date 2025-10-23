@@ -46,7 +46,11 @@ export const useCardPage = (namespace) => {
   async function initializeCard() {
     const { id: itemId } = route.params;
     await setId(itemId);
-    return loadItem();
+    try {
+      return await loadItem();
+    } catch (err) {
+      router.push('/404');
+    }
   }
 
   onMounted(() => initializeCard());

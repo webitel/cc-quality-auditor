@@ -11,6 +11,9 @@ import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 const Criterias = import('../../modules/scorecards/components/opened-scorecard-criterias.vue');
 const General = import('../../modules/scorecards/components/opened-scorecard-general.vue');
+const NotFound = () =>
+  import('../../modules/error-pages/components/the-not-found-component.vue');
+
 import store from '../store';
 
 const checkAppAccess = (to, from, next) => {
@@ -69,6 +72,11 @@ const routes = [
     path: '/access-denied',
     name: 'access-denied',
     component: AccessDenied,
+  },
+  {
+    path: '/404',
+    name: 'not-found',
+    component: NotFound,
   },
 ];
 
