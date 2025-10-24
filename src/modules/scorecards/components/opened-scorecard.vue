@@ -68,6 +68,7 @@ import { useAccess } from '../../../app/composables/useAccess';
 import { useCardPage } from '../../../app/composables/useCardPage';
 import { useClose } from '../../../app/composables/useClose';
 import { usePathName } from '../../../app/composables/usePathName';
+import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import Criterias from './opened-scorecard-criterias.vue';
 import General from './opened-scorecard-general.vue';
@@ -77,6 +78,7 @@ const isInvalidFormQuestions = ref(false);
 const routeName = AuditorSections.SCORECARDS;
 const router = useRouter();
 const route = useRoute();
+const { handleError } = useErrorRedirectHandler();
 
 const {
   id,
@@ -85,7 +87,7 @@ const {
   save,
   setId,
   setItemProp,
-} = useCardPage(namespace);
+} = useCardPage(namespace, { onLoadErrorHandler: handleError });
 
 const {
   hasModifyAccess,

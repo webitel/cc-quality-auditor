@@ -3,12 +3,9 @@ import { onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useCardPage = (namespace) => {
+export const useCardPage = (namespace, { onLoadErrorHandler }) => {
   const router = useRouter();
   const route = useRoute();
-  const errorRedirectMap = {
-    404: '/404',
-  }
 
   const {
     id,
@@ -52,9 +49,8 @@ export const useCardPage = (namespace) => {
     try {
       return await loadItem();
     } catch (err) {
-      if (errorRedirectMap[err.response.status])
-        router.push(errorRedirectMap[err.response.status]);
-
+      if (!onLoadErrorHandler) throw err;
+      onLoadErrorHandler(err)
     }
   }
 
