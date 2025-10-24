@@ -3,7 +3,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useCardPage = (namespace) => {
+export const useCardPage = (namespace, { onLoadErrorHandler }) => {
   const router = useRouter();
   const route = useRoute();
 
@@ -46,7 +46,12 @@ export const useCardPage = (namespace) => {
   async function initializeCard() {
     const { id: itemId } = route.params;
     await setId(itemId);
-    return loadItem();
+    try {
+      return await loadItem();
+    } catch (err) {
+      if (!onLoadErrorHandler) throw err;
+      onLoadErrorHandler(err)
+    }
   }
 
   onMounted(() => initializeCard());
