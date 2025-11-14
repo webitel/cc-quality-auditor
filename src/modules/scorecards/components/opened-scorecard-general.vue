@@ -15,10 +15,10 @@
         @input="setItemProp({ prop: 'name', value: $event })"
       />
       <wt-textarea
-        :value="itemInstance.description"
+        :model-value="itemInstance.description"
         :label="$t('vocabulary.description')"
         :disabled="!hasModifyAccess"
-        @input="setItemProp({ prop: 'description', value: $event })"
+        @update:model-value="setItemProp({ prop: 'description', value: $event })"
       />
       <wt-select
         :label="$t('objects.team', 1)"
