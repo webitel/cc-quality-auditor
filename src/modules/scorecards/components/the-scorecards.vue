@@ -142,6 +142,7 @@ import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-
 import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
 import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
+import { formatDate } from '@webitel/ui-sdk/utils'
 import {computed, onUnmounted} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -245,7 +246,7 @@ const path = computed(() => [
 
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
-  return new Date(+timestamp).toLocaleString();
+  return formatDate(+timestamp, 'datetime');
 }
 
 function create() {
