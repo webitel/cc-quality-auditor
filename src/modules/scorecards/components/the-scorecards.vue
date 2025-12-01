@@ -131,6 +131,7 @@
 </template>
 
 <script setup>
+import { FormatDateMode } from '@webitel/ui-sdk/enums'
 import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum.js';
 import DeleteConfirmationPopup
   from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
@@ -246,7 +247,7 @@ const path = computed(() => [
 
 function prettifyDateTime(timestamp) {
   if (!timestamp) return '';
-  return formatDate(+timestamp, 'datetime');
+  return formatDate(+timestamp, FormatDateMode.DATETIME);
 }
 
 function create() {
