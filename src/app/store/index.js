@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 
 import appearance from '../../modules/appearance/store/appearance';
 import scorecards from '../../modules/scorecards/store/scorecards';
-import userinfo from '../../modules/userinfo/userinfo';
+import userinfo from '../../modules/userinfo/deprecated/userinfo';
 import instance from '../api/instance';
 
 export default createStore({
