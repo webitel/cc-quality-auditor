@@ -1,8 +1,5 @@
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
-import { setupErrorLocalization } from '@webitel/api-services/locale';
-import { setConfig as setApiServicesConfig } from '@webitel/api-services';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 
 import App from './app.vue';
 import i18n from './app/locale/i18n';
@@ -11,14 +8,7 @@ import router from './app/router';
 import store from './app/store';
 import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
-setApiServicesConfig({
-  eventBus,
-});
-
-// Setup backend error localization
-setupErrorLocalization({
-  i18n,
-});
+import './app/plugins/webitel-api-services';
 
 const setTokenFromUrl = () => {
   try {
