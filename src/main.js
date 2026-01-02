@@ -6,7 +6,9 @@ import i18n from './app/locale/i18n';
 import WebitelUi from './app/plugins/webitel-ui';
 import router from './app/router';
 import store from './app/store';
-import { useUserinfoStore } from './modules/userinfo/userInfoStore'
+import { useUserinfoStore } from './modules/userinfo/userInfoStore';
+
+import './app/plugins/webitel-api-services';
 
 const setTokenFromUrl = () => {
   try {
