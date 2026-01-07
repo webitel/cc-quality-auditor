@@ -8,7 +8,8 @@
     "lint:fix": "eslint --fix ./src && prettier --write --check ./src",
     "lint:fix-staged": "npx lint-staged",
     "utils:i": "npm install --install-links",
-    "utils:link-libs": "npm link @webitel/ui-sdk @webitel/ui-datalist @webitel/api-services",
+    "utils:link-libs": "npm link @webitel/ui-sdk @webitel/ui-datalist @webitel/api-services && npm run utils:ls-libs",
+    "utils:ls-libs": "npm ls @webitel/ui-sdk @webitel/ui-datalist @webitel/api-services",
     "utils:up-libs": "npm update @webitel/ui-sdk @webitel/api-services && npm ls @webitel/ui-sdk @webitel/api-services"
   },
   "type": "module",
@@ -18,7 +19,7 @@
     "@vue/compat": "^3.5.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "@webitel/api-services": "^0.0.105",
+    "@webitel/api-services": "^0.0.107",
     "@webitel/ui-sdk": "~25.12",
     "axios": "^1.7.7",
     "deep-equal": "^2.2.0",
