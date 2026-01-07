@@ -66,17 +66,17 @@ const routes = [
           }
         ],
       },
+      {
+        path: '/404',
+        name: 'not-found',
+        component: NotFound,
+      },
     ],
   },
   {
     path: '/access-denied',
     name: 'access-denied',
     component: AccessDenied,
-  },
-  {
-    path: '/404',
-    name: 'not-found',
-    component: NotFound,
   },
 ];
 
