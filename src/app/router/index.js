@@ -66,11 +66,6 @@ const routes = [
           }
         ],
       },
-      {
-        path: '/404',
-        name: 'not-found',
-        component: NotFound,
-      },
     ],
   },
   {
@@ -78,6 +73,18 @@ const routes = [
     name: 'access-denied',
     component: AccessDenied,
   },
+  {
+    path: '/404',
+    name: 'not-found',
+    component: TheAuditorWorkspace,
+    children: [
+      {
+        path: '',
+        name: 'not-found-inner',
+        component: NotFound,
+      },
+    ],
+  }
 ];
 
 const router = createRouter({
