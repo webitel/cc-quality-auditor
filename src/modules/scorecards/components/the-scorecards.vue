@@ -7,6 +7,7 @@
       <wt-page-header
         :hide-primary="!hasCreateAccess"
         :hide-secondary="!hasDeleteAccess"
+        :secondary-disabled="isSecondaryDisabled"
         :primary-action="create"
         :secondary-action="deleteSelectedItems"
         :secondary-text="$t('reusable.delete')"
@@ -237,6 +238,10 @@ selectedItems in the current implementation to include items
  for which there weren't ratings and they can be edited/deleted
   */
 const selectedItems = computed(() => selected.value.filter((item) => item.editable));
+
+const isSecondaryDisabled = computed(() => 
+  !selected.value.length || selected.value.some((item) => !item.editable)
+);
 
 const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
