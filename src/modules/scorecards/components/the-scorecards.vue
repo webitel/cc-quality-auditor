@@ -239,7 +239,7 @@ selectedItems in the current implementation to include items
   */
 const selectedItems = computed(() => selected.value.filter((item) => item.editable));
 
-const isSecondaryDisabled = computed(() => 
+const isSecondaryDisabled = computed(() =>
   !selected.value.length || selected.value.some((item) => !item.editable)
 );
 
