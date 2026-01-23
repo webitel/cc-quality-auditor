@@ -2,7 +2,6 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vitejs.dev/config/
@@ -23,9 +22,13 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
+          api: 'modern',
           additionalData: `@use "@/app/css/main.scss" as *;`,
         },
       },
+    },
+    optimizeDeps: {
+      include: ['clipboard-copy', 'deep-equal', 'deepmerge'],
     },
     resolve: {
       // deduping compat is needed for audit form to prevent vue instance duplicating
@@ -54,9 +57,6 @@ export default ({ mode }) => {
           Buffer: true, // can also be 'build', 'dev', or false
           process: true, // csv stringify
         },
-      }),
-      createSvgSpritePlugin({
-        include: '**/sprite/*.svg',
       }),
       vueDevTools({
         launchEditor: 'webstorm',

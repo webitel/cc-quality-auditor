@@ -10,7 +10,7 @@
   margin: var(--spacing-sm) 0;
 
   .content-title {
-    @extend %typo-heading-3;
+    // typo-heading-3 class should be added directly to template elements
   }
 
   // WRAP FOR SEARCH INPUT

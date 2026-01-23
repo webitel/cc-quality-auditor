@@ -35,7 +35,7 @@
         class="scorecards-main-section"
       >
         <header class="content-header">
-          <h3 class="content-title">
+          <h3 class="content-title typo-heading-3">
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
           </h3>
           <div class="content-header__actions-wrap">
@@ -73,9 +73,7 @@
             @update:selected="setSelected"
           >
             <template #name="{ item }">
-              <wt-item-link
-                :link="`${AuditorSections.SCORECARDS}/${item.id}`"
-              >
+              <wt-item-link :link="`${AuditorSections.SCORECARDS}/${item.id}`">
                 {{ item.name }}
               </wt-item-link>
             </template>
@@ -145,7 +143,7 @@ import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-
 import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
 import { formatDate } from '@webitel/ui-sdk/utils'
-import {computed, onUnmounted} from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -277,7 +275,10 @@ function deleteSelectedItems() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .scorecards {
   width: 100%;
 }
