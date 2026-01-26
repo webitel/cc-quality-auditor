@@ -1,6 +1,7 @@
 <template>
   <div class="opened-scorecard-criterias">
     <audit-form
+      class="wt-scrollbar"
       :questions="itemInstance.questions"
       :mode="hasModifyAccess ? 'create' : 'fill'"
       :readonly="!hasModifyAccess"
@@ -48,7 +49,6 @@ const {
 }
 
 .audit-form {
-  @extend %wt-scrollbar;
   min-height: 0;
   overflow-y: scroll;
 }
