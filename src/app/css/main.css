@@ -1,0 +1,50 @@
+@import "@webitel/ui-sdk/src/css/main";
+
+/* disables scrollbar on 100vh auth on small laptops */
+body {
+	display: flex;
+	min-width: 100%;
+	min-height: 100%;
+	color: var(--text-main-color);
+}
+
+.wt-page-wrapper {
+	flex-grow: 1;
+	display: flex;
+	max-height: 100%;
+}
+
+.wt-dummy {
+	flex-grow: 1;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+/* reset ul styles */
+ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+iframe {
+	border: none;
+	outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+}

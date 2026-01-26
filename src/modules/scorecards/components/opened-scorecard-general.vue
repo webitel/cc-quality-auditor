@@ -1,11 +1,11 @@
 <template>
   <section>
-    <header class="content-header">
-      <h3 class="content-title typo-heading-3">
+    <header class="opened-card-header">
+      <h3 class="opened-card-header__title typo-heading-3">
         {{ $t('reusable.generalInfo') }}
       </h3>
     </header>
-    <div class="object-input-grid">
+    <div class="opened-card-input-grid">
       <wt-input
         :value="itemInstance.name"
         :label="$t('reusable.name')"
@@ -40,30 +40,24 @@
 </template>
 
 <script setup>
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { useCardStore } from "@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore";
 
-import { useAccess } from '../../../app/composables/useAccess';
-import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
+import { useAccess } from "../../../app/composables/useAccess";
+import teamLookupApi from "../../_shared/lookups/api/teamLookupApi";
 
 const props = defineProps({
-  namespace: {
-    type: String,
-    required: true,
-  },
-  v: {
-    type: Object,
-  },
+	namespace: {
+		type: String,
+		required: true,
+	},
+	v: {
+		type: Object,
+	},
 });
 
-const {
-  itemInstance,
-  setItemProp,
-} = useCardStore(props.namespace);
+const { itemInstance, setItemProp } = useCardStore(props.namespace);
 
-const {
-  hasModifyAccess,
-} = useAccess();
-
+const { hasModifyAccess } = useAccess();
 </script>
 
 <style scoped>
