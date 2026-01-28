@@ -6,13 +6,13 @@
       </h3>
     </header>
     <div class="opened-card-input-grid">
-      <wt-input
-        :value="itemInstance.name"
+      <wt-input-text
+        :model-value="itemInstance.name"
         :label="$t('reusable.name')"
         :v="v.itemInstance.name"
         :disabled="!hasModifyAccess"
         required
-        @input="setItemProp({ prop: 'name', value: $event })"
+        @update:model-value="setItemProp({ prop: 'name', value: $event })"
       />
       <wt-textarea
         :model-value="itemInstance.description"
