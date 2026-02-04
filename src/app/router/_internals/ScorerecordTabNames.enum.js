@@ -1,7 +1,6 @@
-import AuditorSections
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
+import { AuditorSections } from "@webitel/ui-sdk/enums";
 
 export default Object.freeze({
-  GENERAL: `${AuditorSections.SCORECARDS}-general`,
-  CRITERIAS: `${AuditorSections.SCORECARDS}-criterias`,
+	GENERAL: `${AuditorSections.Scorecards}-general`,
+	CRITERIAS: `${AuditorSections.Scorecards}-criterias`,
 });

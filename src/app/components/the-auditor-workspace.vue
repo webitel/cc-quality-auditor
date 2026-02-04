@@ -34,15 +34,16 @@
 </template>
 
 <script setup>
-import AuditorSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum';
-import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
-import { computed, inject, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { AuditorSections, WtApplication } from "@webitel/ui-sdk/enums";
+import WtDarkModeSwitcher from "@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue";
+import { storeToRefs } from "pinia";
+import { computed, inject, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import RoutePaths from '../router/_internals/RoutePaths.enum';
+import RoutePaths from "../router/_internals/RoutePaths.enum";
+import { useUserinfoStore } from "../../modules/userinfo/userInfoStore";
 
 const release = process.env.npm_package_version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
@@ -50,96 +51,88 @@ const build = import.meta.env.VITE_BUILD_NUMBER;
 const store = useStore();
 const router = useRouter();
 
-const userinfo = computed(() => store.state.userinfo);
-const currentApp = userinfo.value.thisApp;
+const userinfoStore = useUserinfoStore();
+const { hasApplicationVisibility, logoutUser } = userinfoStore;
+const { userinfo } = storeToRefs(userinfoStore);
+const currentApp = computed(() => WtApplication.Audit);
 
-const checkAccess = computed(() => store.getters['userinfo/CHECK_APP_ACCESS']);
-const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
+const darkMode = computed(() => store.getters["appearance/DARK_MODE"]);
 
 const { t, locale, fallbackLocale } = useI18n();
 
-const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
+const startPageHref = computed(() => import.meta.env.VITE_APPLICATION_HUB_URL);
 
 const apps = computed(() => {
-  const agent = {
-    name: WebitelApplications.AGENT,
-    href: import.meta.env.VITE_AGENT_URL,
-  };
-  const supervisor = {
-    name: WebitelApplications.SUPERVISOR,
-    href: import.meta.env.VITE_SUPERVISOR_URL,
-  };
-  const history = {
-    name: WebitelApplications.HISTORY,
-    href: import.meta.env.VITE_HISTORY_URL,
-  };
-  const audit = {
-    name: WebitelApplications.AUDIT,
-    href: import.meta.env.VITE_AUDIT_URL,
-  };
-  const admin = {
-    name: WebitelApplications.ADMIN,
-    href: import.meta.env.VITE_ADMIN_URL,
-  };
-  const grafana = {
-    name: WebitelApplications.ANALYTICS,
-    href: import.meta.env.VITE_GRAFANA_URL,
-  };
-  const crm = {
-    name: WebitelApplications.CRM,
-    href: import.meta.env.VITE_CRM_URL,
-  };
+	const agent = {
+		name: WtApplication.Agent,
+		href: import.meta.env.VITE_AGENT_URL,
+	};
+	const supervisor = {
+		name: WtApplication.Supervisor,
+		href: import.meta.env.VITE_SUPERVISOR_URL,
+	};
+	const history = {
+		name: WtApplication.History,
+		href: import.meta.env.VITE_HISTORY_URL,
+	};
+	const audit = {
+		name: WtApplication.Audit,
+		href: import.meta.env.VITE_AUDIT_URL,
+	};
+	const admin = {
+		name: WtApplication.Admin,
+		href: import.meta.env.VITE_ADMIN_URL,
+	};
+	const grafana = {
+		name: WtApplication.Analytics,
+		href: import.meta.env.VITE_GRAFANA_URL,
+	};
+	const crm = {
+		name: WtApplication.Crm,
+		href: import.meta.env.VITE_CRM_URL,
+	};
 
-  const config = inject('$config');
+	const config = inject("$config");
 
-  const allApps = [admin, supervisor, agent, history, audit, crm];
-  if (config?.ON_SITE) allApps.push(grafana);
-  return allApps.filter(({ name }) => checkAccess.value(name));
+	const allApps = [admin, supervisor, agent, history, audit, crm];
+	if (config?.ON_SITE) allApps.push(grafana);
+	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
 const nav = computed(() => {
-  const scorecards = {
-    value: AuditorSections.SCORECARDS,
-    name: t(`WebitelApplications.${WebitelApplications.AUDIT}.sections.${AuditorSections.SCORECARDS}`),
-    route: '/scorecards',
-  };
-  const nav = [scorecards];
-  return nav.filter((nav) => checkAccess.value({ name: nav.value }));
+	const scorecards = {
+		value: AuditorSections.Scorecards,
+		name: t(
+			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
+		),
+		route: "/scorecards",
+	};
+	const nav = [scorecards];
+	return nav.filter((nav) => hasApplicationVisibility({ name: nav.value }));
 });
 
 function settings() {
-  const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
-  window.open(settingsUrl);
-}
-
-function logout() {
-  return store.dispatch('userinfo/LOGOUT');
-}
-
-async function logoutUser() {
-  return logout();
-}
-
-function openSession() {
-  return store.dispatch('OPEN_SESSION');
+	const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
+	window.open(settingsUrl);
 }
 
 function setLanguage() {
-  const lang = localStorage.getItem('lang');
-  if (lang) locale.value = lang;
+	const lang = localStorage.getItem("lang");
+	if (lang) locale.value = lang;
 
-  const fallbackLang = localStorage.getItem('fallbackLang');
-  if (fallbackLang) fallbackLocale.value = fallbackLang;
+	const fallbackLang = localStorage.getItem("fallbackLang");
+	if (fallbackLang) fallbackLocale.value = fallbackLang;
 }
 
 onMounted(() => {
-  openSession();
-  setLanguage();
+	setLanguage();
 });
-
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .object-wrap {
   display: flex;
   width: 100%;

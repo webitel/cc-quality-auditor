@@ -3,8 +3,8 @@
     <audit-form
       class="wt-scrollbar"
       :questions="itemInstance.questions"
-      :mode="hasModifyAccess ? 'create' : 'fill'"
-      :readonly="!hasModifyAccess"
+      :mode="!disableUserInput ? 'create' : 'fill'"
+      :readonly="disableUserInput"
       @update:validation="emits('update:validation', $event)"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
     />
@@ -12,32 +12,28 @@
 </template>
 
 <script setup>
-import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { WtObject } from "@webitel/ui-sdk/enums";
+import AuditForm from "@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue";
+import { useCardStore } from "@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore";
 
-import { useAccess } from '../../../app/composables/useAccess';
+import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
 
 const props = defineProps({
-  namespace: {
-    type: String,
-    required: true,
-  },
+	namespace: {
+		type: String,
+		required: true,
+	},
 });
 
-const emits = defineEmits([
-  'update:validation',
-]);
+const emits = defineEmits(["update:validation"]);
 
 const {
-  itemInstance,
+	itemInstance,
 
-  setItemProp,
+	setItemProp,
 } = useCardStore(props.namespace);
 
-const {
-  hasModifyAccess,
-} = useAccess();
-
+const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
 </script>
 
 <style scoped>

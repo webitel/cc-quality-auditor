@@ -10,27 +10,27 @@
         :model-value="itemInstance.name"
         :label="$t('reusable.name')"
         :v="v.itemInstance.name"
-        :disabled="!hasModifyAccess"
+        :disabled="disableUserInput"
         required
         @update:model-value="setItemProp({ prop: 'name', value: $event })"
       />
       <wt-textarea
         :model-value="itemInstance.description"
         :label="$t('vocabulary.description')"
-        :disabled="!hasModifyAccess"
+        :disabled="disableUserInput"
         @update:model-value="setItemProp({ prop: 'description', value: $event })"
       />
       <wt-select
         :label="$t('objects.team', 1)"
         :value="itemInstance.teams"
         :search-method="teamLookupApi"
-        :disabled="!hasModifyAccess"
+        :disabled="disableUserInput || !hasTeamsReadAccess"
         multiple
         @input="setItemProp({ prop: 'teams', value: $event })"
       />
       <div />
       <wt-switcher
-        :disabled="!hasModifyAccess"
+        :disabled="disableUserInput"
         :label="$t('reusable.state')"
         :model-value="itemInstance.enabled"
         @update:model-value="setItemProp({ prop: 'enabled', value: $event })"
@@ -40,9 +40,10 @@
 </template>
 
 <script setup>
+import { WtObject } from "@webitel/ui-sdk/enums";
 import { useCardStore } from "@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore";
 
-import { useAccess } from "../../../app/composables/useAccess";
+import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
 import teamLookupApi from "../../_shared/lookups/api/teamLookupApi";
 
 const props = defineProps({
@@ -57,8 +58,11 @@ const props = defineProps({
 
 const { itemInstance, setItemProp } = useCardStore(props.namespace);
 
-const { hasModifyAccess } = useAccess();
+const { disableUserInput } = useUserAccessControl();
+
+const { hasReadAccess: hasTeamsReadAccess } = useUserAccessControl(
+	WtObject.Team,
+);
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
