@@ -1,65 +1,68 @@
 <template>
-  <wt-page-wrapper :actions-panel="false" class="opened-card">
-    <template #header>
-      <wt-page-header
-        :primary-action="saveChanges"
-        :primary-text="saveText"
-        :secondary-action="() => close(routeName)"
-        :hide-primary="!hasModifyAccess"
-        :primary-disabled="isInvalidForm"
-      >
-        <template
-          v-if="itemInstance.editable"
-          #primary-action
-        >
-          <wt-button-select
-            :options="saveOptions"
-            :disabled="isInvalidForm"
-            :color="isInvalidForm && 'secondary'"
-            @click="saveAction"
-            @click:option="({ callback }) => callback()"
-          >
-            {{ saveText }}
-          </wt-button-select>
-        </template>
-        <wt-breadcrumb :path="path" />
-      </wt-page-header>
-    </template>
+	<wt-page-wrapper
+		:actions-panel="false"
+		class="opened-card"
+	>
+		<template #header>
+			<wt-page-header
+				:primary-action="saveChanges"
+				:primary-text="saveText"
+				:secondary-action="() => close(routeName)"
+				:hide-primary="disableUserInput"
+				:primary-disabled="isInvalidForm"
+			>
+				<template
+					v-if="itemInstance.editable"
+					#primary-action
+				>
+					<wt-button-select
+						:options="saveOptions"
+						:disabled="isInvalidForm"
+						:color="isInvalidForm && 'secondary'"
+						@click="saveAction"
+						@click:option="({ callback }) => callback()"
+					>
+						{{ saveText }}
+					</wt-button-select>
+				</template>
+				<wt-breadcrumb :path="path" />
+			</wt-page-header>
+		</template>
 
-    <template #main>
-      <form
-        class="opened-card-form"
-        @submit.prevent="saveAction"
-      >
-        <wt-tabs
-          :current="currentTab"
-          :tabs="tabs"
-          @change="changeTab"
-        />
-        <component
-          :is="component"
-          :v="v$"
-          :namespace="namespace"
-          @update:validation="isInvalidFormQuestions = $event.invalid"
-        />
-        <input
-          type="submit"
-          hidden
-        >
-      </form>
-    </template>
-  </wt-page-wrapper>
+		<template #main>
+			<form
+				class="opened-card-form"
+				@submit.prevent="saveAction"
+			>
+				<wt-tabs
+					:current="currentTab"
+					:tabs="tabs"
+					@change="changeTab"
+				/>
+				<component
+					:is="component"
+					:v="v$"
+					:namespace="namespace"
+					@update:validation="isInvalidFormQuestions = $event.invalid"
+				/>
+				<input
+					type="submit"
+					hidden
+				>
+			</form>
+		</template>
+	</wt-page-wrapper>
 </template>
 
 <script setup>
 import { useVuelidate } from "@vuelidate/core";
 import { minLength, required } from "@vuelidate/validators";
-import AuditorSections from "@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum";
+import { AuditorSections, WtObject } from "@webitel/ui-sdk/enums";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import { useAccess } from "../../../app/composables/useAccess";
+import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
 import { useCardPage } from "../../../app/composables/useCardPage";
 import { useClose } from "../../../app/composables/useClose";
 import { usePathName } from "../../../app/composables/usePathName";
@@ -70,7 +73,7 @@ import General from "./opened-scorecard-general.vue";
 
 const namespace = "scorecards";
 const isInvalidFormQuestions = ref(false);
-const routeName = AuditorSections.SCORECARDS;
+const routeName = AuditorSections.Scorecards;
 const router = useRouter();
 const route = useRoute();
 const { handleError } = useErrorRedirectHandler();
@@ -84,7 +87,7 @@ const {
 	setItemProp,
 } = useCardPage(namespace, { onLoadErrorHandler: handleError });
 
-const { hasModifyAccess } = useAccess();
+const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
 
 const { pathName } = usePathName(itemInstance);
 
@@ -195,11 +198,14 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style
+	lang="scss"
+	scoped
+>
 .main-container {
-  width: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+	width: 100%;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
 }
 </style>

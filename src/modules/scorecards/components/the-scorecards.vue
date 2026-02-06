@@ -65,7 +65,6 @@
         >
           <wt-table
             :data="dataList"
-            :grid-actions="hasEditAccess || hasDeleteAccess"
             :headers="headers"
             :selected="selected"
             sortable
@@ -73,7 +72,7 @@
             @update:selected="setSelected"
           >
             <template #name="{ item }">
-              <wt-item-link :link="`${AuditorSections.SCORECARDS}/${item.id}`">
+              <wt-item-link :link="`${AuditorSections.Scorecards}/${item.id}`">
                 {{ item.name }}
               </wt-item-link>
             </template>
@@ -98,19 +97,19 @@
             </template>
             <template #state="{ item, index }">
               <wt-switcher
-                :disabled="!hasEditAccess"
+                :disabled="!hasUpdateAccess"
                 :model-value="item.enabled"
                 @update:model-value="patchProperty({ item, index, prop: 'enabled', value: $event })"
               />
             </template>
             <template #actions="{ item }">
               <wt-icon-action
-                :disabled="!item.editable"
+                :disabled="!hasUpdateAccess || !item.editable"
                 action="edit"
                 @click="edit(item)"
               />
               <wt-icon-action
-                :disabled="!item.editable"
+                :disabled="!hasDeleteAccess || !item.editable"
                 action="delete"
                 @click="askDeleteConfirmation({
                   deleted: [item],
@@ -131,7 +130,7 @@
 
 <script setup>
 import { FormatDateMode } from "@webitel/ui-sdk/enums";
-import AuditorSections from "@webitel/ui-sdk/src/enums/WebitelApplications/AuditorSections.enum.js";
+import { AuditorSections } from "@webitel/ui-sdk/enums";
 import DeleteConfirmationPopup from "@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue";
 import { useDeleteConfirmationPopup } from "@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup";
 import FilterPagination from "@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue";
@@ -144,10 +143,11 @@ import { computed, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { WtObject } from "@webitel/ui-sdk/enums";
 
 import dummyDark from "../../../app/assets/dummy-dark.svg";
 import dummyLight from "../../../app/assets/dummy-light.svg";
-import { useAccess } from "../../../app/composables/useAccess";
+import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
 import SearchMode from "../modules/filters/enums/SearchMode.enum.js";
 
 const baseNamespace = "scorecards";
@@ -193,7 +193,8 @@ onUnmounted(() => {
 	flushSubscribers();
 });
 
-const { hasCreateAccess, hasEditAccess, hasDeleteAccess } = useAccess();
+const { hasCreateAccess, hasUpdateAccess, hasDeleteAccess } =
+	useUserAccessControl(WtObject.Scorecard);
 
 const {
 	isVisible: isDeleteConfirmationPopup,
@@ -250,14 +251,14 @@ function prettifyDateTime(timestamp) {
 
 function create() {
 	return router.push({
-		name: `${AuditorSections.SCORECARDS}-card`,
+		name: `${AuditorSections.Scorecards}-card`,
 		params: { id: "new" },
 	});
 }
 
 function edit(item) {
 	return router.push({
-		name: `${AuditorSections.SCORECARDS}-card`,
+		name: `${AuditorSections.Scorecards}-card`,
 		params: { id: item.id },
 	});
 }
