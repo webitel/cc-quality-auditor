@@ -26,7 +26,7 @@ const routes = [
 		name: "auditor-workspace",
 		redirect: { name: AuditorSections.Scorecards },
 		component: TheAuditorWorkspace,
-		meta: { app: WtApplication.Audit },
+		meta: { WtApplication: WtApplication.Audit },
 		children: [
 			{
 				path: RoutePaths.Scorecards,
