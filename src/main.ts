@@ -3,8 +3,11 @@ import { createApp } from "vue";
 
 import App from "./app.vue";
 import i18n from "./app/locale/i18n";
-import WebitelUi from "./app/plugins/webitel-ui";
-import router from "./app/router";
+import {
+	plugin as WebitelUi,
+	options as WebitelUiOptions,
+} from "./app/plugins/webitel/ui-sdk";
+import { initRouter, router } from "./app/router";
 import store from "./app/store";
 import { useUserinfoStore } from "./modules/userinfo/userinfoStore";
 import { createUserAccessControl } from "./app/composables/useUserAccessControl";
@@ -38,22 +41,24 @@ const fetchConfig = async () => {
 const pinia = createPinia();
 
 const initApp = async () => {
-	const app = createApp(App)
-		.use(store)
-		.use(i18n)
-		.use(...WebitelUi)
-		.use(pinia);
+	const app = createApp(App).use(store).use(i18n).use(pinia);
 
 	const { initialize, routeAccessGuard } = useUserinfoStore();
 	try {
 		await initialize();
 		createUserAccessControl(useUserinfoStore);
-		router.beforeEach(routeAccessGuard);
+		await initRouter({
+			beforeEach: [routeAccessGuard],
+		});
 	} catch (err) {
 		console.error("Error initializing app", err);
 	}
 
 	app.use(router);
+	app.use(WebitelUi, {
+		...WebitelUiOptions,
+		router,
+	}); // setup webitel ui after router init
 
 	return app;
 };
