@@ -1,4 +1,8 @@
-import { AuditorSections, WtObject } from "@webitel/ui-sdk/enums";
+import {
+	AuditorSections,
+	WtApplication,
+	WtObject,
+} from "@webitel/ui-sdk/enums";
 import { createRouter, createWebHistory } from "vue-router";
 
 import OpenedScorecard from "../../modules/scorecards/components/opened-scorecard.vue";
@@ -22,6 +26,7 @@ const routes = [
 		name: "auditor-workspace",
 		redirect: { name: AuditorSections.Scorecards },
 		component: TheAuditorWorkspace,
+		meta: { app: WtApplication.Audit },
 		children: [
 			{
 				path: RoutePaths.Scorecards,
