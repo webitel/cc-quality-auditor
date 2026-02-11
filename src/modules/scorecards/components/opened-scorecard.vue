@@ -55,23 +55,22 @@
 </template>
 
 <script setup>
-import { useVuelidate } from "@vuelidate/core";
-import { minLength, required } from "@vuelidate/validators";
-import { AuditorSections, WtObject } from "@webitel/ui-sdk/enums";
-import { computed, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useVuelidate } from '@vuelidate/core';
+import { minLength, required } from '@vuelidate/validators';
+import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
+import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useCardPage } from '../../../app/composables/useCardPage';
+import { useClose } from '../../../app/composables/useClose';
+import { usePathName } from '../../../app/composables/usePathName';
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
+import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
+import Criterias from './opened-scorecard-criterias.vue';
+import General from './opened-scorecard-general.vue';
 
-import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
-import { useCardPage } from "../../../app/composables/useCardPage";
-import { useClose } from "../../../app/composables/useClose";
-import { usePathName } from "../../../app/composables/usePathName";
-import { useErrorRedirectHandler } from "../../error-pages/composable/useErrorRedirectHandler";
-import ScorerecordTabNames from "../../../app/router/_internals/ScorerecordTabNames.enum";
-import Criterias from "./opened-scorecard-criterias.vue";
-import General from "./opened-scorecard-general.vue";
-
-const namespace = "scorecards";
+const namespace = 'scorecards';
 const isInvalidFormQuestions = ref(false);
 const routeName = AuditorSections.Scorecards;
 const router = useRouter();
@@ -85,7 +84,9 @@ const {
 	save,
 	setId,
 	setItemProp,
-} = useCardPage(namespace, { onLoadErrorHandler: handleError });
+} = useCardPage(namespace, {
+	onLoadErrorHandler: handleError,
+});
 
 const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
 
@@ -108,20 +109,24 @@ const v$ = useVuelidate(
 			},
 		},
 	})),
-	{ itemInstance },
-	{ $autoDirty: true },
+	{
+		itemInstance,
+	},
+	{
+		$autoDirty: true,
+	},
 );
 
 const tabs = computed(() => [
 	{
-		text: t("reusable.general"),
-		value: "general",
+		text: t('reusable.general'),
+		value: 'general',
 		pathName: ScorerecordTabNames.GENERAL,
 		namespace,
 	},
 	{
-		text: t("objects.criterion", 2),
-		value: "criteria",
+		text: t('objects.criterion', 2),
+		value: 'criteria',
 		pathName: ScorerecordTabNames.CRITERIAS,
 		namespace: `${namespace}/criteria`,
 	},
@@ -129,10 +134,15 @@ const tabs = computed(() => [
 
 const path = computed(() => {
 	return [
-		{ name: t("audit") },
-		{ name: t("scorecards.scorecards", 2), route: "/scorecards" },
 		{
-			name: id.value ? pathName.value : t("reusable.new"),
+			name: t('audit'),
+		},
+		{
+			name: t('scorecards.scorecards', 2),
+			route: '/scorecards',
+		},
+		{
+			name: id.value ? pathName.value : t('reusable.new'),
 			route: {
 				name: currentTab.value.pathName,
 				query: route.query,
@@ -146,7 +156,7 @@ const currentTab = computed(() => {
 });
 
 const component = computed(() => {
-	if (currentTab.value?.value === "criteria") return Criterias;
+	if (currentTab.value?.value === 'criteria') return Criterias;
 	return General;
 });
 
@@ -157,9 +167,9 @@ const isInvalidForm = computed(() =>
 );
 
 const saveText = computed(() => {
-	if (!itemInstance.value.editable && id.value) return t("reusable.saveAs");
-	if (!isInvalidForm.value) return t("reusable.save");
-	return t("reusable.saved");
+	if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
+	if (!isInvalidForm.value) return t('reusable.save');
+	return t('reusable.saved');
 });
 
 function saveAction() {
@@ -168,11 +178,26 @@ function saveAction() {
 }
 
 function saveAs() {
-	setItemProp({ prop: "createdAt", value: "" });
-	setItemProp({ prop: "createdBy", value: {} });
-	setItemProp({ prop: "updatedAt", value: "" });
-	setItemProp({ prop: "updatedBy", value: {} });
-	setItemProp({ prop: "id", value: "" });
+	setItemProp({
+		prop: 'createdAt',
+		value: '',
+	});
+	setItemProp({
+		prop: 'createdBy',
+		value: {},
+	});
+	setItemProp({
+		prop: 'updatedAt',
+		value: '',
+	});
+	setItemProp({
+		prop: 'updatedBy',
+		value: {},
+	});
+	setItemProp({
+		prop: 'id',
+		value: '',
+	});
 	setId(null);
 	saveAction();
 }
@@ -183,14 +208,19 @@ const saveChanges = computed(() =>
 
 const saveOptions = computed(() => {
 	const saveAsNew = {
-		text: t("reusable.saveAs"),
+		text: t('reusable.saveAs'),
 		callback: saveAs,
 	};
-	return [saveAsNew];
+	return [
+		saveAsNew,
+	];
 });
 
 function changeTab(tab) {
-	router.push({ ...route, name: tab.pathName });
+	router.push({
+		...route,
+		name: tab.pathName,
+	});
 }
 
 onMounted(() => {

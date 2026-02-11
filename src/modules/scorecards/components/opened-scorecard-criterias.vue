@@ -12,11 +12,11 @@
 </template>
 
 <script setup>
-import { WtObject } from "@webitel/ui-sdk/enums";
-import AuditForm from "@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue";
-import { useCardStore } from "@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore";
+import { WtObject } from '@webitel/ui-sdk/enums';
+import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 
-import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 
 const props = defineProps({
 	namespace: {
@@ -25,7 +25,9 @@ const props = defineProps({
 	},
 });
 
-const emits = defineEmits(["update:validation"]);
+const emits = defineEmits([
+	'update:validation',
+]);
 
 const {
 	itemInstance,

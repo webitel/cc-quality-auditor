@@ -1,5 +1,5 @@
 const RoutePaths = Object.freeze({
-  Scorecards: '/scorecards',
+	Scorecards: '/scorecards',
 });
 
 export default RoutePaths;

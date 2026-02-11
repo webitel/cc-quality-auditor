@@ -1,35 +1,34 @@
-import { createPinia } from "pinia";
-import { createApp } from "vue";
-
-import App from "./app.vue";
-import i18n from "./app/locale/i18n";
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+import { createUserAccessControl } from './app/composables/useUserAccessControl';
+import i18n from './app/locale/i18n';
 import {
 	plugin as WebitelUi,
 	options as WebitelUiOptions,
-} from "./app/plugins/webitel/ui-sdk";
-import { initRouter, router } from "./app/router";
-import store from "./app/store";
-import { useUserinfoStore } from "./modules/userinfo/userinfoStore";
-import { createUserAccessControl } from "./app/composables/useUserAccessControl";
+} from './app/plugins/webitel/ui-sdk';
+import { initRouter, router } from './app/router';
+import store from './app/store';
+import App from './app.vue';
+import { useUserinfoStore } from './modules/userinfo/userinfoStore';
 
-import "./app/plugins/webitel-api-services";
+import './app/plugins/webitel-api-services';
 
 const setTokenFromUrl = () => {
 	try {
 		const queryMap = window.location.search
 			.slice(1)
-			.split("&")
+			.split('&')
 			.reduce((obj, query) => {
-				const [key, value] = query.split("=");
+				const [key, value] = query.split('=');
 				obj[key] = value;
 				return obj;
 			}, {});
 
 		if (queryMap.accessToken) {
-			localStorage.setItem("access-token", queryMap.accessToken);
+			localStorage.setItem('access-token', queryMap.accessToken);
 		}
 	} catch (err) {
-		console.error("Error restoring token from url", err);
+		console.error('Error restoring token from url', err);
 	}
 };
 
@@ -48,10 +47,12 @@ const initApp = async () => {
 		await initialize();
 		createUserAccessControl(useUserinfoStore);
 		await initRouter({
-			beforeEach: [routeAccessGuard],
+			beforeEach: [
+				routeAccessGuard,
+			],
 		});
 	} catch (err) {
-		console.error("Error initializing app", err);
+		console.error('Error initializing app', err);
 	}
 
 	app.use(router);
@@ -68,12 +69,12 @@ const initApp = async () => {
 	try {
 		setTokenFromUrl();
 		config = await fetchConfig();
-		store.commit("SET_ROUTER", router);
+		store.commit('SET_ROUTER', router);
 	} catch (err) {
-		console.error("before app mount error:", err);
+		console.error('before app mount error:', err);
 	} finally {
 		const app = await initApp();
-		app.provide("$config", config);
-		app.mount("#app");
+		app.provide('$config', config);
+		app.mount('#app');
 	}
 })();

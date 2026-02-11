@@ -34,16 +34,15 @@
 </template>
 
 <script setup>
-import { AuditorSections, WtApplication } from "@webitel/ui-sdk/enums";
-import WtDarkModeSwitcher from "@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue";
-import { storeToRefs } from "pinia";
-import { computed, inject, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-
-import RoutePaths from "../router/_internals/RoutePaths.enum";
-import { useUserinfoStore } from "../../modules/userinfo/userInfoStore";
+import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
+import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+import { storeToRefs } from 'pinia';
+import { computed, inject, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
+import RoutePaths from '../router/_internals/RoutePaths.enum';
 
 const release = process.env.npm_package_version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
@@ -56,7 +55,7 @@ const { hasApplicationVisibility, logoutUser } = userinfoStore;
 const { userinfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
-const darkMode = computed(() => store.getters["appearance/DARK_MODE"]);
+const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const { t, locale, fallbackLocale } = useI18n();
 
@@ -92,9 +91,16 @@ const apps = computed(() => {
 		href: import.meta.env.VITE_CRM_URL,
 	};
 
-	const config = inject("$config");
+	const config = inject('$config');
 
-	const allApps = [admin, supervisor, agent, history, audit, crm];
+	const allApps = [
+		admin,
+		supervisor,
+		agent,
+		history,
+		audit,
+		crm,
+	];
 	if (config?.ON_SITE) allApps.push(grafana);
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
@@ -105,10 +111,16 @@ const nav = computed(() => {
 		name: t(
 			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
 		),
-		route: "/scorecards",
+		route: '/scorecards',
 	};
-	const nav = [scorecards];
-	return nav.filter((nav) => hasApplicationVisibility({ name: nav.value }));
+	const nav = [
+		scorecards,
+	];
+	return nav.filter((nav) =>
+		hasApplicationVisibility({
+			name: nav.value,
+		}),
+	);
 });
 
 function settings() {
@@ -117,10 +129,10 @@ function settings() {
 }
 
 function setLanguage() {
-	const lang = localStorage.getItem("lang");
+	const lang = localStorage.getItem('lang');
 	if (lang) locale.value = lang;
 
-	const fallbackLang = localStorage.getItem("fallbackLang");
+	const fallbackLang = localStorage.getItem('fallbackLang');
 	if (fallbackLang) fallbackLocale.value = fallbackLang;
 }
 

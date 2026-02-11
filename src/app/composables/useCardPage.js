@@ -4,65 +4,67 @@ import { useRoute, useRouter } from 'vue-router';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCardPage = (namespace, { onLoadErrorHandler }) => {
-  const router = useRouter();
-  const route = useRoute();
+	const router = useRouter();
+	const route = useRoute();
 
-  const {
-    id,
-    itemInstance,
+	const {
+		id,
+		itemInstance,
 
-    loadItem,
-    addItem,
-    updateItem,
-    setId,
-    resetState,
-    setItemProp,
-  } = useCardStore(namespace);
+		loadItem,
+		addItem,
+		updateItem,
+		setId,
+		resetState,
+		setItemProp,
+	} = useCardStore(namespace);
 
-  function redirectToEdit() {
-    const routeName = route.name.replace('-new', '-edit');
-    return router.replace({
-      name: routeName,
-      params: { id: id.value },
-      hash: route.hash,
-    });
-  }
+	function redirectToEdit() {
+		const routeName = route.name.replace('-new', '-edit');
+		return router.replace({
+			name: routeName,
+			params: {
+				id: id.value,
+			},
+			hash: route.hash,
+		});
+	}
 
-  async function save() {
-    if (id.value) {
-      await updateItem();
-    } else {
-      try {
-        await addItem();
-        if (id.value) {
-          await redirectToEdit();
-        }
-      } catch (err) {
-        throw err;
-      }
-    }
-  }
+	async function save() {
+		if (id.value) {
+			await updateItem();
+		} else {
+			try {
+				await addItem();
+				if (id.value) {
+					await redirectToEdit();
+				}
+			} catch (err) {
+				throw err;
+			}
+		}
+	}
 
-  async function initializeCard() {
-    const { id: itemId } = route.params;
-    await setId(itemId);
-    try {
-      return await loadItem();
-    } catch (err) {
-      if (!onLoadErrorHandler) throw err;
-      onLoadErrorHandler(err)
-    }
-  }
+	async function initializeCard() {
+		const { id: itemId } = route.params;
+		await setId(itemId);
+		try {
+			return await loadItem();
+		} catch (err) {
+			if (!onLoadErrorHandler) throw err;
+			onLoadErrorHandler(err);
+		}
+	}
 
-  onMounted(() => initializeCard());
-  onUnmounted(() => resetState());
+	onMounted(() => initializeCard());
+	onUnmounted(() => resetState());
 
-  return {
-    id,
-    itemInstance,
+	return {
+		id,
+		itemInstance,
 
-    save,
-    setId,
-    setItemProp,
-  };
+		save,
+		setId,
+		setItemProp,
+	};
 };

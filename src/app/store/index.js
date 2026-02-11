@@ -1,7 +1,7 @@
-import { createStore } from "vuex";
+import { createStore } from 'vuex';
 
-import appearance from "../../modules/appearance/store/appearance";
-import scorecards from "../../modules/scorecards/store/scorecards";
+import appearance from '../../modules/appearance/store/appearance';
+import scorecards from '../../modules/scorecards/store/scorecards';
 
 export default createStore({
 	state: {
@@ -19,9 +19,9 @@ export default createStore({
 	actions: {
 		LOAD_DATA: (context, payload) =>
 			context.dispatch(`${context.state.state}/LOAD_DATA`, payload),
-		SET_APP_STATE: (context, state) => context.commit("SET_APP_STATE", state),
+		SET_APP_STATE: (context, state) => context.commit('SET_APP_STATE', state),
 		RESET_FILTERS: (context) => {
-			context.dispatch("filters/RESET_FILTERS");
+			context.dispatch('filters/RESET_FILTERS');
 			context.dispatch(`${context.state.state}/RESET_FILTERS`);
 		},
 	},

@@ -6,7 +6,6 @@ import i18n from '../locale/i18n';
 // Configure api-services
 // Note: Locale messages are automatically merged by setConfig when i18n is provided
 setConfig({
-  eventBus,
-  i18n,
+	eventBus,
+	i18n,
 });
-

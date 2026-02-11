@@ -40,11 +40,11 @@
 </template>
 
 <script setup>
-import { WtObject } from "@webitel/ui-sdk/enums";
-import { useCardStore } from "@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore";
+import { WtObject } from '@webitel/ui-sdk/enums';
+import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 
-import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
-import teamLookupApi from "../../_shared/lookups/api/teamLookupApi";
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 
 const props = defineProps({
 	namespace: {

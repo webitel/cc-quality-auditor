@@ -129,28 +129,30 @@
 </template>
 
 <script setup>
-import { FormatDateMode } from "@webitel/ui-sdk/enums";
-import { AuditorSections } from "@webitel/ui-sdk/enums";
-import DeleteConfirmationPopup from "@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue";
-import { useDeleteConfirmationPopup } from "@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup";
-import FilterPagination from "@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue";
-import FilterSearch from "@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue";
-import FilterFields from "@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue";
-import { useTableFilters } from "@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters";
-import { useTableStore } from "@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js";
-import { formatDate } from "@webitel/ui-sdk/utils";
-import { computed, onUnmounted } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { WtObject } from "@webitel/ui-sdk/enums";
+import {
+	AuditorSections,
+	FormatDateMode,
+	WtObject,
+} from '@webitel/ui-sdk/enums';
+import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
+import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
+import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
+import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue';
+import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
+import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
+import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
+import { formatDate } from '@webitel/ui-sdk/utils';
+import { computed, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import dummyDark from "../../../app/assets/dummy-dark.svg";
-import dummyLight from "../../../app/assets/dummy-light.svg";
-import { useUserAccessControl } from "../../../app/composables/useUserAccessControl";
-import SearchMode from "../modules/filters/enums/SearchMode.enum.js";
+import dummyDark from '../../../app/assets/dummy-dark.svg';
+import dummyLight from '../../../app/assets/dummy-light.svg';
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import SearchMode from '../modules/filters/enums/SearchMode.enum.js';
 
-const baseNamespace = "scorecards";
+const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
@@ -183,7 +185,7 @@ const {
 } = useTableFilters(namespace);
 
 subscribe({
-	event: "*",
+	event: '*',
 	callback: onFilterEvent,
 });
 
@@ -217,11 +219,11 @@ const isEmptyData = computed(() => {
 const searchOpts = computed(() => [
 	{
 		value: SearchMode.NAME,
-		text: t("reusable.name"),
+		text: t('reusable.name'),
 	},
 	{
 		value: SearchMode.CRITERION,
-		text: t("objects.criterion", 1),
+		text: t('objects.criterion', 1),
 	},
 ]);
 
@@ -237,29 +239,39 @@ const isSecondaryDisabled = computed(
 	() => !selected.value.length || selected.value.some((item) => !item.editable),
 );
 
-const darkMode = computed(() => store.getters["appearance/DARK_MODE"]);
+const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const path = computed(() => [
-	{ name: t("audit"), route: "/" },
-	{ name: t("scorecards.scorecards", 2), route: "/scorecards" },
+	{
+		name: t('audit'),
+		route: '/',
+	},
+	{
+		name: t('scorecards.scorecards', 2),
+		route: '/scorecards',
+	},
 ]);
 
 function prettifyDateTime(timestamp) {
-	if (!timestamp) return "";
+	if (!timestamp) return '';
 	return formatDate(+timestamp, FormatDateMode.DATETIME);
 }
 
 function create() {
 	return router.push({
 		name: `${AuditorSections.Scorecards}-card`,
-		params: { id: "new" },
+		params: {
+			id: 'new',
+		},
 	});
 }
 
 function edit(item) {
 	return router.push({
 		name: `${AuditorSections.Scorecards}-card`,
-		params: { id: item.id },
+		params: {
+			id: item.id,
+		},
 	});
 }
 
@@ -268,7 +280,10 @@ function deleteSelectedItems() {
 		selectedItems.value.length &&
 		askDeleteConfirmation({
 			deleted: selectedItems.value,
-			callback: () => deleteData([...selectedItems.value]),
+			callback: () =>
+				deleteData([
+					...selectedItems.value,
+				]),
 		})
 	);
 }
