@@ -11,7 +11,7 @@
 		"utils:link-libs": "npm link @webitel/ui-sdk @webitel/api-services && npm run utils:ls-libs",
 		"utils:ls-libs": "npm ls @webitel/ui-sdk @webitel/api-services",
 		"utils:up-libs": "npm update @webitel/ui-sdk @webitel/api-services && npm ls @webitel/ui-sdk @webitel/api-services",
-		"prepare": "husky"
+		"prepare": "husky || true"
 	},
 	"type": "module",
 	"dependencies": {
