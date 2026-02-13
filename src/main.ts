@@ -9,7 +9,7 @@ import {
 import { initRouter, router } from './app/router';
 import store from './app/store';
 import App from './app.vue';
-import { useUserinfoStore } from './modules/userinfo/userinfoStore';
+import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
 import './app/plugins/webitel-api-services';
 
