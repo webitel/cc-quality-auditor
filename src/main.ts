@@ -51,6 +51,7 @@ const initApp = async () => {
 				routeAccessGuard,
 			],
 		});
+		store.commit('SET_ROUTER', router);
 	} catch (err) {
 		console.error('Error initializing app', err);
 	}
@@ -69,7 +70,6 @@ const initApp = async () => {
 	try {
 		setTokenFromUrl();
 		config = await fetchConfig();
-		store.commit('SET_ROUTER', router);
 	} catch (err) {
 		console.error('before app mount error:', err);
 	} finally {
