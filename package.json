@@ -22,7 +22,7 @@
 		"@vuelidate/validators": "^2.0.4",
 		"@webitel/api-services": "^0.1.8",
 		"@webitel/styleguide": "~26.2",
-		"@webitel/ui-sdk": "^26.2.100",
+		"@webitel/ui-sdk": "~26.2",
 		"axios": "^1.13",
 		"clipboard-copy": "^4.0.1",
 		"deep-equal": "^2.x",

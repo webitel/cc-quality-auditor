@@ -9,7 +9,7 @@ import {
 import { initRouter, router } from './app/router';
 import store from './app/store';
 import App from './app.vue';
-import { useUserinfoStore } from './modules/userinfo/userinfoStore';
+import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
 import './app/plugins/webitel-api-services';
 
@@ -51,6 +51,7 @@ const initApp = async () => {
 				routeAccessGuard,
 			],
 		});
+		store.commit('SET_ROUTER', router);
 	} catch (err) {
 		console.error('Error initializing app', err);
 	}
