@@ -74,6 +74,7 @@ const initApp = async () => {
 		console.error('before app mount error:', err);
 	} finally {
 		const app = await initApp();
+		store.commit('SET_ROUTER', router);
 		app.provide('$config', config);
 		app.mount('#app');
 	}
