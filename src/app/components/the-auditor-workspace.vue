@@ -43,8 +43,9 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
+import packageJson from '../../../package.json' with { type: 'json' };
 
-const release = process.env.npm_package_version;
+const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
 
 const store = useStore();
