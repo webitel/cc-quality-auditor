@@ -21,7 +21,7 @@
         />
         <wt-header-actions
           :build-info="{ release, build }"
-          :user="userinfo"
+          :user="userInfo"
           @logout="logoutUser"
           @settings="settings"
         />
@@ -53,7 +53,7 @@ const router = useRouter();
 
 const userinfoStore = useUserinfoStore();
 const { hasApplicationVisibility, logoutUser } = userinfoStore;
-const { userinfo } = storeToRefs(userinfoStore);
+const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
 const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
