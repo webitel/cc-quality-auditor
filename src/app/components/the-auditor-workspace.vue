@@ -20,7 +20,7 @@
           :dark-mode="darkMode"
         />
         <wt-header-actions
-          :build-info="{ release, build }"
+          :build-info="{ release, build, timestamp }"
           :user="userInfo"
           @logout="logoutUser"
           @settings="settings"
@@ -47,6 +47,7 @@ import packageJson from '../../../package.json' with { type: 'json' };
 
 const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
+const timestamp = import.meta.env.VITE_BUILD_TIMESTAMP;
 
 const store = useStore();
 const router = useRouter();
