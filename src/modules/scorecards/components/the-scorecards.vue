@@ -22,18 +22,7 @@
         :delete-count="deleteCount"
         @close="closeDelete"
       />
-      <wt-dummy
-        v-if="isEmptyData && !isLoading"
-        :src="darkMode ? dummyDark : dummyLight"
-        :text="$t('scorecards.emptyWorkspace')"
-        class="scorecards__dummy"
-        show-action
-        @create="create"
-      />
-      <section
-        v-else
-        class="table-section"
-      >
+      <section class="table-section">
         <header class="table-title">
           <h3 class="table-title__title typo-heading-3">
             {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
@@ -57,10 +46,14 @@
           </div>
         </header>
 
-        <wt-loader v-show="isLoading" />
-
+        <wt-loader v-show="isLoading && !dataList.length" />
+        <wt-empty
+          v-if="showEmpty"
+          :image="imageEmpty"
+          :text="textEmpty"
+        />
         <div
-          v-show="!isLoading"
+          v-show="dataList?.length"
           class="table-section__table-wrapper"
         >
           <wt-table
@@ -129,6 +122,7 @@
 </template>
 
 <script setup>
+import { WtEmpty } from '@webitel/ui-sdk/components';
 import {
 	AuditorSections,
 	FormatDateMode,
@@ -140,23 +134,19 @@ import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/fil
 import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue';
 import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
 import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
+import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { computed, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-import dummyDark from '../../../app/assets/dummy-dark.svg';
-import dummyLight from '../../../app/assets/dummy-light.svg';
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import SearchMode from '../modules/filters/enums/SearchMode.enum.js';
 
 const baseNamespace = 'scorecards';
 const { t } = useI18n();
 const router = useRouter();
-const route = useRoute();
-const store = useStore();
 
 const {
 	namespace,
@@ -178,11 +168,23 @@ const {
 
 const {
 	namespace: filtersNamespace,
+	filtersValue,
 
 	subscribe,
 	flushSubscribers,
 	restoreFilters,
 } = useTableFilters(namespace);
+
+const {
+	showEmpty,
+	image: imageEmpty,
+	text: textEmpty,
+} = useTableEmpty({
+	dataList,
+	filters: filtersValue,
+	isLoading,
+	error,
+});
 
 subscribe({
 	event: '*',
@@ -207,15 +209,6 @@ const {
 	closeDelete,
 } = useDeleteConfirmationPopup();
 
-// FIXME: refactor me!
-const isEmptyData = computed(() => {
-	if (dataList.value.length) return false;
-	if (error.value) return false;
-	if (route.query.q && !dataList.value.length) return false;
-	if (route.query.question && !dataList.value.length) return false;
-	return true;
-});
-
 const searchOpts = computed(() => [
 	{
 		value: SearchMode.NAME,
@@ -238,8 +231,6 @@ const selectedItems = computed(() =>
 const isSecondaryDisabled = computed(
 	() => !selected.value.length || selected.value.some((item) => !item.editable),
 );
-
-const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
 
 const path = computed(() => [
 	{
@@ -295,10 +286,5 @@ function deleteSelectedItems() {
 >
 .scorecards {
   width: 100%;
-}
-
-
-.scorecards__dummy {
-  margin: auto;
 }
 </style>
