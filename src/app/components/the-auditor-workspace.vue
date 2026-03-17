@@ -106,23 +106,15 @@ const apps = computed(() => {
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
-const nav = computed(() => {
-	const scorecards = {
+const nav = computed(() => [
+	{
 		value: AuditorSections.Scorecards,
 		name: t(
 			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
 		),
 		route: '/scorecards',
-	};
-	const nav = [
-		scorecards,
-	];
-	return nav.filter((nav) =>
-		hasApplicationVisibility({
-			name: nav.value,
-		}),
-	);
-});
+	},
+]);
 
 function settings() {
 	const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
