@@ -5,12 +5,14 @@ import {
 } from '@webitel/ui-sdk/enums';
 import { createRouter, createWebHistory } from 'vue-router';
 
-import OpenedScorecard from '../../modules/scorecards/components/opened-scorecard.vue';
-import Scorecards from '../../modules/scorecards/components/the-scorecards.vue';
-import TheAuditorWorkspace from '../components/the-auditor-workspace.vue';
-import AccessDenied from '../components/utils/access-denied-component.vue';
 import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
+
+const TheAuditorWorkspace = () =>
+	import('../components/the-auditor-workspace.vue');
+const OpenedScorecard = () => import('../../modules/scorecards/components/opened-scorecard.vue');
+const Scorecards = () => import('../../modules/scorecards/components/the-scorecards.vue');
+const AccessDenied = () => import('../components/utils/access-denied-component.vue');
 
 const Criterias = import(
 	'../../modules/scorecards/components/opened-scorecard-criterias.vue'
@@ -91,7 +93,7 @@ const routes = [
 
 export let router = null;
 
-export const initRouter = async ({ beforeEach = [] } = {}) => {
+export const initRouter = async ({ beforeEach = [], afterEach = [] } = {}) => {
 	router = createRouter({
 		history: createWebHistory(import.meta.env.BASE_URL),
 		scrollBehavior(to, from, savedPosition) {
@@ -126,6 +128,10 @@ export const initRouter = async ({ beforeEach = [] } = {}) => {
 	beforeEach.forEach((guard) => {
 		router.beforeEach(guard);
 	});
+
+  afterEach.forEach((guard) => {
+    router.afterEach(guard);
+  });
 
 	return router;
 };

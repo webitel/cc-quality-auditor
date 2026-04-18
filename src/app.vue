@@ -1,4 +1,5 @@
 <template>
+  <wt-notifications-bar />
   <router-view />
 </template>
 

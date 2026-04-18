@@ -42,7 +42,7 @@ const pinia = createPinia();
 const initApp = async () => {
 	const app = createApp(App).use(store).use(i18n).use(pinia);
 
-	const { initialize, routeAccessGuard } = useUserinfoStore();
+	const { initialize, routeAccessGuard, showUserNotifications } = useUserinfoStore();
 	try {
 		await initialize();
 		createUserAccessControl(useUserinfoStore);
@@ -50,6 +50,9 @@ const initApp = async () => {
 			beforeEach: [
 				routeAccessGuard,
 			],
+      afterEach: [
+        showUserNotifications,
+      ],
 		});
 		store.commit('SET_ROUTER', router);
 	} catch (err) {
