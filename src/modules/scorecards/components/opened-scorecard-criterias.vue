@@ -3,7 +3,7 @@
     <audit-form
       class="wt-scrollbar"
       :questions="itemInstance.questions"
-      :mode="!disableUserInput ? 'create' : 'fill'"
+      mode="create"
       :readonly="disableUserInput"
       @update:validation="emits('update:validation', $event)"
       @update:questions="setItemProp({ prop: 'questions', value: $event })"
