@@ -42,8 +42,8 @@ jobs:
         id: version
         run: |
           INPUT="${{ inputs.version }}"
-          VERSION=$(echo $INPUT | cut -d',' -f1 | tr -d ' ')
-          NEXT_VERSION=$(echo $INPUT | cut -d',' -f2 | tr -d ' ')
+          VERSION=$(echo $INPUT | cut -d',' -f1 | tr -d ' ') #splits versions from input by separator
+          NEXT_VERSION=$(echo $INPUT | cut -d',' -f2 | tr -d ' ') #splits versions from input by separator
           
           {
             echo "version=$VERSION"
@@ -61,8 +61,7 @@ jobs:
       - name: Bump version in main to next version
         run: |
           git checkout ${{ github.event.repository.default_branch }}
-          node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.version = '${{ steps.version.outputs.next_full_version }}'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');"
-          npm install --package-lock-only
+          npm version "${{ steps.version.outputs.next_full_version }}" --no-git-tag-version --allow-same-version
           git add package.json
           if [ -f package-lock.json ]; then
             git add package-lock.json
