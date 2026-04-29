@@ -46,16 +46,15 @@
           </div>
         </header>
 
-        <wt-loader v-show="isLoading" />
-        <wt-empty
-          v-if="showEmpty"
-          :image="imageEmpty"
-          :text="textEmpty"
-        />
         <div
-          v-show="dataList?.length"
           class="table-section__table-wrapper"
         >
+          <wt-empty
+            v-if="showEmpty"
+            :image="imageEmpty"
+            :text="textEmpty"
+          />
+          <wt-loader v-show="isLoading" />
           <wt-table
             v-show="!isLoading"
             :data="dataList"
