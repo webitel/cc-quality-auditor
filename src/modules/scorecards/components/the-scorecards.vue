@@ -96,19 +96,27 @@
               />
             </template>
             <template #actions="{ item }">
-              <wt-icon-action
-                :disabled="!hasUpdateAccess || !item.editable"
-                action="edit"
-                @click="edit(item)"
-              />
-              <wt-icon-action
-                :disabled="!hasDeleteAccess || !item.editable"
-                action="delete"
-                @click="askDeleteConfirmation({
-                  deleted: [item],
-                  callback: () => deleteData(item),
-                })"
-              />
+              <div
+                v-tooltip="showEditUsedTooltip(item) && $t('scorecards.usedScorecardCantEdit')"
+              >
+                <wt-icon-action
+                  :disabled="isEditDisabled(item)"
+                  action="edit"
+                  @click="edit(item)"
+                />
+              </div>
+              <div
+                v-tooltip="showDeleteUsedTooltip(item) && $t('scorecards.usedScorecardCantDelete')"
+              >
+                <wt-icon-action
+                  :disabled="isDeleteDisabled(item)"
+                  action="delete"
+                  @click="askDeleteConfirmation({
+                    deleted: [item],
+                    callback: () => deleteData(item),
+                  })"
+                />
+              </div>
             </template>
           </wt-table>
           <filter-pagination
@@ -230,6 +238,21 @@ const selectedItems = computed(() =>
 
 const isSecondaryDisabled = computed(
 	() => !selected.value.length || selected.value.some((item) => !item.editable),
+);
+
+const isScorecardUsed = computed(() => (item) => !item.editable);
+
+const showEditUsedTooltip = computed(
+	() => (item) => hasUpdateAccess.value && isScorecardUsed.value(item),
+);
+const isEditDisabled = computed(
+	() => (item) => !hasUpdateAccess.value || isScorecardUsed.value(item),
+);
+const showDeleteUsedTooltip = computed(
+	() => (item) => hasDeleteAccess.value && isScorecardUsed.value(item),
+);
+const isDeleteDisabled = computed(
+	() => (item) => !hasDeleteAccess.value || isScorecardUsed.value(item),
 );
 
 const path = computed(() => [
