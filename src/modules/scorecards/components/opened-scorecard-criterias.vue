@@ -48,6 +48,6 @@ const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
 
 .audit-form {
   min-height: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>
