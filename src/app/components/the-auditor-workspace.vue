@@ -52,7 +52,7 @@ const store = useStore();
 const router = useRouter();
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser } = userinfoStore;
+const { hasApplicationVisibility, logoutUser, showUserNotifications } = userinfoStore;
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
@@ -131,6 +131,7 @@ function setLanguage() {
 
 onMounted(() => {
 	setLanguage();
+  showUserNotifications();
 });
 </script>
 
