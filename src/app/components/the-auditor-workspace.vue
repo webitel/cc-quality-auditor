@@ -41,9 +41,9 @@ import { computed, inject, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import packageJson from '../../../package.json' with { type: 'json' };
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
-import packageJson from '../../../package.json' with { type: 'json' };
 
 const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
@@ -52,7 +52,8 @@ const store = useStore();
 const router = useRouter();
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser, showUserNotifications } = userinfoStore;
+const { hasApplicationVisibility, logoutUser, showUserNotifications } =
+	userinfoStore;
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
@@ -131,7 +132,7 @@ function setLanguage() {
 
 onMounted(() => {
 	setLanguage();
-  showUserNotifications();
+	showUserNotifications();
 });
 </script>
 
