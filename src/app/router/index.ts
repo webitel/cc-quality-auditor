@@ -10,9 +10,12 @@ import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 
 const TheAuditorWorkspace = () =>
 	import('../components/the-auditor-workspace.vue');
-const OpenedScorecard = () => import('../../modules/scorecards/components/opened-scorecard.vue');
-const Scorecards = () => import('../../modules/scorecards/components/the-scorecards.vue');
-const AccessDenied = () => import('../components/utils/access-denied-component.vue');
+const OpenedScorecard = () =>
+	import('../../modules/scorecards/components/opened-scorecard.vue');
+const Scorecards = () =>
+	import('../../modules/scorecards/components/the-scorecards.vue');
+const AccessDenied = () =>
+	import('../components/utils/access-denied-component.vue');
 
 const Criterias = import(
 	'../../modules/scorecards/components/opened-scorecard-criterias.vue'
@@ -93,7 +96,10 @@ const routes = [
 
 export let router = null;
 
-export const initRouter = async ({ beforeEach = [], onUnauthorized = () => {}, } = {}) => {
+export const initRouter = async ({
+	beforeEach = [],
+	onUnauthorized = () => {},
+} = {}) => {
 	router = createRouter({
 		history: createWebHistory(import.meta.env.BASE_URL),
 		scrollBehavior(to, from, savedPosition) {
@@ -107,9 +113,9 @@ export const initRouter = async ({ beforeEach = [], onUnauthorized = () => {}, }
 
 	router.beforeEach((to, from, next) => {
 		if (!localStorage.getItem('access-token') && !to.query.accessToken) {
-      // @author @Lear24
-      // remove flag about shown notifications from localStorage
-      onUnauthorized();
+			// @author @Lear24
+			// remove flag about shown notifications from localStorage
+			onUnauthorized();
 			const desiredUrl = encodeURIComponent(window.location.href);
 			const authUrl = import.meta.env.VITE_AUTH_URL;
 			window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
