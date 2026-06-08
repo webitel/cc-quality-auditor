@@ -20,13 +20,12 @@
         :disabled="disableUserInput"
         @update:model-value="setItemProp({ prop: 'description', value: $event })"
       />
-      <wt-select
+      <wt-multi-select
         :label="$t('objects.team', 1)"
-        :value="itemInstance.teams"
+        :model-value="itemInstance.teams"
         :search-method="teamLookupApi"
         :disabled="disableUserInput || !hasTeamsReadAccess"
-        multiple
-        @input="setItemProp({ prop: 'teams', value: $event })"
+        @update:model-value="setItemProp({ prop: 'teams', value: $event })"
       />
       <div />
       <wt-switcher
