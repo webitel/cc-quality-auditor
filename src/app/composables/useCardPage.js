@@ -34,13 +34,9 @@ export const useCardPage = (namespace, { onLoadErrorHandler }) => {
 		if (id.value) {
 			await updateItem();
 		} else {
-			try {
-				await addItem();
-				if (id.value) {
-					await redirectToEdit();
-				}
-			} catch (err) {
-				throw err;
+			await addItem();
+			if (id.value) {
+				await redirectToEdit();
 			}
 		}
 	}
