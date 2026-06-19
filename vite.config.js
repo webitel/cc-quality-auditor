@@ -1,16 +1,19 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vitejs.dev/config/
-export default () => {
+export default ({ mode }) => {
+	const env = loadEnv(mode, process.cwd(), '');
+	const isStagingEnv = !!env.VITE_STAGING_ENV;
+
 	return defineConfig({
 		base: '/audit',
 		build: {
-			sourcemap: import.meta.env.VITE_STAGING_ENV,
-			minify: !import.meta.env.VITE_STAGING_ENV, // Disable minification for readable debugging
+			sourcemap: isStagingEnv,
+			minify: !isStagingEnv, // Disable minification for readable debugging
 		},
 		server: {
 			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
