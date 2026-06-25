@@ -28,7 +28,7 @@
 		"@webitel/api-services": "^0.1.26",
 		"@webitel/styleguide": "~26.2",
 		"@webitel/ui-sdk": "~26.6",
-		"axios": "1.15.2",
+		"axios": "^1.18.1",
 		"clipboard-copy": "^4.0.1",
 		"deep-equal": "^2.x",
 		"deepmerge": "^4.x",
