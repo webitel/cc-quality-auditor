@@ -1,0 +1,49 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"lib": [
+			"esnext",
+			"dom",
+			"dom.iterable"
+		],
+		"moduleResolution": "Bundler",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"skipLibCheck": true,
+		"noEmit": true,
+		"strict": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+		"allowJs": false,
+		"baseUrl": ".",
+		"paths": {
+			"vue": [
+				"./node_modules/@vue/compat"
+			],
+			"@/*": [
+				"./src/*"
+			],
+			"@aliasedDeps/api-services/axios": [
+				"./src/app/api/instance"
+			],
+			"@webitel/ui-sdk/src/*": [
+				"./node_modules/@webitel/ui-sdk/types/*"
+			]
+		}
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.vue",
+		"src/**/*.d.ts"
+	],
+	"exclude": [
+		"**/*.spec.ts",
+		"**/*.test.ts",
+		"node_modules"
+	]
+}
