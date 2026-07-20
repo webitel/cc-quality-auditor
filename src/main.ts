@@ -19,7 +19,7 @@ const setTokenFromUrl = () => {
 		const queryMap = window.location.search
 			.slice(1)
 			.split('&')
-			.reduce((obj, query) => {
+			.reduce<Record<string, string>>((obj, query) => {
 				const [key, value] = query.split('=');
 				obj[key] = value;
 				return obj;
