@@ -55,74 +55,79 @@
             :text="textEmpty"
           />
           <wt-loader v-show="isLoading" />
-          <wt-table
+          <div
+            v-if="dataList?.length"
             v-show="!isLoading"
-            :data="dataList"
-            :headers="headers"
-            :selected="selected"
-            sortable
-            @sort="sort"
-            @update:selected="setSelected"
+            class="table-section__table-wrapper"
           >
-            <template #name="{ item }">
-              <wt-item-link :link="`${AuditorSections.Scorecards}/${item.id}`">
-                {{ item.name }}
-              </wt-item-link>
-            </template>
-            <template #description="{ item }">
-              {{ item.description }}
-            </template>
-            <template #createdAt="{ item }">
-              {{ prettifyDateTime(item.createdAt) }}
-            </template>
-            <template #createdBy="{ item }">
-              <div v-if="item.createdBy">
-                {{ item.createdBy.name }}
-              </div>
-            </template>
-            <template #modifiedAt="{ item }">
-              {{ prettifyDateTime(item.updatedAt) }}
-            </template>
-            <template #modifiedBy="{ item }">
-              <div v-if="item.updatedBy">
-                {{ item.updatedBy.name }}
-              </div>
-            </template>
-            <template #state="{ item, index }">
-              <wt-switcher
-                :disabled="!hasUpdateAccess"
-                :model-value="item.enabled"
-                @update:model-value="patchProperty({ item, index, prop: 'enabled', value: $event })"
-              />
-            </template>
-            <template #actions="{ item }">
-              <div
-                v-tooltip="showEditUsedTooltip(item) && $t('scorecards.usedScorecardCantEdit')"
-              >
-                <wt-icon-action
-                  :disabled="isEditDisabled(item)"
-                  action="edit"
-                  @click="edit(item)"
+            <wt-table
+              :data="dataList"
+              :headers="headers"
+              :selected="selected"
+              sortable
+              @sort="sort"
+              @update:selected="setSelected"
+            >
+              <template #name="{ item }">
+                <wt-item-link :link="`${AuditorSections.Scorecards}/${item.id}`">
+                  {{ item.name }}
+                </wt-item-link>
+              </template>
+              <template #description="{ item }">
+                {{ item.description }}
+              </template>
+              <template #createdAt="{ item }">
+                {{ prettifyDateTime(item.createdAt) }}
+              </template>
+              <template #createdBy="{ item }">
+                <div v-if="item.createdBy">
+                  {{ item.createdBy.name }}
+                </div>
+              </template>
+              <template #modifiedAt="{ item }">
+                {{ prettifyDateTime(item.updatedAt) }}
+              </template>
+              <template #modifiedBy="{ item }">
+                <div v-if="item.updatedBy">
+                  {{ item.updatedBy.name }}
+                </div>
+              </template>
+              <template #state="{ item, index }">
+                <wt-switcher
+                  :disabled="!hasUpdateAccess"
+                  :model-value="item.enabled"
+                  @update:model-value="patchProperty({ item, index, prop: 'enabled', value: $event })"
                 />
-              </div>
-              <div
-                v-tooltip="showDeleteUsedTooltip(item) && $t('scorecards.usedScorecardCantDelete')"
-              >
-                <wt-icon-action
-                  :disabled="isDeleteDisabled(item)"
-                  action="delete"
-                  @click="askDeleteConfirmation({
-                    deleted: [item],
-                    callback: () => deleteData(item),
-                  })"
-                />
-              </div>
-            </template>
-          </wt-table>
-          <filter-pagination
-            :is-next="isNext"
-            :namespace="filtersNamespace"
-          />
+              </template>
+              <template #actions="{ item }">
+                <div
+                  v-tooltip="showEditUsedTooltip(item) && $t('scorecards.usedScorecardCantEdit')"
+                >
+                  <wt-icon-action
+                    :disabled="isEditDisabled(item)"
+                    action="edit"
+                    @click="edit(item)"
+                  />
+                </div>
+                <div
+                  v-tooltip="showDeleteUsedTooltip(item) && $t('scorecards.usedScorecardCantDelete')"
+                >
+                  <wt-icon-action
+                    :disabled="isDeleteDisabled(item)"
+                    action="delete"
+                    @click="askDeleteConfirmation({
+                      deleted: [item],
+                      callback: () => deleteData(item),
+                    })"
+                  />
+                </div>
+              </template>
+            </wt-table>
+            <filter-pagination
+              :is-next="isNext"
+              :namespace="filtersNamespace"
+            />
+          </div>
         </div>
       </section>
     </template>
