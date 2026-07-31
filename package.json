@@ -34,7 +34,7 @@
 		"deep-equal": "^2.x",
 		"deepmerge": "^4.x",
 		"lodash-es": "^4.x",
-		"pinia": "^3.x",
+		"pinia": "^4.x",
 		"vue": "^3.5.x",
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
