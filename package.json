@@ -29,7 +29,7 @@
 		"@webitel/api-services": "^0.1.54",
 		"@webitel/styleguide": "~26.2.19",
 		"@webitel/ui-sdk": "~26.8.13",
-		"axios": "^1.18.1",
+		"axios": "^1.19.0",
 		"clipboard-copy": "^4.0.1",
 		"deep-equal": "^2.x",
 		"deepmerge": "^4.x",
@@ -39,10 +39,10 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
-		"webitel-sdk": "^26.4.25"
+		"webitel-sdk": "^26.4.26"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.5",
+		"@biomejs/biome": "^2.5.6",
 		"@vitejs/plugin-vue": "^6.x",
 		"@vitest/coverage-v8": "^4.x",
 		"@vue/test-utils": "^2.x",
@@ -57,7 +57,7 @@
 		"vite-plugin-node-polyfills": "^0.x",
 		"vite-plugin-vue-devtools": "^8.x",
 		"vitest": "^4.x",
-		"vue-tsc": "^3.3.8"
+		"vue-tsc": "^3.3.9"
 	},
 	"optionalDependencies": {
 		"@esbuild/darwin-arm64": "^0.28.1",
