@@ -2,60 +2,58 @@
   <section>
     <header class="opened-card-header">
       <h3 class="opened-card-header__title typo-heading-3">
-        {{ $t('reusable.generalInfo') }}
+        {{ t('reusable.generalInfo') }}
       </h3>
     </header>
     <div class="opened-card-input-grid">
       <wt-input-text
-        :model-value="itemInstance.name"
-        :label="$t('reusable.name')"
-        :v="v.itemInstance.name"
+        v-model:model-value="modelValue.name"
+        :label="t('reusable.name')"
+        :regle-validation="validationFields?.name"
         :disabled="disableUserInput"
         required
-        @update:model-value="setItemProp({ prop: 'name', value: $event })"
       />
       <wt-textarea
-        :model-value="itemInstance.description"
-        :label="$t('vocabulary.description')"
+        v-model:model-value="modelValue.description"
+        :label="t('vocabulary.description')"
         :disabled="disableUserInput"
-        @update:model-value="setItemProp({ prop: 'description', value: $event })"
       />
       <wt-multi-select
-        :label="$t('objects.team', 1)"
-        :model-value="itemInstance.teams"
+        v-model:model-value="modelValue.teams"
+        :label="t('objects.team', 1)"
         :search-method="teamLookupApi"
         :disabled="disableUserInput || !hasTeamsReadAccess"
-        @update:model-value="setItemProp({ prop: 'teams', value: $event })"
       />
       <div />
       <wt-switcher
+        v-model:model-value="modelValue.enabled"
         :disabled="disableUserInput"
-        :label="$t('reusable.state')"
-        :model-value="itemInstance.enabled"
-        @update:model-value="setItemProp({ prop: 'enabled', value: $event })"
+        :label="t('reusable.state')"
       />
     </div>
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { RegleSchemaFieldStatus } from '@regle/schemas';
+import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { WtObject } from '@webitel/ui-sdk/enums';
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
+import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
-	},
-	v: {
-		type: Object,
-	},
+const modelValue = defineModel<EngineAuditForm>({
+	required: true,
 });
 
-const { itemInstance, setItemProp } = useCardStore(props.namespace);
+defineProps<{
+	validationFields?: {
+		[K in keyof EngineAuditForm]?: RegleSchemaFieldStatus<EngineAuditForm[K]>;
+	};
+}>();
+
+const { t } = useI18n();
 
 const { disableUserInput } = useUserAccessControl();
 
@@ -63,5 +61,3 @@ const { hasReadAccess: hasTeamsReadAccess } = useUserAccessControl(
 	WtObject.Team,
 );
 </script>
-
-<style scoped></style>

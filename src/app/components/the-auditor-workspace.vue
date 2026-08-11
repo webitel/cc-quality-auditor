@@ -12,7 +12,7 @@
           :dark-mode="darkMode"
           :logo-href="startPageHref"
         />
-        <wt-dark-mode-switcher />
+        <wt-dark-mode-switcher @changed-mode="appearanceStore.setTheme" />
         <wt-app-navigator
           :apps="apps"
           :current-app="currentApp"
@@ -38,17 +38,13 @@ import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/component
 import { storeToRefs } from 'pinia';
 import { computed, inject, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import packageJson from '../../../package.json' with { type: 'json' };
+import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
 
 const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
-
-const store = useStore();
-const router = useRouter();
 
 const userinfoStore = useUserinfoStore();
 const { hasApplicationVisibility, logoutUser, showUserNotifications } =
@@ -56,7 +52,8 @@ const { hasApplicationVisibility, logoutUser, showUserNotifications } =
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
-const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
+const appearanceStore = useAppearanceStore();
+const { darkMode } = storeToRefs(appearanceStore);
 
 const { t, locale, fallbackLocale } = useI18n();
 

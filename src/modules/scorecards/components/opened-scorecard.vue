@@ -1,241 +1,179 @@
 <template>
-	<wt-page-wrapper
-		:actions-panel="false"
-		class="opened-card"
-	>
-		<template #header>
-			<wt-page-header
-				:primary-action="saveChanges"
-				:primary-text="saveText"
-				:secondary-action="() => close(routeName)"
-				:hide-primary="disableUserInput"
-				:primary-disabled="isInvalidForm"
-			>
-				<template
-					v-if="itemInstance.editable"
-					#primary-action
-				>
-					<wt-button-select
-						:options="saveOptions"
-						:disabled="isInvalidForm"
-						:color="isInvalidForm && 'secondary'"
-						@click="saveAction"
-						@click:option="({ callback }) => callback()"
-					>
-						{{ saveText }}
-					</wt-button-select>
-				</template>
-				<wt-breadcrumb :path="path" />
-			</wt-page-header>
-		</template>
+  <wt-page-wrapper
+    :actions-panel="false"
+    class="opened-card"
+  >
+    <template #header>
+      <wt-page-header
+        :primary-action="saveChanges"
+        :primary-text="primarySaveText"
+        :secondary-action="close"
+        :hide-primary="disableUserInput"
+        :primary-disabled="disabledSave"
+      >
+        <template
+          v-if="modelValue?.editable"
+          #primary-action
+        >
+          <wt-button-select
+            :options="saveOptions"
+            :disabled="disabledSave"
+            :color="disabledSave && 'secondary'"
+            @click="saveAction"
+            @click:option="({ callback }) => callback()"
+          >
+            {{ primarySaveText }}
+          </wt-button-select>
+        </template>
+        <wt-breadcrumb :path="path" />
+      </wt-page-header>
+    </template>
 
-		<template #main>
-			<form
-				class="opened-card-form"
-				@submit.prevent="saveAction"
-			>
-				<wt-tabs
-					:current="currentTab"
-					:tabs="tabs"
-					@change="changeTab"
-				/>
-				<component
-					:is="component"
-					:v="v$"
-					:namespace="namespace"
-					@update:validation="isInvalidFormQuestions = $event.invalid"
-				/>
-				<input
-					type="submit"
-					hidden
-				>
-			</form>
-		</template>
-	</wt-page-wrapper>
+    <template #main>
+      <wt-loader v-if="debouncedIsLoading" />
+      <form
+        v-else
+        class="opened-card-form"
+        @submit.prevent="saveAction"
+      >
+        <wt-tabs
+          :current="currentTab"
+          :tabs="tabs"
+          @change="changeTab"
+        />
+        <router-view v-slot="{ Component }">
+          <component
+            :is="Component"
+            v-model="modelValue"
+            :validation-fields="validationFields"
+            @update:validation="isInvalidFormQuestions = $event.invalid"
+          />
+        </router-view>
+        <input
+          type="submit"
+          hidden
+        >
+      </form>
+    </template>
+  </wt-page-wrapper>
 </template>
 
-<script setup>
-import { useVuelidate } from '@vuelidate/core';
-import { minLength, required } from '@vuelidate/validators';
+<script setup lang="ts">
+import type { EngineAuditForm } from '@webitel/api-services/gen/models';
+import { useCardComponent } from '@webitel/ui-datalist/card';
+import { useCardTabs, useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
-import { computed, onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
-import { useCardPage } from '../../../app/composables/useCardPage';
-import { useClose } from '../../../app/composables/useClose';
-import { usePathName } from '../../../app/composables/usePathName';
+
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
-import Criterias from './opened-scorecard-criterias.vue';
-import General from './opened-scorecard-general.vue';
+import { useScorecardsCardStore } from '../stores';
 
-const namespace = 'scorecards';
-const isInvalidFormQuestions = ref(false);
-const routeName = AuditorSections.Scorecards;
-const router = useRouter();
-const route = useRoute();
+const { t } = useI18n();
 const { handleError } = useErrorRedirectHandler();
+const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
+
+const isInvalidFormQuestions = ref(false);
+
+const cardStore = useScorecardsCardStore();
+const { itemId } = storeToRefs(cardStore);
 
 const {
-	id,
-	itemInstance,
-
+	modelValue,
+	debouncedIsLoading,
+	originalItemInstance,
+	isNew,
+	saveText,
+	hasValidationErrors,
+	isAnyFieldEdited,
+	validationFields,
 	save,
-	setId,
-	setItemProp,
-} = useCardPage(namespace, {
+} = useCardComponent<EngineAuditForm>({
+	useCardStore: useScorecardsCardStore,
 	onLoadErrorHandler: handleError,
 });
-
-const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
-
-const { pathName } = usePathName(itemInstance);
-
-const { close } = useClose();
-const { t } = useI18n();
-/* When open the scorecard, we check for the presence of at least 1 question.
-When open criteria tab, we use deeper validation from the library "@webitel/ui-sdk" */
-const v$ = useVuelidate(
-	computed(() => ({
-		itemInstance: {
-			name: {
-				required,
-				minLength: minLength(3),
-			},
-			questions: {
-				required,
-				minLength: minLength(1),
-			},
-		},
-	})),
-	{
-		itemInstance,
-	},
-	{
-		$autoDirty: true,
-	},
-);
 
 const tabs = computed(() => [
 	{
 		text: t('reusable.general'),
 		value: 'general',
 		pathName: ScorerecordTabNames.GENERAL,
-		namespace,
 	},
 	{
 		text: t('objects.criterion', 2),
 		value: 'criteria',
 		pathName: ScorerecordTabNames.CRITERIAS,
-		namespace: `${namespace}/criteria`,
 	},
 ]);
 
-const path = computed(() => {
-	return [
-		{
-			name: t('audit'),
-		},
-		{
-			name: t('scorecards.scorecards', 2),
-			route: '/scorecards',
-		},
-		{
-			name: id.value ? pathName.value : t('reusable.new'),
-			route: {
-				name: currentTab.value.pathName,
-				query: route.query,
-			},
-		},
-	];
-});
+const { currentTab, changeTab } = useCardTabs(tabs);
+const { close } = useClose(AuditorSections.Scorecards);
 
-const currentTab = computed(() => {
-	return tabs.value.find(({ pathName }) => route.name === pathName);
-});
+const path = computed(() => [
+	{
+		name: t('audit'),
+	},
+	{
+		name: t('scorecards.scorecards', 2),
+		route: '/scorecards',
+	},
+	{
+		name: isNew.value ? t('reusable.new') : originalItemInstance.value?.name,
+	},
+]);
 
-const component = computed(() => {
-	if (currentTab.value?.value === 'criteria') return Criterias;
-	return General;
-});
-
-const isInvalidForm = computed(() =>
-	itemInstance.value._dirty
-		? v$.value.$invalid || isInvalidFormQuestions.value
-		: true,
+const disabledSave = computed(
+	() =>
+		!isAnyFieldEdited.value ||
+		hasValidationErrors.value ||
+		isInvalidFormQuestions.value,
 );
 
-const saveText = computed(() => {
-	if (!itemInstance.value.editable && id.value) return t('reusable.saveAs');
-	if (!isInvalidForm.value) return t('reusable.save');
-	return t('reusable.saved');
+const primarySaveText = computed(() => {
+	if (!modelValue.value?.editable && !isNew.value) {
+		return t('reusable.saveAs');
+	}
+	return saveText.value;
 });
 
-function saveAction() {
-	if (isInvalidForm.value) return;
-	save();
-}
+const saveAs = async () => {
+	if (disabledSave.value || !modelValue.value) return;
 
-function saveAs() {
-	setItemProp({
-		prop: 'createdAt',
-		value: '',
-	});
-	setItemProp({
-		prop: 'createdBy',
-		value: {},
-	});
-	setItemProp({
-		prop: 'updatedAt',
-		value: '',
-	});
-	setItemProp({
-		prop: 'updatedBy',
-		value: {},
-	});
-	setItemProp({
-		prop: 'id',
-		value: '',
-	});
-	setId(null);
-	saveAction();
-}
+	modelValue.value.createdAt = undefined;
+	modelValue.value.createdBy = undefined;
+	modelValue.value.updatedAt = undefined;
+	modelValue.value.updatedBy = undefined;
+	modelValue.value.id = undefined;
+	itemId.value = null;
+
+	await save();
+};
+
+const saveAction = async () => {
+	if (disabledSave.value) return;
+	await save();
+};
 
 const saveChanges = computed(() =>
-	!itemInstance.value.editable && id.value ? saveAs : saveAction,
+	!modelValue.value?.editable && !isNew.value ? saveAs : saveAction,
 );
 
-const saveOptions = computed(() => {
-	const saveAsNew = {
+const saveOptions = computed(() => [
+	{
 		text: t('reusable.saveAs'),
 		callback: saveAs,
-	};
-	return [
-		saveAsNew,
-	];
-});
-
-function changeTab(tab) {
-	router.push({
-		...route,
-		name: tab.pathName,
-	});
-}
-
-onMounted(() => {
-	v$.value.$touch();
-});
+	},
+]);
 </script>
 
-<style
-	lang="scss"
-	scoped
->
+<style lang="scss" scoped>
 .main-container {
-	width: 100%;
-	min-height: 0;
-	display: flex;
-	flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 </style>

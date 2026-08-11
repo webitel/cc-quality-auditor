@@ -6,11 +6,7 @@
     <template #header>
       <wt-page-header
         :hide-primary="!hasCreateAccess"
-        :hide-secondary="!hasDeleteAccess"
-        :secondary-disabled="isSecondaryDisabled"
         :primary-action="create"
-        :secondary-action="deleteSelectedItems"
-        :secondary-text="$t('reusable.delete')"
       >
         <wt-breadcrumb :path="path" />
       </wt-page-header>
@@ -25,48 +21,57 @@
       <section class="table-section">
         <header class="table-title">
           <h3 class="table-title__title typo-heading-3">
-            {{ $t('reusable.all', { entity: $t('scorecards.scorecards', 2) }) }}
+            {{ t('reusable.all', { entity: t('scorecards.scorecards', 2) }) }}
           </h3>
-          <div class="table-title__actions-wrap">
-            <filter-search
-              :namespace="filtersNamespace"
-              :search-mode-opts="searchOpts"
-              multisearch
-            />
-            <wt-table-actions
-              :icons="['refresh']"
-              @input="loadData"
-            >
-              <filter-fields
+          <wt-action-bar
+            :include="[IconAction.REFRESH, IconAction.COLUMNS, IconAction.DELETE]"
+            :disabled:delete="isDeleteDisabled"
+            @click:refresh="loadDataList"
+            @click:delete="
+              askDeleteConfirmation({
+                deleted: selectedItems,
+                callback: () => deleteEls(selectedItems),
+              })
+            "
+          >
+            <template #search-bar>
+              <dynamic-filter-search
+                :filters-manager="filtersManager"
+                :is-filters-restoring="isFiltersRestoring"
+                :search-mode="searchMode"
+                :search-mode-options="searchModeOptions"
+                @filter:add="addFilter"
+                @filter:update="updateFilter"
+                @filter:delete="deleteFilter"
+                @update:search-mode="updateSearchMode"
+              />            </template>
+            <template #columns>
+              <wt-table-column-select
                 :headers="headers"
-                :namespace="filtersNamespace"
-                :static-headers="['name']"
+                @change="updateShownHeaders"
               />
-            </wt-table-actions>
-          </div>
+            </template>
+          </wt-action-bar>
         </header>
 
-        <div
-          class="table-section__table-wrapper"
-        >
+        <div class="table-section__table-wrapper">
           <wt-empty
-            v-if="showEmpty"
+            v-show="showEmpty"
             :image="imageEmpty"
             :text="textEmpty"
           />
           <wt-loader v-show="isLoading" />
           <div
-            v-if="dataList?.length"
-            v-show="!isLoading"
+            v-show="dataList.length && !isLoading"
             class="table-section__table-wrapper"
           >
             <wt-table
               :data="dataList"
-              :headers="headers"
+              :headers="shownHeaders"
               :selected="selected"
               sortable
-              @sort="sort"
-              @update:selected="setSelected"
+              @sort="updateSort"
+              @update:selected="updateSelected"
             >
               <template #name="{ item }">
                 <wt-item-link :link="`${AuditorSections.Scorecards}/${item.id}`">
@@ -96,12 +101,21 @@
                 <wt-switcher
                   :disabled="!hasUpdateAccess"
                   :model-value="item.enabled"
-                  @update:model-value="patchProperty({ item, index, prop: 'enabled', value: $event })"
+                  @update:model-value="
+                    patchItemProperty({
+                      index,
+                      path: 'enabled',
+                      value: $event,
+                    })
+                  "
                 />
               </template>
               <template #actions="{ item }">
                 <div
-                  v-tooltip="showEditUsedTooltip(item) && $t('scorecards.usedScorecardCantEdit')"
+                  v-tooltip="
+                    showEditUsedTooltip(item) &&
+                      t('scorecards.usedScorecardCantEdit')
+                  "
                 >
                   <wt-icon-action
                     :disabled="isEditDisabled(item)"
@@ -110,22 +124,32 @@
                   />
                 </div>
                 <div
-                  v-tooltip="showDeleteUsedTooltip(item) && $t('scorecards.usedScorecardCantDelete')"
+                  v-tooltip="
+                    showDeleteUsedTooltip(item) &&
+                      t('scorecards.usedScorecardCantDelete')
+                  "
                 >
                   <wt-icon-action
-                    :disabled="isDeleteDisabled(item)"
+                    :disabled="isDeleteActionDisabled(item)"
                     action="delete"
-                    @click="askDeleteConfirmation({
-                      deleted: [item],
-                      callback: () => deleteData(item),
-                    })"
+                    @click="
+                      askDeleteConfirmation({
+                        deleted: [item],
+                        callback: () => deleteEls([item]),
+                      })
+                    "
                   />
                 </div>
               </template>
             </wt-table>
-            <filter-pagination
-              :is-next="isNext"
-              :namespace="filtersNamespace"
+            <wt-pagination
+              :next="next"
+              :prev="page > 1"
+              :size="size"
+              debounce
+              @change="updateSize"
+              @next="updatePage(page + 1)"
+              @prev="updatePage(page - 1)"
             />
           </div>
         </div>
@@ -134,95 +158,85 @@
   </wt-page-wrapper>
 </template>
 
-<script setup>
-import { WtEmpty } from '@webitel/ui-sdk/components';
+<script setup lang="ts">
+import type { EngineAuditForm } from '@webitel/api-services/gen/models';
+import { DynamicFilterSearchComponent as DynamicFilterSearch } from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
 	FormatDateMode,
+	IconAction,
 	WtObject,
 } from '@webitel/ui-sdk/enums';
 import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
-import FilterPagination from '@webitel/ui-sdk/src/modules/Filters/components/filter-pagination.vue';
-import FilterSearch from '@webitel/ui-sdk/src/modules/Filters/components/filter-search.vue';
-import FilterFields from '@webitel/ui-sdk/src/modules/Filters/components/filter-table-fields.vue';
-import { useTableFilters } from '@webitel/ui-sdk/src/modules/Filters/composables/useTableFilters';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
-import { useTableStore } from '@webitel/ui-sdk/src/store/new/modules/tableStoreModule/useTableStore.js';
 import { formatDate } from '@webitel/ui-sdk/utils';
-import { computed, onUnmounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
-import SearchMode from '../modules/filters/enums/SearchMode.enum.js';
+import { SearchMode } from '../enums/SearchMode.enum';
+import { useScorecardsDatalistStore } from '../stores';
 
-const baseNamespace = 'scorecards';
+// @vue/compat: kebab-case template tags do not count as import usage for vue-tsc
+defineOptions({
+	components: {
+		DynamicFilterSearch,
+	},
+});
+
 const { t } = useI18n();
 const router = useRouter();
 
-const {
-	namespace,
-
-	dataList,
-	isLoading,
-	headers,
-	isNext,
-	error,
-	selected,
-
-	loadData,
-	patchProperty,
-	deleteData,
-	sort,
-	setSelected,
-	onFilterEvent,
-} = useTableStore(baseNamespace);
-
-const {
-	namespace: filtersNamespace,
-	filtersValue,
-
-	subscribe,
-	flushSubscribers,
-	restoreFilters,
-} = useTableFilters(namespace);
-
-const {
-	showEmpty,
-	image: imageEmpty,
-	text: textEmpty,
-} = useTableEmpty({
-	dataList,
-	filters: filtersValue,
-	isLoading,
-	error,
-});
-
-subscribe({
-	event: '*',
-	callback: onFilterEvent,
-});
-
-restoreFilters();
-
-onUnmounted(() => {
-	flushSubscribers();
-});
-
 const { hasCreateAccess, hasUpdateAccess, hasDeleteAccess } =
-	useUserAccessControl(WtObject.Scorecard);
+	useUserAccessControl(WtObject.AuditForm);
+
+const tableStore = useScorecardsDatalistStore();
+
+const {
+	dataList,
+	selected,
+	error,
+	isLoading,
+	page,
+	size,
+	next,
+	headers,
+	shownHeaders,
+	filtersManager,
+	isFiltersRestoring,
+	searchMode,
+} = storeToRefs(tableStore);
+
+const {
+	initialize,
+	loadDataList,
+	updateSelected,
+	updatePage,
+	updateSize,
+	updateSort,
+	deleteEls,
+	addFilter,
+	updateFilter,
+	deleteFilter,
+	updateSearchMode,
+	updateShownHeaders,
+	patchItemProperty,
+} = tableStore;
+
+initialize();
 
 const {
 	isVisible: isDeleteConfirmationPopup,
 	deleteCount,
 	deleteCallback,
-
 	askDeleteConfirmation,
 	closeDelete,
 } = useDeleteConfirmationPopup();
 
-const searchOpts = computed(() => [
+const searchModeOptions = computed(() => [
 	{
 		value: SearchMode.NAME,
 		text: t('reusable.name'),
@@ -233,32 +247,30 @@ const searchOpts = computed(() => [
 	},
 ]);
 
-/*
-selectedItems in the current implementation to include items
- for which there weren't ratings and they can be edited/deleted
-  */
 const selectedItems = computed(() =>
-	selected.value.filter((item) => item.editable),
+	selected.value.filter((item: EngineAuditForm) => item.editable),
 );
 
-const isSecondaryDisabled = computed(
-	() => !selected.value.length || selected.value.some((item) => !item.editable),
-);
-
-const isScorecardUsed = computed(() => (item) => !item.editable);
-
-const showEditUsedTooltip = computed(
-	() => (item) => hasUpdateAccess.value && isScorecardUsed.value(item),
-);
-const isEditDisabled = computed(
-	() => (item) => !hasUpdateAccess.value || isScorecardUsed.value(item),
-);
-const showDeleteUsedTooltip = computed(
-	() => (item) => hasDeleteAccess.value && isScorecardUsed.value(item),
-);
 const isDeleteDisabled = computed(
-	() => (item) => !hasDeleteAccess.value || isScorecardUsed.value(item),
+	() =>
+		!hasDeleteAccess.value ||
+		!selected.value.length ||
+		selected.value.some((item: EngineAuditForm) => !item.editable),
 );
+
+const isScorecardUsed = (item: EngineAuditForm) => !item.editable;
+
+const showEditUsedTooltip = (item: EngineAuditForm) =>
+	hasUpdateAccess.value && isScorecardUsed(item);
+
+const isEditDisabled = (item: EngineAuditForm) =>
+	!hasUpdateAccess.value || isScorecardUsed(item);
+
+const showDeleteUsedTooltip = (item: EngineAuditForm) =>
+	hasDeleteAccess.value && isScorecardUsed(item);
+
+const isDeleteActionDisabled = (item: EngineAuditForm) =>
+	!hasDeleteAccess.value || isScorecardUsed(item);
 
 const path = computed(() => [
 	{
@@ -271,7 +283,7 @@ const path = computed(() => [
 	},
 ]);
 
-function prettifyDateTime(timestamp) {
+function prettifyDateTime(timestamp?: string) {
 	if (!timestamp) return '';
 	return formatDate(+timestamp, FormatDateMode.DATETIME);
 }
@@ -285,7 +297,7 @@ function create() {
 	});
 }
 
-function edit(item) {
+function edit(item: EngineAuditForm) {
 	return router.push({
 		name: `${AuditorSections.Scorecards}-card`,
 		params: {
@@ -294,24 +306,19 @@ function edit(item) {
 	});
 }
 
-function deleteSelectedItems() {
-	return (
-		selectedItems.value.length &&
-		askDeleteConfirmation({
-			deleted: selectedItems.value,
-			callback: () =>
-				deleteData([
-					...selectedItems.value,
-				]),
-		})
-	);
-}
+const {
+	showEmpty,
+	image: imageEmpty,
+	text: textEmpty,
+} = useTableEmpty({
+	dataList,
+	error,
+	filters: computed(() => filtersManager.value.getAllValues()),
+	isLoading,
+});
 </script>
 
-<style
-  lang="scss"
-  scoped
->
+<style lang="scss" scoped>
 .scorecards {
   width: 100%;
 }
