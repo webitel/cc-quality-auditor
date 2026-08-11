@@ -2,40 +2,35 @@
   <div class="opened-scorecard-criterias">
     <audit-form
       class="wt-scrollbar"
-      :questions="itemInstance.questions"
+      :questions="modelValue.questions"
       mode="create"
       :readonly="disableUserInput"
       @update:validation="emits('update:validation', $event)"
-      @update:questions="setItemProp({ prop: 'questions', value: $event })"
+      @update:questions="modelValue.questions = $event"
     />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { WtObject } from '@webitel/ui-sdk/enums';
 import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
-import { useCardStore } from '@webitel/ui-sdk/src/modules/CardStoreModule/composables/useCardStore';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
-	},
+const modelValue = defineModel<EngineAuditForm>({
+	required: true,
 });
 
-const emits = defineEmits([
-	'update:validation',
-]);
+const emits = defineEmits<{
+	'update:validation': [
+		{
+			invalid: boolean;
+		},
+	];
+}>();
 
-const {
-	itemInstance,
-
-	setItemProp,
-} = useCardStore(props.namespace);
-
-const { disableUserInput } = useUserAccessControl(WtObject.Scorecard);
+const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 </script>
 
 <style scoped>

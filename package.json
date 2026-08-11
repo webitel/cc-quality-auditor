@@ -10,9 +10,9 @@
 		"lint:fix-staged": "npx lint-staged",
 		"test:unit": "vitest run --passWithNoTests",
 		"utils:i": "npm install --install-links",
-		"utils:link-libs": "npm link @webitel/ui-sdk @webitel/api-services && npm run utils:ls-libs",
-		"utils:ls-libs": "npm ls @webitel/ui-sdk @webitel/api-services",
-		"utils:up-libs": "npm update @webitel/ui-sdk @webitel/api-services && npm ls @webitel/ui-sdk @webitel/api-services",
+		"utils:link-libs": "npm link @webitel/ui-sdk @webitel/api-services @webitel/ui-datalist && npm run utils:ls-libs",
+		"utils:ls-libs": "npm ls @webitel/ui-sdk @webitel/api-services @webitel/ui-datalist",
+		"utils:up-libs": "npm update @webitel/ui-sdk @webitel/api-services @webitel/ui-datalist && npm ls @webitel/ui-sdk @webitel/api-services @webitel/ui-datalist",
 		"prepare": "husky",
 		"biome:ci:gh": "biome ci ./src --reporter=github",
 		"test:unit:ci": "vitest run --coverage --passWithNoTests",
@@ -23,11 +23,14 @@
 	"dependencies": {
 		"@floating-ui/vue": "^1.1.6",
 		"@morev/vue-transitions": "^3.0.5",
+		"@regle/schemas": "^1.x",
 		"@vue/compat": "^3.5.x",
 		"@vuelidate/core": "^2.0.3",
 		"@vuelidate/validators": "^2.0.4",
+		"@vueuse/core": "^14.0",
 		"@webitel/api-services": "^0.1.54",
 		"@webitel/styleguide": "~26.2.19",
+		"@webitel/ui-datalist": "^1.1.70",
 		"@webitel/ui-sdk": "~26.8.13",
 		"axios": "^1.18.1",
 		"clipboard-copy": "^4.0.1",
@@ -39,7 +42,8 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
-		"webitel-sdk": "^26.4.25"
+		"webitel-sdk": "^26.4.25",
+		"zod": "^4.x"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.5",
