@@ -7,11 +7,19 @@
   lang="ts"
   setup
 >
-import { computed, provide } from 'vue';
-import { useStore } from 'vuex';
+import { storeToRefs } from 'pinia';
+import { provide } from 'vue';
 
-const store = useStore();
-const darkMode = computed(() => store.getters['appearance/DARK_MODE']);
+import { useAppearanceStore } from './modules/appearance/stores/appearanceStore';
+
+const appearanceStore = useAppearanceStore();
+const { darkMode } = storeToRefs(appearanceStore);
+
+const cachedTheme = localStorage.getItem('theme');
+if (cachedTheme) {
+	appearanceStore.setTheme(cachedTheme);
+}
+
 provide('darkMode', darkMode);
 </script>
 

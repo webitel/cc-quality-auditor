@@ -8,7 +8,6 @@ import {
 	options as WebitelUiOptions,
 } from './app/plugins/webitel/ui-sdk';
 import { initRouter, router } from './app/router';
-import store from './app/store';
 import App from './app.vue';
 import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
@@ -46,7 +45,7 @@ configureZod({
 });
 
 const initApp = async () => {
-	const app = createApp(App).use(store).use(i18n).use(pinia);
+	const app = createApp(App).use(i18n).use(pinia);
 
 	const { initialize, routeAccessGuard, clearStorageNotifications } =
 		useUserinfoStore();
@@ -59,7 +58,6 @@ const initApp = async () => {
 			],
 			onUnauthorized: clearStorageNotifications,
 		});
-		store.commit('SET_ROUTER', router);
 	} catch (err) {
 		console.error('Error initializing app', err);
 	}
@@ -82,7 +80,6 @@ const initApp = async () => {
 		console.error('before app mount error:', err);
 	} finally {
 		const app = await initApp();
-		store.commit('SET_ROUTER', router);
 		app.provide('$config', config);
 		app.mount('#app');
 	}

@@ -35,7 +35,7 @@
             "
           >
             <template #search-bar>
-              <DynamicFilterSearch
+              <dynamic-filter-search
                 :filters-manager="filtersManager"
                 :is-filters-restoring="isFiltersRestoring"
                 :search-mode="searchMode"
@@ -44,8 +44,7 @@
                 @filter:update="updateFilter"
                 @filter:delete="deleteFilter"
                 @update:search-mode="updateSearchMode"
-              />
-            </template>
+              />            </template>
             <template #columns>
               <wt-table-column-select
                 :headers="headers"
@@ -180,6 +179,13 @@ import { useRouter } from 'vue-router';
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useScorecardsDatalistStore } from '../stores';
+
+// @vue/compat: kebab-case template tags do not count as import usage for vue-tsc
+defineOptions({
+	components: {
+		DynamicFilterSearch,
+	},
+});
 
 const { t } = useI18n();
 const router = useRouter();

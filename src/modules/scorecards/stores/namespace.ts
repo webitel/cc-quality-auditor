@@ -1,1 +1,1 @@
-export const ScorecardsNamespace = 'scorecards';
+export const ScorecardsNamespace = 'audit/scorecards';
