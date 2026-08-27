@@ -28,9 +28,6 @@
 			"@/*": [
 				"./src/*"
 			],
-			"@aliasedDeps/api-services/axios": [
-				"./src/app/api/instance"
-			],
 			"@webitel/ui-sdk/src/*": [
 				"./node_modules/@webitel/ui-sdk/types/*"
 			]
