@@ -21,7 +21,7 @@
       <wt-multi-select
         v-model:model-value="modelValue.teams"
         :label="t('objects.team', 1)"
-        :search-method="teamLookupApi"
+        :search-method="TeamsAPI.getLookup"
         :disabled="disableUserInput || !hasTeamsReadAccess"
       />
       <div />
@@ -36,12 +36,12 @@
 
 <script setup lang="ts">
 import type { RegleSchemaFieldStatus } from '@regle/schemas';
+import { TeamsAPI } from '@webitel/api-services/api';
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { WtObject } from '@webitel/ui-sdk/enums';
 import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
-import teamLookupApi from '../../_shared/lookups/api/teamLookupApi';
 
 const modelValue = defineModel<EngineAuditForm>({
 	required: true,
