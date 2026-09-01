@@ -28,6 +28,9 @@ export default ({ mode }) => {
 		optimizeDeps: {
 			include: [
 				'clipboard-copy',
+				// webitel-sdk depends on CJS-only `ee-ts`; without prebundling it,
+				// vite serves both raw and the browser fails on the named import
+				'webitel-sdk',
 				'deep-equal',
 				'deepmerge',
 			],

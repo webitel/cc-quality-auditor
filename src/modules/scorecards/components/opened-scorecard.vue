@@ -60,8 +60,8 @@
 
 <script setup lang="ts">
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
-import { useCardComponent } from '@webitel/ui-datalist/card';
-import { useCardTabs, useClose } from '@webitel/ui-sdk/composables';
+import { useCardTabs, useCardComponent } from '@webitel/ui-datalist/card';
+import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
