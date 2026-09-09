@@ -70,6 +70,7 @@ import { useCardComponent, useCardTabs } from '@webitel/ui-datalist/card';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
 import SaveCopyPopup from '@webitel/ui-sdk/src/modules/SaveCopyPopup/components/save-copy-popup.vue';
+import { useSaveCopyPopup } from '@webitel/ui-sdk/src/modules/SaveCopyPopup/composables/useSaveCopyPopup';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -141,20 +142,16 @@ const primarySaveText = computed(() =>
 	isCopyMode.value ? t('webitelUI.saveCopyPopup.title') : saveText.value,
 );
 
-const isSaveCopyPopupShown = ref(false);
-
-const openSaveCopyPopup = () => {
-	isSaveCopyPopupShown.value = true;
-};
-
-const closeSaveCopyPopup = () => {
-	isSaveCopyPopupShown.value = false;
-};
-
-const saveCopy = async (name: string) => {
+const {
+	isSaveCopyPopupShown,
+	saveOptions,
+	openSaveCopyPopup,
+	closeSaveCopyPopup,
+	saveCopy,
+} = useSaveCopyPopup((name) => {
 	if (!modelValue.value) return;
 
-	await AuditFormsAPI.add({
+	return AuditFormsAPI.add({
 		itemInstance: {
 			...modelValue.value,
 			name,
@@ -165,8 +162,7 @@ const saveCopy = async (name: string) => {
 			updatedBy: undefined,
 		},
 	});
-	closeSaveCopyPopup();
-};
+});
 
 const saveAction = async () => {
 	if (disabledSave.value) return;
@@ -176,13 +172,6 @@ const saveAction = async () => {
 const saveChanges = computed(() =>
 	isCopyMode.value ? openSaveCopyPopup : saveAction,
 );
-
-const saveOptions = computed(() => [
-	{
-		text: t('webitelUI.saveCopyPopup.title'),
-		callback: openSaveCopyPopup,
-	},
-]);
 </script>
 
 <style lang="scss" scoped>
