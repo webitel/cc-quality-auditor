@@ -69,8 +69,10 @@ import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { useCardComponent, useCardTabs } from '@webitel/ui-datalist/card';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
-import SaveCopyPopup from '@webitel/ui-sdk/src/modules/SaveCopyPopup/components/save-copy-popup.vue';
-import { useSaveCopyPopup } from '@webitel/ui-sdk/src/modules/SaveCopyPopup/composables/useSaveCopyPopup';
+import {
+	SaveCopyPopup,
+	useSaveCopyPopup,
+} from '@webitel/ui-sdk/modules/SaveCopyPopup';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
