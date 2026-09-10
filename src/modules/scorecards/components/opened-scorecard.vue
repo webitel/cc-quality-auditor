@@ -157,11 +157,6 @@ const {
 		itemInstance: {
 			...modelValue.value,
 			name,
-			id: undefined,
-			createdAt: undefined,
-			createdBy: undefined,
-			updatedAt: undefined,
-			updatedBy: undefined,
 		},
 	});
 });
