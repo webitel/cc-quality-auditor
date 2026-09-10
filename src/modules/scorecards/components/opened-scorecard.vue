@@ -9,7 +9,7 @@
         :primary-text="primarySaveText"
         :secondary-action="close"
         :hide-primary="disableUserInput"
-        :primary-disabled="disabledSave"
+        :primary-disabled="isCopyMode ? hasValidationErrors : disabledSave"
       >
         <template
           v-if="modelValue?.editable"
@@ -17,7 +17,6 @@
         >
           <wt-button-select
             :options="saveOptions"
-            :disabled="disabledSave"
             :color="disabledSave && 'secondary'"
             @click="saveAction"
             @click:option="({ callback }) => callback()"
@@ -54,16 +53,26 @@
           hidden
         >
       </form>
+
+      <save-copy-popup
+        :shown="isSaveCopyPopupShown"
+        @close="closeSaveCopyPopup"
+        @save="saveCopy"
+      />
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup lang="ts">
+import { AuditFormsAPI } from '@webitel/api-services/api';
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
-import { useCardTabs, useCardComponent } from '@webitel/ui-datalist/card';
+import { useCardComponent, useCardTabs } from '@webitel/ui-datalist/card';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
-import { storeToRefs } from 'pinia';
+import {
+	SaveCopyPopup,
+	useSaveCopyPopup,
+} from '@webitel/ui-sdk/modules/SaveCopyPopup';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -77,9 +86,6 @@ const { handleError } = useErrorRedirectHandler();
 const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 
 const isInvalidFormQuestions = ref(false);
-
-const cardStore = useScorecardsCardStore();
-const { itemId } = storeToRefs(cardStore);
 
 const {
 	modelValue,
@@ -132,25 +138,28 @@ const disabledSave = computed(
 		isInvalidFormQuestions.value,
 );
 
-const primarySaveText = computed(() => {
-	if (!modelValue.value?.editable && !isNew.value) {
-		return t('reusable.saveAs');
-	}
-	return saveText.value;
+const isCopyMode = computed(() => !modelValue.value?.editable && !isNew.value);
+
+const primarySaveText = computed(() =>
+	isCopyMode.value ? t('webitelUI.saveCopyPopup.title') : saveText.value,
+);
+
+const {
+	isSaveCopyPopupShown,
+	saveOptions,
+	openSaveCopyPopup,
+	closeSaveCopyPopup,
+	saveCopy,
+} = useSaveCopyPopup((name) => {
+	if (!modelValue.value) return;
+
+	return AuditFormsAPI.add({
+		itemInstance: {
+			...modelValue.value,
+			name,
+		},
+	});
 });
-
-const saveAs = async () => {
-	if (disabledSave.value || !modelValue.value) return;
-
-	modelValue.value.createdAt = undefined;
-	modelValue.value.createdBy = undefined;
-	modelValue.value.updatedAt = undefined;
-	modelValue.value.updatedBy = undefined;
-	modelValue.value.id = undefined;
-	itemId.value = null;
-
-	await save();
-};
 
 const saveAction = async () => {
 	if (disabledSave.value) return;
@@ -158,15 +167,14 @@ const saveAction = async () => {
 };
 
 const saveChanges = computed(() =>
-	!modelValue.value?.editable && !isNew.value ? saveAs : saveAction,
+	isCopyMode.value ? openSaveCopyPopup : saveAction,
 );
 
-const saveOptions = computed(() => [
-	{
-		text: t('reusable.saveAs'),
-		callback: saveAs,
+defineOptions({
+	components: {
+		SaveCopyPopup,
 	},
-]);
+});
 </script>
 
 <style lang="scss" scoped>
