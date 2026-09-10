@@ -169,6 +169,12 @@ const saveAction = async () => {
 const saveChanges = computed(() =>
 	isCopyMode.value ? openSaveCopyPopup : saveAction,
 );
+
+defineOptions({
+	components: {
+		SaveCopyPopup,
+	},
+});
 </script>
 
 <style lang="scss" scoped>
