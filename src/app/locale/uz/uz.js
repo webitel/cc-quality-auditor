@@ -4,9 +4,9 @@ export default {
 		scorecards: 'Baholash varaqasi | Baholash varaqalari',
 		emptyWorkspace: 'Hozircha baholash varaqalari mavjud emas',
 		usedScorecardCantEdit:
-			'Siz allaqachon ishlatilgan baholash varaqasini tahrirlay olmaysiz',
+			'Bu baholash varaqasida baholar mavjud, uni tahrirlab bo‘lmaydi. Uni oching va nusxa yaratish uchun NUSXASINI SAQLASH dan foydalaning.',
 		usedScorecardCantDelete:
-			'Siz allaqachon ishlatilgan baholash varaqasini o‘chira olmaysiz',
+			'Bu baholash varaqasi foydalanilmoqda, uni o‘chirib bo‘lmaydi.',
 	},
 	objects: {
 		criterion: 'Mezon | Mezonlar',
