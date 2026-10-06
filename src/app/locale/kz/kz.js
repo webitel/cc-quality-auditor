@@ -3,8 +3,9 @@ export default {
 	scorecards: {
 		scorecards: 'Сауалнама | Сауалнамалар',
 		emptyWorkspace: 'Сауалнамалар әлі жасалмады',
-		usedScorecardCantEdit: 'Сіз пайдаланылған сауалнаманы өңдей алмайсыз',
-		usedScorecardCantDelete: 'Сіз пайдаланылған сауалнаманы жоя алмайсыз',
+		usedScorecardCantEdit:
+			'Сауалнамада бағалар бар, оны өңдеуге болмайды. Оны ашып, көшірме жасау үшін БАСҚАША САҚТАУ пайдаланыңыз.',
+		usedScorecardCantDelete: 'Сауалнама пайдаланылуда, оны жоюға болмайды.',
 	},
 	objects: {
 		criterion: 'Критерий | Критерийлер',
