@@ -7,6 +7,6 @@ export default {
 		usedScorecardCantDelete: 'You can’t delete scorecard, that was used',
 	},
 	objects: {
-		criterion: 'Criteria | Criterias',
+		criterion: 'Criterion | Criteria',
 	},
 };

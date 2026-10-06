@@ -1,5 +1,5 @@
 <template>
-  <div class="opened-scorecard-criterias">
+  <div class="opened-scorecard-criteria">
     <audit-form
       class="wt-scrollbar"
       :questions="modelValue.questions"
@@ -34,7 +34,7 @@ const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 </script>
 
 <style scoped>
-.opened-scorecard-criterias {
+.opened-scorecard-criteria {
   min-height: 0;
   display: flex;
   flex-direction: column;
