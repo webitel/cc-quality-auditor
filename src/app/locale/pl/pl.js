@@ -4,9 +4,9 @@ export default {
 		scorecards: 'Arkusz ocen | Arkusze ocen',
 		emptyWorkspace: 'Brak jeszcze arkuszy ocen',
 		usedScorecardCantEdit:
-			'Nie możesz edytować arkusza ocen, który został już użyty',
+			'Ten arkusz ocen ma oceny i nie można go edytować. Otwórz go i użyj ZAPISZ JAKO, aby utworzyć kopię.',
 		usedScorecardCantDelete:
-			'Nie możesz usunąć arkusza ocen, który został już użyty',
+			'Ten arkusz ocen jest używany i nie można go usunąć.',
 	},
 	objects: {
 		criterion: 'Kryterium | Kryteria',

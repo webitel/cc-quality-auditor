@@ -104,7 +104,7 @@ const tabs = computed(() => [
 	{
 		text: t('objects.criterion', 2),
 		value: 'criteria',
-		pathName: ScorerecordTabNames.CRITERIAS,
+		pathName: ScorerecordTabNames.CRITERIA,
 	},
 ]);
 

@@ -21,8 +21,8 @@ const Scorecards = () =>
 const AccessDenied = () =>
 	import('../components/utils/access-denied-component.vue');
 
-const Criterias = import(
-	'../../modules/scorecards/components/opened-scorecard-criterias.vue'
+const Criteria = import(
+	'../../modules/scorecards/components/opened-scorecard-criteria.vue'
 );
 const General = import(
 	'../../modules/scorecards/components/opened-scorecard-general.vue'
@@ -69,9 +69,9 @@ const routes: RouteRecordRaw[] = [
 						component: () => General,
 					},
 					{
-						path: 'criterias',
-						name: ScorerecordTabName.CRITERIAS,
-						component: () => Criterias,
+						path: 'criteria',
+						name: ScorerecordTabName.CRITERIA,
+						component: () => Criteria,
 					},
 				],
 			},
