@@ -75,26 +75,21 @@ const routes: RouteRecordRaw[] = [
 					},
 				],
 			},
+			{
+				path: '/:pathMatch(.*)*',
+				component: NotFound,
+			},
+			{
+				path: '/404',
+				name: 'not-found',
+				component: NotFound,
+			},
 		],
 	},
 	{
 		path: '/access-denied',
 		name: 'access-denied',
 		component: AccessDenied,
-	},
-	{
-		// Added to render 404 pages with the common workspace layout (header)
-		// https://webitel.atlassian.net/browse/WTEL-8140
-		path: '/404',
-		name: 'not-found',
-		component: TheAuditorWorkspace,
-		children: [
-			{
-				path: '',
-				name: 'not-found-inner',
-				component: NotFound,
-			},
-		],
 	},
 ];
 
