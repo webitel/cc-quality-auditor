@@ -6,7 +6,7 @@
           :current-app="currentApp"
           :nav="nav"
           :dark-mode="darkMode"
-          :logo-route="RoutePaths.Scorecards"
+          :logo-route="RoutePaths.StartPage"
         />
         <wt-logo
           :dark-mode="darkMode"
@@ -114,7 +114,7 @@ const nav = computed(() => [
 		name: t(
 			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
 		),
-		route: '/scorecards',
+		route: RoutePaths.Scorecards,
 	},
 ]);
 
