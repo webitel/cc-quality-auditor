@@ -1,5 +1,5 @@
 export default {
-	audit: 'Aудит',
+	audit: 'Аудит',
 	scorecards: {
 		scorecards: 'Анкета | Анкети',
 		emptyWorkspace: 'Анкети ще не створені',

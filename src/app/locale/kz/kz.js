@@ -1,5 +1,5 @@
 export default {
-	audit: 'Aудит',
+	audit: 'Аудит',
 	scorecards: {
 		scorecards: 'Сауалнама | Сауалнамалар',
 		emptyWorkspace: 'Сауалнамалар әлі жасалмады',
