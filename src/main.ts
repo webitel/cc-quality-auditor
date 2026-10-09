@@ -1,3 +1,5 @@
+import './app/css/main.css';
+
 import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { configureZod } from '@webitel/ui-sdk/validations';
 import { createPinia } from 'pinia';

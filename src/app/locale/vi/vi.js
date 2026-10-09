@@ -8,6 +8,11 @@ export default {
 		usedScorecardCantDelete:
 			'Phiếu chấm điểm này đang được sử dụng và không thể xóa.',
 	},
+	startPage: {
+		scorecards: {
+			text: 'Tạo phiếu chấm điểm, đặt trọng số tiêu chí và nhóm câu hỏi.',
+		},
+	},
 	objects: {
 		criterion: 'Tiêu chí | Các tiêu chí',
 	},

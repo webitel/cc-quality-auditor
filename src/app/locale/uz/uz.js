@@ -8,6 +8,11 @@ export default {
 		usedScorecardCantDelete:
 			'Bu baholash varaqasi foydalanilmoqda, uni o‘chirib bo‘lmaydi.',
 	},
+	startPage: {
+		scorecards: {
+			text: 'Baholash varaqalarini yarating, mezonlar vaznini belgilang va savollarni guruhlang.',
+		},
+	},
 	objects: {
 		criterion: 'Mezon | Mezonlar',
 	},

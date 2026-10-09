@@ -177,6 +177,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useScorecardsDatalistStore } from '../stores';
 
@@ -275,11 +276,11 @@ const isDeleteActionDisabled = (item: EngineAuditForm) =>
 const path = computed(() => [
 	{
 		name: t('audit'),
-		route: '/',
+		route: RoutePaths.StartPage,
 	},
 	{
 		name: t('scorecards.scorecards', 2),
-		route: '/scorecards',
+		route: RoutePaths.Scorecards,
 	},
 ]);
 

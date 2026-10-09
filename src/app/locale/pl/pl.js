@@ -8,6 +8,11 @@ export default {
 		usedScorecardCantDelete:
 			'Ten arkusz ocen jest używany i nie można go usunąć.',
 	},
+	startPage: {
+		scorecards: {
+			text: 'Twórz arkusze ocen, ustawiaj wagi kryteriów i grupuj pytania.',
+		},
+	},
 	objects: {
 		criterion: 'Kryterium | Kryteria',
 	},

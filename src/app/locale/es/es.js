@@ -8,6 +8,11 @@ export default {
 		usedScorecardCantDelete:
 			'Esta hoja de puntuación está en uso y no se puede eliminar.',
 	},
+	startPage: {
+		scorecards: {
+			text: 'Cree hojas de puntuación, defina el peso de los criterios y agrupe las preguntas.',
+		},
+	},
 	objects: {
 		criterion: 'Criterio | Criterios',
 	},

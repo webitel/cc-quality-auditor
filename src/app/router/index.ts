@@ -9,11 +9,14 @@ import {
 	type RouteRecordRaw,
 } from 'vue-router';
 
+import RouteNames from './_internals/RouteNames.enum';
 import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 
 const TheAuditorWorkspace = () =>
 	import('../components/the-auditor-workspace.vue');
+const TheStartPage = () =>
+	import('../../modules/start-page/components/the-start-page.vue');
 const OpenedScorecard = () =>
 	import('../../modules/scorecards/components/opened-scorecard.vue');
 const Scorecards = () =>
@@ -35,13 +38,18 @@ const routes: RouteRecordRaw[] = [
 		path: '/',
 		name: 'auditor-workspace',
 		redirect: {
-			name: AuditorSections.Scorecards,
+			name: RouteNames.StartPage,
 		},
 		component: TheAuditorWorkspace,
 		meta: {
 			WtApplication: WtApplication.Audit,
 		},
 		children: [
+			{
+				path: RoutePaths.StartPage,
+				name: RouteNames.StartPage,
+				component: TheStartPage,
+			},
 			{
 				path: RoutePaths.Scorecards,
 				name: AuditorSections.Scorecards,
@@ -52,7 +60,7 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
-				path: 'scorecards/:id',
+				path: `${RoutePaths.Scorecards}/:id`,
 				name: `${AuditorSections.Scorecards}-card`,
 				component: OpenedScorecard,
 				redirect: {

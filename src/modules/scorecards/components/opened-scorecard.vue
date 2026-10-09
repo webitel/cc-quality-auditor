@@ -70,6 +70,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
 import { useScorecardsCardStore } from '../stores';
@@ -114,10 +115,11 @@ const { close } = useClose(AuditorSections.Scorecards);
 const path = computed(() => [
 	{
 		name: t('audit'),
+		route: RoutePaths.StartPage,
 	},
 	{
 		name: t('scorecards.scorecards', 2),
-		route: '/scorecards',
+		route: RoutePaths.Scorecards,
 	},
 	{
 		name: isNew.value ? t('reusable.new') : originalItemInstance.value?.name,

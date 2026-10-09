@@ -8,6 +8,11 @@ export default {
 		usedScorecardCantDelete:
 			'Această fișă de evaluare este în uz și nu poate fi ștearsă.',
 	},
+	startPage: {
+		scorecards: {
+			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
+		},
+	},
 	objects: {
 		criterion: 'Criteriu | Criterii',
 	},
