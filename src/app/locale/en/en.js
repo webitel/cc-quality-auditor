@@ -1,3 +1,5 @@
+import { InteractionType } from '../../../modules/scorecards/enums/InteractionType.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -6,6 +8,12 @@ export default {
 		usedScorecardCantEdit:
 			"This scorecard has evaluations and can't be edited. Open it and use SAVE AS to create a copy.",
 		usedScorecardCantDelete: "This scorecard is in use and can't be deleted.",
+		interactionType: 'Interaction type',
+		interactionTypes: {
+			[InteractionType.CALL]: 'Call',
+			[InteractionType.CHAT]: 'Chat',
+			[InteractionType.EMAIL]: 'Email',
+		},
 	},
 	startPage: {
 		scorecards: {
