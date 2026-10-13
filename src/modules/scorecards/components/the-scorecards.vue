@@ -81,6 +81,9 @@
               <template #description="{ item }">
                 {{ item.description }}
               </template>
+              <template #interactionType="{ item }">
+                <wt-display-chip-items :items="interactionTypeItems(item)" />
+              </template>
               <template #createdAt="{ item }">
                 {{ prettifyDateTime(item.createdAt) }}
               </template>
@@ -161,6 +164,7 @@
 <script setup lang="ts">
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { DynamicFilterSearchComponent as DynamicFilterSearch } from '@webitel/ui-datalist/filters';
+import { WtDisplayChipItems } from '@webitel/ui-sdk/components';
 import {
 	AuditorSections,
 	FormatDateMode,
@@ -178,6 +182,7 @@ import { useRouter } from 'vue-router';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { InteractionType } from '../enums/InteractionType.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useScorecardsDatalistStore } from '../stores';
 
@@ -185,6 +190,7 @@ import { useScorecardsDatalistStore } from '../stores';
 defineOptions({
 	components: {
 		DynamicFilterSearch,
+		WtDisplayChipItems,
 	},
 });
 
@@ -283,6 +289,15 @@ const path = computed(() => [
 		route: RoutePaths.Scorecards,
 	},
 ]);
+
+function interactionTypeItems(item: EngineAuditForm) {
+	return Object.values(InteractionType)
+		.filter((type) => item.interactionType?.includes(type))
+		.map((type) => ({
+			id: type,
+			name: t(`objects.interactionType.${type}`),
+		}));
+}
 
 function prettifyDateTime(timestamp?: string) {
 	if (!timestamp) return '';

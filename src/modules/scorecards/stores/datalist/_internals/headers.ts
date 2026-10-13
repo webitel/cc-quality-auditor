@@ -17,6 +17,13 @@ export const headers: DatalistTableHeader[] = [
 		sort: SortSymbols.NONE,
 	},
 	{
+		value: 'interactionType',
+		locale: 'objects.interactionType.interactionType',
+		show: true,
+		field: 'interaction_type',
+		sort: SortSymbols.NONE,
+	},
+	{
 		value: 'createdAt',
 		locale: 'reusable.createdAt',
 		show: true,
