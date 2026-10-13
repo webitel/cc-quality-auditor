@@ -24,7 +24,12 @@
             {{ t('reusable.all', { entity: t('scorecards.scorecards', 2) }) }}
           </h3>
           <wt-action-bar
-            :include="[IconAction.REFRESH, IconAction.COLUMNS, IconAction.DELETE]"
+            :include="[
+              IconAction.REFRESH,
+              IconAction.FILTERS,
+              IconAction.COLUMNS,
+              IconAction.DELETE,
+            ]"
             :disabled:delete="isDeleteDisabled"
             @click:refresh="loadDataList"
             @click:delete="
@@ -34,6 +39,13 @@
               })
             "
           >
+            <template #filters>
+              <filters-actions-menu
+                :filters-manager="filtersManager"
+                :filter-options="filtersOptions"
+                @filter:reset-all="resetFilters"
+              />
+            </template>
             <template #search-bar>
               <dynamic-filter-search
                 :filters-manager="filtersManager"
@@ -144,6 +156,9 @@
                   />
                 </div>
               </template>
+              <template #column-filter="scope">
+                <scorecards-column-filter v-bind="scope" />
+              </template>
             </wt-table>
             <wt-pagination
               :next="next"
@@ -163,7 +178,10 @@
 
 <script setup lang="ts">
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
-import { DynamicFilterSearchComponent as DynamicFilterSearch } from '@webitel/ui-datalist/filters';
+import {
+	DynamicFilterSearchComponent as DynamicFilterSearch,
+	FiltersActionsMenuComponent as FiltersActionsMenu,
+} from '@webitel/ui-datalist/filters';
 import { WtDisplayChipItems } from '@webitel/ui-sdk/components';
 import {
 	AuditorSections,
@@ -182,14 +200,18 @@ import { useRouter } from 'vue-router';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionType } from '../enums/InteractionType.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useScorecardsDatalistStore } from '../stores';
+import ScorecardsColumnFilter from './scorecards-column-filter.vue';
 
 // @vue/compat: kebab-case template tags do not count as import usage for vue-tsc
 defineOptions({
 	components: {
 		DynamicFilterSearch,
+		FiltersActionsMenu,
+		ScorecardsColumnFilter,
 		WtDisplayChipItems,
 	},
 });
@@ -234,6 +256,12 @@ const {
 } = tableStore;
 
 initialize();
+
+const resetFilters = () => {
+	filtersManager.value.reset({
+		exclude: Object.values(SearchMode),
+	});
+};
 
 const {
 	isVisible: isDeleteConfirmationPopup,
