@@ -15,8 +15,7 @@ import { initRouter, router } from './app/router';
 import App from './app.vue';
 import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
-// rollback change by this issue https://webitel.atlassian.net/browse/WTEL-9362
-// import './app/plugins/webitel-api-services';
+import './app/plugins/webitel-api-services';
 
 const setTokenFromUrl = () => {
 	try {
