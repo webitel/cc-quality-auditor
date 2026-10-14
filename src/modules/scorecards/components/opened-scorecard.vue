@@ -65,7 +65,6 @@ import { useCardComponent, useCardTabs } from '@webitel/ui-datalist/card';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
 import { useSaveCopy } from '@webitel/ui-sdk/modules/SaveCopy';
-import { eventBus } from '@webitel/ui-sdk/scripts';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -145,10 +144,6 @@ const { saveOptions, saveCopy } = useSaveCopy(async () => {
 			itemInstance: modelValue.value,
 		});
 	} catch (err) {
-		eventBus.$emit('notification', {
-			type: 'error',
-			text: err?.response?.data?.detail,
-		});
 		// [Claude] rethrow so useSaveCopy doesn't emit its success notification
 		throw err;
 	}
