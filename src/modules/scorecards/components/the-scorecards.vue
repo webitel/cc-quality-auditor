@@ -177,6 +177,7 @@
 </template>
 
 <script setup lang="ts">
+import { ChannelType } from '@webitel/api-services/enums';
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import {
 	DynamicFilterSearchComponent as DynamicFilterSearch,
@@ -201,7 +202,6 @@ import { useRouter } from 'vue-router';
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { filtersOptions } from '../configs/filtersOptions';
-import { InteractionType } from '../enums/InteractionType.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useScorecardsDatalistStore } from '../stores';
 import ScorecardsColumnFilter from './scorecards-column-filter.vue';
@@ -319,7 +319,11 @@ const path = computed(() => [
 ]);
 
 function interactionTypeItems(item: EngineAuditForm) {
-	return Object.values(InteractionType)
+	return [
+		ChannelType.Call,
+		ChannelType.Chat,
+		ChannelType.Email,
+	]
 		.filter((type) => item.interactionType?.includes(type))
 		.map((type) => ({
 			id: type,
