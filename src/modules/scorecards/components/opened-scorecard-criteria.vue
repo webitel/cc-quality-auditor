@@ -8,15 +8,29 @@
       @update:validation="emits('update:validation', $event)"
       @update:questions="modelValue.questions = $event"
     />
+    <wt-message
+      v-if="!hasPositiveMaxRequiredCriterion(modelValue.questions)"
+      :color="MessageColor.ERROR"
+      :variant="MessageVariant.SIMPLE"
+      :size="ComponentSize.SM"
+    >
+      {{ $t('scorecards.noPositiveRequiredCriterion') }}
+    </wt-message>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
-import { WtObject } from '@webitel/ui-sdk/enums';
+import {
+	ComponentSize,
+	MessageColor,
+	MessageVariant,
+	WtObject,
+} from '@webitel/ui-sdk/enums';
 import AuditForm from '@webitel/ui-sdk/src/modules/AuditForm/components/audit-form.vue';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import { hasPositiveMaxRequiredCriterion } from '../scripts/hasPositiveMaxRequiredCriterion';
 
 const modelValue = defineModel<EngineAuditForm>({
 	required: true,
