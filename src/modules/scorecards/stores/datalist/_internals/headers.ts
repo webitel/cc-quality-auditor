@@ -1,6 +1,8 @@
 import type { DatalistTableHeader } from '@webitel/ui-datalist';
 import { SortSymbols } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
 
+import { interactionTypeFilterConfig } from '../../../configs/filtersOptions';
+
 export const headers: DatalistTableHeader[] = [
 	{
 		value: 'name',
@@ -15,6 +17,14 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'description',
 		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'interactionType',
+		locale: 'objects.interactionType.interactionType',
+		show: true,
+		field: 'interaction_type',
+		sort: SortSymbols.NONE,
+		filter: interactionTypeFilterConfig,
 	},
 	{
 		value: 'createdAt',
