@@ -14,6 +14,8 @@ export default {
 			[InteractionType.CHAT]: 'Чат',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Ең жоғары бағасы 0-ден асатын кемінде бір міндетті критерий қосыңыз.',
 	},
 	startPage: {
 		scorecards: {

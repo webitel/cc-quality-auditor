@@ -15,6 +15,8 @@ export default {
 			[InteractionType.CHAT]: 'Chat',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Maksimal bali 0 dan yuqori bo‘lgan kamida bitta majburiy mezon qo‘shing.',
 	},
 	startPage: {
 		scorecards: {

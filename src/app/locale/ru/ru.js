@@ -14,6 +14,8 @@ export default {
 			[InteractionType.CHAT]: 'Чат',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Добавьте хотя бы один обязательный критерий с максимальным баллом больше 0.',
 	},
 	startPage: {
 		scorecards: {

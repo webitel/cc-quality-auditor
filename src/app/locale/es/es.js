@@ -15,6 +15,8 @@ export default {
 			[InteractionType.CHAT]: 'Chat',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Añada al menos un criterio obligatorio con una puntuación máxima superior a 0.',
 	},
 	startPage: {
 		scorecards: {

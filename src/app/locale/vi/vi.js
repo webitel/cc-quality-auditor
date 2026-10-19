@@ -15,6 +15,8 @@ export default {
 			[InteractionType.CHAT]: 'Chat',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Thêm ít nhất một tiêu chí bắt buộc có điểm tối đa lớn hơn 0.',
 	},
 	startPage: {
 		scorecards: {

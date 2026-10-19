@@ -15,6 +15,8 @@ export default {
 			[InteractionType.CHAT]: 'Chat',
 			[InteractionType.EMAIL]: 'Email',
 		},
+		noPositiveRequiredCriterion:
+			'Adăugați cel puțin un criteriu obligatoriu cu scorul maxim peste 0.',
 	},
 	startPage: {
 		scorecards: {

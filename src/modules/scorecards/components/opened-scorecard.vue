@@ -72,6 +72,7 @@ import { useUserAccessControl } from '../../../app/composables/useUserAccessCont
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
+import { hasPositiveMaxRequiredCriterion } from '../scripts/hasPositiveMaxRequiredCriterion';
 import { useScorecardsCardStore } from '../stores';
 
 const { t } = useI18n();
@@ -129,7 +130,8 @@ const disabledSave = computed(
 	() =>
 		!isAnyFieldEdited.value ||
 		hasValidationErrors.value ||
-		isInvalidFormQuestions.value,
+		isInvalidFormQuestions.value ||
+		!hasPositiveMaxRequiredCriterion(modelValue.value?.questions),
 );
 
 const isCopyMode = computed(() => !modelValue.value?.editable && !isNew.value);
