@@ -3,10 +3,12 @@
     <audit-form
       class="wt-scrollbar"
       :questions="modelValue.questions"
+      :groups="modelValue.criteriaGroups"
       mode="create"
       :readonly="disableUserInput"
       @update:validation="emits('update:validation', $event)"
       @update:questions="modelValue.questions = $event"
+      @update:groups="modelValue.criteriaGroups = $event"
     />
     <wt-message
       v-if="!hasPositiveMaxRequiredCriterion(modelValue.questions)"
