@@ -81,9 +81,6 @@ export default ({ mode }) => {
 				reporter: 'json',
 			},
 			environment: 'happy-dom',
-			setupFiles: [
-				'./tests/config/config.js',
-			],
 		},
 	});
 };

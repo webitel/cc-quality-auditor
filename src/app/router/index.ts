@@ -12,6 +12,7 @@ import {
 import RouteNames from './_internals/RouteNames.enum';
 import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
+import { createAuthGuard } from './authGuard';
 
 const TheAuditorWorkspace = () =>
 	import('../components/the-auditor-workspace.vue');
@@ -118,28 +119,11 @@ export const initRouter = async ({
 		routes,
 	});
 
-	router.beforeEach((to, _from, next) => {
-		if (!localStorage.getItem('access-token') && !to.query.accessToken) {
-			// @author @Lear24
-			// remove flag about shown notifications from localStorage
-			onUnauthorized();
-			const desiredUrl = encodeURIComponent(window.location.href);
-			const authUrl = import.meta.env.VITE_AUTH_URL;
-			window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
-		} else if (to.query.accessToken) {
-			// assume that access token was set from query before app initialization in main.js
-			const newQuery = {
-				...to.query,
-			};
-			delete newQuery.accessToken;
-			next({
-				...to,
-				query: newQuery,
-			});
-		} else {
-			next();
-		}
-	});
+	router.beforeEach(
+		createAuthGuard({
+			onUnauthorized,
+		}),
+	);
 
 	beforeEach.forEach((guard) => {
 		router.beforeEach(guard);
