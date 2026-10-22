@@ -6,14 +6,20 @@
   />
 </template>
 
-<script setup>
-import WtStartPage from '@webitel/ui-sdk/src/components/on-demand/wt-start-page/components/wt-start-page.vue';
+<script setup lang="ts">
+import { WtStartPage } from '@webitel/ui-sdk/components';
 import { storeToRefs } from 'pinia';
 
 import { useAppearanceStore } from '../../appearance/stores/appearanceStore';
 import LogoDark from '../assets/audit-logo-dark.svg';
 import LogoLight from '../assets/audit-logo-light.svg';
 import { useNavStore } from '../stores/navStore';
+
+defineOptions({
+	components: {
+		WtStartPage,
+	},
+});
 
 const logo = {
 	light: LogoLight,
