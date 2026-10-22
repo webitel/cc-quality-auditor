@@ -32,7 +32,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
 import { WtDarkModeSwitcher } from '@webitel/ui-sdk/modules/Appearance';
 import { storeToRefs } from 'pinia';
@@ -42,6 +42,12 @@ import packageJson from '../../../package.json' with { type: 'json' };
 import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
+
+defineOptions({
+	components: {
+		WtDarkModeSwitcher,
+	},
+});
 
 const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
@@ -95,7 +101,10 @@ const apps = computed(() => {
 
 	const config = inject('$config');
 
-	const allApps = [
+	const allApps: {
+		name: WtApplication;
+		href: string;
+	}[] = [
 		admin,
 		supervisor,
 		agent,
