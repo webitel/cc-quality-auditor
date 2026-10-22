@@ -4,7 +4,7 @@
       <wt-app-header>
         <wt-navigation-bar
           :current-app="currentApp"
-          :nav="nav"
+          :nav="accessibleNav"
           :dark-mode="darkMode"
           :logo-route="RoutePaths.StartPage"
         />
@@ -33,13 +33,13 @@
 </template>
 
 <script setup lang="ts">
-import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
+import { WtApplication } from '@webitel/ui-sdk/enums';
 import { WtDarkModeSwitcher } from '@webitel/ui-sdk/modules/Appearance';
 import { storeToRefs } from 'pinia';
 import { computed, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
 import packageJson from '../../../package.json' with { type: 'json' };
 import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
+import { useNavStore } from '../../modules/start-page/stores/navStore';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
 
@@ -60,8 +60,6 @@ const currentApp = WtApplication.Audit;
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
 const { setTheme } = appearanceStore;
-
-const { t } = useI18n();
 
 const startPageHref = computed(() => import.meta.env.VITE_APPLICATION_HUB_URL);
 
@@ -119,15 +117,12 @@ const apps = computed(() => {
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
-const nav = computed(() => [
-	{
-		value: AuditorSections.Scorecards,
-		name: t(
-			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
-		),
-		route: RoutePaths.Scorecards,
-	},
-]);
+const navStore = useNavStore();
+const { nav } = storeToRefs(navStore);
+
+const accessibleNav = computed(() =>
+	nav.value.filter(({ disabled }) => !disabled),
+);
 
 function settings() {
 	const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
