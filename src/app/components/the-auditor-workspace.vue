@@ -65,6 +65,10 @@ const { t } = useI18n();
 
 const startPageHref = computed(() => import.meta.env.VITE_APPLICATION_HUB_URL);
 
+const config = inject<{
+	ON_SITE?: boolean;
+}>('$config');
+
 const apps = computed(() => {
 	const agent = {
 		name: WtApplication.Agent,
@@ -98,8 +102,6 @@ const apps = computed(() => {
 		name: WtApplication.Wfm,
 		href: import.meta.env.VITE_WFM_URL,
 	};
-
-	const config = inject('$config');
 
 	const allApps: {
 		name: WtApplication;
