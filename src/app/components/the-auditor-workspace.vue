@@ -34,7 +34,7 @@
 
 <script setup>
 import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
-import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+import { WtDarkModeSwitcher } from '@webitel/ui-sdk/modules/Appearance';
 import { storeToRefs } from 'pinia';
 import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
