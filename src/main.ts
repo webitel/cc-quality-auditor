@@ -1,10 +1,10 @@
 import './app/css/main.css';
 
-import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
+import { setConfig as setApiServicesConfig } from '@webitel/api-services';
+import { eventBus, reloadOnStaleChunk } from '@webitel/ui-sdk/scripts';
 import { configureZod } from '@webitel/ui-sdk/validations';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
-import instance from './app/api/instance';
 import { createUserAccessControl } from './app/composables/useUserAccessControl';
 import i18n from './app/locale/i18n';
 import {
@@ -12,24 +12,26 @@ import {
 	options as WebitelUiOptions,
 } from './app/plugins/webitel/ui-sdk';
 import { initRouter, router } from './app/router';
+import { setTokenFromUrl } from './app/scripts/setTokenFromUrl';
 import App from './app.vue';
 import { useUserinfoStore } from './modules/userinfo/userInfoStore';
-
-import './app/plugins/webitel-api-services';
-import { setTokenFromUrl } from './app/scripts/setTokenFromUrl';
 
 const fetchConfig = async () => {
 	const response = await fetch(`${import.meta.env.BASE_URL}/config.json`);
 	return response.json();
 };
 
-// generated api-services clients call through this app's instance
-setDefaultAxiosInstance(instance);
+reloadOnStaleChunk();
 
 const pinia = createPinia();
 
 configureZod({
 	t: i18n.global.t,
+});
+
+setApiServicesConfig({
+	eventBus,
+	i18n,
 });
 
 const initApp = async () => {
