@@ -1,4 +1,5 @@
 const RoutePaths = Object.freeze({
+	StartPage: '/start-page',
 	Scorecards: '/scorecards',
 });
 

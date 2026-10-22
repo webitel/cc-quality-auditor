@@ -1,3 +1,5 @@
+import './app/css/main.css';
+
 import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { configureZod } from '@webitel/ui-sdk/validations';
 import { createPinia } from 'pinia';
@@ -13,27 +15,8 @@ import { initRouter, router } from './app/router';
 import App from './app.vue';
 import { useUserinfoStore } from './modules/userinfo/userInfoStore';
 
-// rollback change by this issue https://webitel.atlassian.net/browse/WTEL-9362
-// import './app/plugins/webitel-api-services';
-
-const setTokenFromUrl = () => {
-	try {
-		const queryMap = window.location.search
-			.slice(1)
-			.split('&')
-			.reduce<Record<string, string>>((obj, query) => {
-				const [key, value] = query.split('=');
-				obj[key] = value;
-				return obj;
-			}, {});
-
-		if (queryMap.accessToken) {
-			localStorage.setItem('access-token', queryMap.accessToken);
-		}
-	} catch (err) {
-		console.error('Error restoring token from url', err);
-	}
-};
+import './app/plugins/webitel-api-services';
+import { setTokenFromUrl } from './app/scripts/setTokenFromUrl';
 
 const fetchConfig = async () => {
 	const response = await fetch(`${import.meta.env.BASE_URL}/config.json`);

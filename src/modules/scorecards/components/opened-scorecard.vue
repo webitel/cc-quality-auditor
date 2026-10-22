@@ -9,7 +9,7 @@
         :primary-text="primarySaveText"
         :secondary-action="close"
         :hide-primary="disableUserInput"
-        :primary-disabled="isCopyMode ? hasValidationErrors : disabledSave"
+        :primary-disabled="disabledSave"
       >
         <template
           v-if="modelValue?.editable"
@@ -18,6 +18,7 @@
           <wt-button-select
             :options="saveOptions"
             :color="disabledSave && 'secondary'"
+            :disabled="disabledSave"
             @click="saveAction"
             @click:option="({ callback }) => callback()"
           >
@@ -53,12 +54,6 @@
           hidden
         >
       </form>
-
-      <save-copy-popup
-        :shown="isSaveCopyPopupShown"
-        @close="closeSaveCopyPopup"
-        @save="saveCopy"
-      />
     </template>
   </wt-page-wrapper>
 </template>
@@ -69,14 +64,12 @@ import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { useCardComponent, useCardTabs } from '@webitel/ui-datalist/card';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { AuditorSections, WtObject } from '@webitel/ui-sdk/enums';
-import {
-	SaveCopyPopup,
-	useSaveCopyPopup,
-} from '@webitel/ui-sdk/modules/SaveCopyPopup';
+import { useSaveCopy } from '@webitel/ui-sdk/modules/SaveCopy';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
 import { useScorecardsCardStore } from '../stores';
@@ -111,7 +104,7 @@ const tabs = computed(() => [
 	{
 		text: t('objects.criterion', 2),
 		value: 'criteria',
-		pathName: ScorerecordTabNames.CRITERIAS,
+		pathName: ScorerecordTabNames.CRITERIA,
 	},
 ]);
 
@@ -121,10 +114,11 @@ const { close } = useClose(AuditorSections.Scorecards);
 const path = computed(() => [
 	{
 		name: t('audit'),
+		route: RoutePaths.StartPage,
 	},
 	{
 		name: t('scorecards.scorecards', 2),
-		route: '/scorecards',
+		route: RoutePaths.Scorecards,
 	},
 	{
 		name: isNew.value ? t('reusable.new') : originalItemInstance.value?.name,
@@ -141,24 +135,18 @@ const disabledSave = computed(
 const isCopyMode = computed(() => !modelValue.value?.editable && !isNew.value);
 
 const primarySaveText = computed(() =>
-	isCopyMode.value ? t('webitelUI.saveCopyPopup.title') : saveText.value,
+	isCopyMode.value ? t('webitelUI.saveCopy.title') : saveText.value,
 );
 
-const {
-	isSaveCopyPopupShown,
-	saveOptions,
-	openSaveCopyPopup,
-	closeSaveCopyPopup,
-	saveCopy,
-} = useSaveCopyPopup((name) => {
-	if (!modelValue.value) return;
-
-	return AuditFormsAPI.add({
-		itemInstance: {
-			...modelValue.value,
-			name,
-		},
-	});
+const { saveOptions, saveCopy } = useSaveCopy(async () => {
+	try {
+		return await AuditFormsAPI.add({
+			itemInstance: modelValue.value,
+		});
+	} catch (err) {
+		// [Claude] rethrow so useSaveCopy doesn't emit its success notification
+		throw err;
+	}
 });
 
 const saveAction = async () => {
@@ -166,15 +154,7 @@ const saveAction = async () => {
 	await save();
 };
 
-const saveChanges = computed(() =>
-	isCopyMode.value ? openSaveCopyPopup : saveAction,
-);
-
-defineOptions({
-	components: {
-		SaveCopyPopup,
-	},
-});
+const saveChanges = computed(() => (isCopyMode.value ? saveCopy : saveAction));
 </script>
 
 <style lang="scss" scoped>

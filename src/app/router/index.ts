@@ -9,11 +9,15 @@ import {
 	type RouteRecordRaw,
 } from 'vue-router';
 
+import RouteNames from './_internals/RouteNames.enum';
 import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
+import { createAuthGuard } from './authGuard';
 
 const TheAuditorWorkspace = () =>
 	import('../components/the-auditor-workspace.vue');
+const TheStartPage = () =>
+	import('../../modules/start-page/components/the-start-page.vue');
 const OpenedScorecard = () =>
 	import('../../modules/scorecards/components/opened-scorecard.vue');
 const Scorecards = () =>
@@ -21,8 +25,8 @@ const Scorecards = () =>
 const AccessDenied = () =>
 	import('../components/utils/access-denied-component.vue');
 
-const Criterias = import(
-	'../../modules/scorecards/components/opened-scorecard-criterias.vue'
+const Criteria = import(
+	'../../modules/scorecards/components/opened-scorecard-criteria.vue'
 );
 const General = import(
 	'../../modules/scorecards/components/opened-scorecard-general.vue'
@@ -35,13 +39,18 @@ const routes: RouteRecordRaw[] = [
 		path: '/',
 		name: 'auditor-workspace',
 		redirect: {
-			name: AuditorSections.Scorecards,
+			name: RouteNames.StartPage,
 		},
 		component: TheAuditorWorkspace,
 		meta: {
 			WtApplication: WtApplication.Audit,
 		},
 		children: [
+			{
+				path: RoutePaths.StartPage,
+				name: RouteNames.StartPage,
+				component: TheStartPage,
+			},
 			{
 				path: RoutePaths.Scorecards,
 				name: AuditorSections.Scorecards,
@@ -52,7 +61,7 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
-				path: 'scorecards/:id',
+				path: `${RoutePaths.Scorecards}/:id`,
 				name: `${AuditorSections.Scorecards}-card`,
 				component: OpenedScorecard,
 				redirect: {
@@ -69,11 +78,20 @@ const routes: RouteRecordRaw[] = [
 						component: () => General,
 					},
 					{
-						path: 'criterias',
-						name: ScorerecordTabName.CRITERIAS,
-						component: () => Criterias,
+						path: 'criteria',
+						name: ScorerecordTabName.CRITERIA,
+						component: () => Criteria,
 					},
 				],
+			},
+			{
+				path: '/:pathMatch(.*)*',
+				component: NotFound,
+			},
+			{
+				path: '/404',
+				name: 'not-found',
+				component: NotFound,
 			},
 		],
 	},
@@ -81,20 +99,6 @@ const routes: RouteRecordRaw[] = [
 		path: '/access-denied',
 		name: 'access-denied',
 		component: AccessDenied,
-	},
-	{
-		// Added to render 404 pages with the common workspace layout (header)
-		// https://webitel.atlassian.net/browse/WTEL-8140
-		path: '/404',
-		name: 'not-found',
-		component: TheAuditorWorkspace,
-		children: [
-			{
-				path: '',
-				name: 'not-found-inner',
-				component: NotFound,
-			},
-		],
 	},
 ];
 
@@ -115,28 +119,11 @@ export const initRouter = async ({
 		routes,
 	});
 
-	router.beforeEach((to, _from, next) => {
-		if (!localStorage.getItem('access-token') && !to.query.accessToken) {
-			// @author @Lear24
-			// remove flag about shown notifications from localStorage
-			onUnauthorized();
-			const desiredUrl = encodeURIComponent(window.location.href);
-			const authUrl = import.meta.env.VITE_AUTH_URL;
-			window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
-		} else if (to.query.accessToken) {
-			// assume that access token was set from query before app initialization in main.js
-			const newQuery = {
-				...to.query,
-			};
-			delete newQuery.accessToken;
-			next({
-				...to,
-				query: newQuery,
-			});
-		} else {
-			next();
-		}
-	});
+	router.beforeEach(
+		createAuthGuard({
+			onUnauthorized,
+		}),
+	);
 
 	beforeEach.forEach((guard) => {
 		router.beforeEach(guard);

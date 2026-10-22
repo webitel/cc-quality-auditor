@@ -6,7 +6,7 @@
           :current-app="currentApp"
           :nav="nav"
           :dark-mode="darkMode"
-          :logo-route="RoutePaths.Scorecards"
+          :logo-route="RoutePaths.StartPage"
         />
         <wt-logo
           :dark-mode="darkMode"
@@ -88,6 +88,10 @@ const apps = computed(() => {
 		name: WtApplication.Crm,
 		href: import.meta.env.VITE_CRM_URL,
 	};
+	const wfm = {
+		name: WtApplication.Wfm,
+		href: import.meta.env.VITE_WFM_URL,
+	};
 
 	const config = inject('$config');
 
@@ -98,6 +102,7 @@ const apps = computed(() => {
 		history,
 		audit,
 		crm,
+		wfm,
 	];
 	if (config?.ON_SITE) allApps.push(grafana);
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
@@ -109,7 +114,7 @@ const nav = computed(() => [
 		name: t(
 			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
 		),
-		route: '/scorecards',
+		route: RoutePaths.Scorecards,
 	},
 ]);
 
