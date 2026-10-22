@@ -82,7 +82,7 @@
                 {{ item.description }}
               </template>
               <template #createdAt="{ item }">
-                {{ prettifyDateTime(item.createdAt) }}
+                <wt-time-tooltip :text="prettifyDateTime(item.createdAt)" />
               </template>
               <template #createdBy="{ item }">
                 <div v-if="item.createdBy">
@@ -90,7 +90,7 @@
                 </div>
               </template>
               <template #modifiedAt="{ item }">
-                {{ prettifyDateTime(item.updatedAt) }}
+                <wt-time-tooltip :text="prettifyDateTime(item.updatedAt)" />
               </template>
               <template #modifiedBy="{ item }">
                 <div v-if="item.updatedBy">
@@ -161,6 +161,7 @@
 <script setup lang="ts">
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { DynamicFilterSearchComponent as DynamicFilterSearch } from '@webitel/ui-datalist/filters';
+import { WtTimeTooltip } from '@webitel/ui-sdk/components';
 import {
 	AuditorSections,
 	FormatDateMode,
@@ -184,6 +185,7 @@ import { useScorecardsDatalistStore } from '../stores';
 defineOptions({
 	components: {
 		DynamicFilterSearch,
+		WtTimeTooltip,
 	},
 });
 
