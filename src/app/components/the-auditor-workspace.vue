@@ -36,7 +36,7 @@
 import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import { storeToRefs } from 'pinia';
-import { computed, inject, onMounted } from 'vue';
+import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import packageJson from '../../../package.json' with { type: 'json' };
 import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
@@ -47,15 +47,14 @@ const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser, showUserNotifications } =
-	userinfoStore;
+const { hasApplicationVisibility, logoutUser } = userinfoStore;
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Audit);
 
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
 
-const { t, locale, fallbackLocale } = useI18n();
+const { t } = useI18n();
 
 const startPageHref = computed(() => import.meta.env.VITE_APPLICATION_HUB_URL);
 
@@ -122,19 +121,6 @@ function settings() {
 	const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
 	window.open(settingsUrl);
 }
-
-function setLanguage() {
-	const lang = localStorage.getItem('lang');
-	if (lang) locale.value = lang;
-
-	const fallbackLang = localStorage.getItem('fallbackLang');
-	if (fallbackLang) fallbackLocale.value = fallbackLang;
-}
-
-onMounted(() => {
-	setLanguage();
-	showUserNotifications();
-});
 </script>
 
 <style
