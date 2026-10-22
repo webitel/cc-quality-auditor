@@ -55,7 +55,7 @@ const build = import.meta.env.VITE_BUILD_NUMBER;
 const userinfoStore = useUserinfoStore();
 const { hasApplicationVisibility, logoutUser } = userinfoStore;
 const { userInfo } = storeToRefs(userinfoStore);
-const currentApp = computed(() => WtApplication.Audit);
+const currentApp = WtApplication.Audit;
 
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
