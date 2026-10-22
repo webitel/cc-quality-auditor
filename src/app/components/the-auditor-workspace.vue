@@ -12,7 +12,7 @@
           :dark-mode="darkMode"
           :logo-href="startPageHref"
         />
-        <wt-dark-mode-switcher @changed-mode="appearanceStore.setTheme" />
+        <wt-dark-mode-switcher @changed-mode="setTheme" />
         <wt-app-navigator
           :apps="apps"
           :current-app="currentApp"
@@ -53,6 +53,7 @@ const currentApp = computed(() => WtApplication.Audit);
 
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
+const { setTheme } = appearanceStore;
 
 const { t } = useI18n();
 

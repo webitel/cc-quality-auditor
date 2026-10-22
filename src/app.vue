@@ -20,11 +20,6 @@ const { showUserNotifications } = useUserinfoStore();
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
 
-const cachedTheme = localStorage.getItem('theme');
-if (cachedTheme) {
-	appearanceStore.setTheme(cachedTheme);
-}
-
 provide('darkMode', darkMode);
 
 function setLanguage() {
