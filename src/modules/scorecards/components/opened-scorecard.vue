@@ -5,25 +5,29 @@
   >
     <template #header>
       <wt-page-header
-        :primary-action="saveChanges"
-        :primary-text="primarySaveText"
         :secondary-action="close"
         :hide-primary="disableUserInput"
-        :primary-disabled="disabledSave"
       >
-        <template
-          v-if="modelValue?.editable"
-          #primary-action
-        >
-          <wt-button-select
-            :options="saveOptions"
-            :color="disabledSave && 'secondary'"
-            :disabled="disabledSave"
-            @click="saveAction"
-            @click:option="({ callback }) => callback()"
-          >
-            {{ primarySaveText }}
-          </wt-button-select>
+        <template #primary-action>
+          <div v-tooltip="saveHint">
+            <wt-button-select
+              v-if="modelValue?.editable"
+              :options="saveOptions"
+              :color="disabledSave && 'secondary'"
+              :disabled="disabledSave"
+              @click="saveAction"
+              @click:option="({ callback }) => callback()"
+            >
+              {{ primarySaveText }}
+            </wt-button-select>
+            <wt-button
+              v-else
+              :disabled="disabledSave"
+              @click="saveChanges"
+            >
+              {{ primarySaveText }}
+            </wt-button>
+          </div>
         </template>
         <wt-breadcrumb :path="path" />
       </wt-page-header>
@@ -126,12 +130,20 @@ const path = computed(() => [
 	},
 ]);
 
+const hasPositiveMax = computed(() =>
+	hasPositiveMaxRequiredCriterion(modelValue.value?.questions),
+);
+
 const disabledSave = computed(
 	() =>
 		!isAnyFieldEdited.value ||
 		hasValidationErrors.value ||
 		isInvalidFormQuestions.value ||
-		!hasPositiveMaxRequiredCriterion(modelValue.value?.questions),
+		!hasPositiveMax.value,
+);
+
+const saveHint = computed(
+	() => !hasPositiveMax.value && t('scorecards.noPositiveRequiredCriterion'),
 );
 
 const isCopyMode = computed(() => !modelValue.value?.editable && !isNew.value);
