@@ -5,13 +5,10 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 
 const router = useRouter();
 </script>
-
-<style lang="scss" scoped>
-</style>

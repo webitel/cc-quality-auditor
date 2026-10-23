@@ -25,12 +25,10 @@ const Scorecards = () =>
 const AccessDenied = () =>
 	import('../components/utils/access-denied-component.vue');
 
-const Criteria = import(
-	'../../modules/scorecards/components/opened-scorecard-criteria.vue'
-);
-const General = import(
-	'../../modules/scorecards/components/opened-scorecard-general.vue'
-);
+const Criteria = () =>
+	import('../../modules/scorecards/components/opened-scorecard-criteria.vue');
+const General = () =>
+	import('../../modules/scorecards/components/opened-scorecard-general.vue');
 const NotFound = () =>
 	import('../../modules/error-pages/components/the-not-found-component.vue');
 
@@ -75,12 +73,12 @@ const routes: RouteRecordRaw[] = [
 					{
 						path: 'general',
 						name: ScorerecordTabName.GENERAL,
-						component: () => General,
+						component: General,
 					},
 					{
 						path: 'criteria',
 						name: ScorerecordTabName.CRITERIA,
-						component: () => Criteria,
+						component: Criteria,
 					},
 				],
 			},

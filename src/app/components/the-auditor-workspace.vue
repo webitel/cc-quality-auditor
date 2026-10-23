@@ -4,7 +4,7 @@
       <wt-app-header>
         <wt-navigation-bar
           :current-app="currentApp"
-          :nav="nav"
+          :nav="accessibleNav"
           :dark-mode="darkMode"
           :logo-route="RoutePaths.StartPage"
         />
@@ -12,7 +12,7 @@
           :dark-mode="darkMode"
           :logo-href="startPageHref"
         />
-        <wt-dark-mode-switcher @changed-mode="appearanceStore.setTheme" />
+        <wt-dark-mode-switcher @changed-mode="setTheme" />
         <wt-app-navigator
           :apps="apps"
           :current-app="currentApp"
@@ -32,32 +32,40 @@
   </main>
 </template>
 
-<script setup>
-import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
-import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+<script setup lang="ts">
+import { WtApplication } from '@webitel/ui-sdk/enums';
+import { WtDarkModeSwitcher } from '@webitel/ui-sdk/modules/Appearance';
 import { storeToRefs } from 'pinia';
-import { computed, inject, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, inject } from 'vue';
 import packageJson from '../../../package.json' with { type: 'json' };
 import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
+import { useNavStore } from '../../modules/start-page/stores/navStore';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
 import RoutePaths from '../router/_internals/RoutePaths.enum';
+
+defineOptions({
+	components: {
+		WtDarkModeSwitcher,
+	},
+});
 
 const release = packageJson.version;
 const build = import.meta.env.VITE_BUILD_NUMBER;
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser, showUserNotifications } =
-	userinfoStore;
+const { hasApplicationVisibility, logoutUser } = userinfoStore;
 const { userInfo } = storeToRefs(userinfoStore);
-const currentApp = computed(() => WtApplication.Audit);
+const currentApp = WtApplication.Audit;
 
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
-
-const { t, locale, fallbackLocale } = useI18n();
+const { setTheme } = appearanceStore;
 
 const startPageHref = computed(() => import.meta.env.VITE_APPLICATION_HUB_URL);
+
+const config = inject<{
+	ON_SITE?: boolean;
+}>('$config');
 
 const apps = computed(() => {
 	const agent = {
@@ -93,9 +101,10 @@ const apps = computed(() => {
 		href: import.meta.env.VITE_WFM_URL,
 	};
 
-	const config = inject('$config');
-
-	const allApps = [
+	const allApps: {
+		name: WtApplication;
+		href: string;
+	}[] = [
 		admin,
 		supervisor,
 		agent,
@@ -108,33 +117,17 @@ const apps = computed(() => {
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
-const nav = computed(() => [
-	{
-		value: AuditorSections.Scorecards,
-		name: t(
-			`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
-		),
-		route: RoutePaths.Scorecards,
-	},
-]);
+const navStore = useNavStore();
+const { nav } = storeToRefs(navStore);
+
+const accessibleNav = computed(() =>
+	nav.value.filter(({ disabled }) => !disabled),
+);
 
 function settings() {
 	const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
 	window.open(settingsUrl);
 }
-
-function setLanguage() {
-	const lang = localStorage.getItem('lang');
-	if (lang) locale.value = lang;
-
-	const fallbackLang = localStorage.getItem('fallbackLang');
-	if (fallbackLang) fallbackLocale.value = fallbackLang;
-}
-
-onMounted(() => {
-	setLanguage();
-	showUserNotifications();
-});
 </script>
 
 <style
