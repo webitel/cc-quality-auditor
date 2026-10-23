@@ -3,10 +3,12 @@
     <audit-form
       class="wt-scrollbar"
       :questions="modelValue.questions"
+      :groups="modelValue.criteriaGroups"
       mode="create"
       :readonly="disableUserInput"
       @update:validation="emits('update:validation', $event)"
       @update:questions="modelValue.questions = $event"
+      @update:groups="modelValue.criteriaGroups = $event"
     />
     <wt-message
       v-if="!hasPositiveMaxRequiredCriterion(modelValue.questions)"
@@ -50,6 +52,7 @@ const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 <style scoped>
 .opened-scorecard-criteria {
   min-height: 0;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   margin-top: var(--spacing-sm);
@@ -57,6 +60,7 @@ const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 
 .audit-form {
   min-height: 0;
+  flex-grow: 1;
   overflow-y: auto;
 }
 </style>
