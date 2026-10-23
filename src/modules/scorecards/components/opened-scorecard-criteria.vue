@@ -52,6 +52,7 @@ const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 <style scoped>
 .opened-scorecard-criteria {
   min-height: 0;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   margin-top: var(--spacing-sm);
@@ -59,6 +60,7 @@ const { disableUserInput } = useUserAccessControl(WtObject.AuditForm);
 
 .audit-form {
   min-height: 0;
+  flex-grow: 1;
   overflow-y: auto;
 }
 </style>
