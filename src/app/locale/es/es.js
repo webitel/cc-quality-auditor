@@ -7,6 +7,8 @@ export default {
 			'Esta hoja de puntuación tiene evaluaciones y no se puede editar. Ábrela y usa GUARDAR COMO para crear una copia.',
 		usedScorecardCantDelete:
 			'Esta hoja de puntuación está en uso y no se puede eliminar.',
+		noPositiveRequiredCriterion:
+			'Añada al menos un criterio obligatorio con una puntuación máxima superior a 0.',
 	},
 	startPage: {
 		scorecards: {
