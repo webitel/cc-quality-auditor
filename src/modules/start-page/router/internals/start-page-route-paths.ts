@@ -1,4 +1,4 @@
-2const RoutePaths = {
+const RoutePaths = {
 	TheStartPage: '/start-page',
 } as const;
 
