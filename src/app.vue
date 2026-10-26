@@ -8,19 +8,32 @@
   setup
 >
 import { storeToRefs } from 'pinia';
-import { provide } from 'vue';
+import { onMounted, provide } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { useAppearanceStore } from './modules/appearance/stores/appearanceStore';
+import { useUserinfoStore } from './modules/userinfo/userInfoStore';
+
+const { locale, fallbackLocale } = useI18n();
+const { showUserNotifications } = useUserinfoStore();
 
 const appearanceStore = useAppearanceStore();
 const { darkMode } = storeToRefs(appearanceStore);
 
-const cachedTheme = localStorage.getItem('theme');
-if (cachedTheme) {
-	appearanceStore.setTheme(cachedTheme);
+provide('darkMode', darkMode);
+
+function setLanguage() {
+	const lang = localStorage.getItem('lang');
+	if (lang) locale.value = lang;
+
+	const fallbackLang = localStorage.getItem('fallbackLang');
+	if (fallbackLang) fallbackLocale.value = fallbackLang;
 }
 
-provide('darkMode', darkMode);
+onMounted(() => {
+	setLanguage();
+	showUserNotifications();
+});
 </script>
 
 <style>
