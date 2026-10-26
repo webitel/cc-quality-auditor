@@ -8,16 +8,14 @@ import {
 	createWebHistory,
 	type RouteRecordRaw,
 } from 'vue-router';
-
-import RouteNames from './_internals/RouteNames.enum';
+import startPageRoutes from '../../modules/start-page/router';
+import StartPageRouteNames from '../../modules/start-page/router/internals/start-page-route-names';
 import RoutePaths from './_internals/RoutePaths.enum';
 import ScorerecordTabName from './_internals/ScorerecordTabNames.enum';
 import { createAuthGuard } from './authGuard';
 
 const TheAuditorWorkspace = () =>
 	import('../components/the-auditor-workspace.vue');
-const TheStartPage = () =>
-	import('../../modules/start-page/components/the-start-page.vue');
 const OpenedScorecard = () =>
 	import('../../modules/scorecards/components/opened-scorecard.vue');
 const Scorecards = () =>
@@ -37,18 +35,14 @@ const routes: RouteRecordRaw[] = [
 		path: '/',
 		name: 'auditor-workspace',
 		redirect: {
-			name: RouteNames.StartPage,
+			name: StartPageRouteNames.TheStartPage,
 		},
 		component: TheAuditorWorkspace,
 		meta: {
 			WtApplication: WtApplication.Audit,
 		},
 		children: [
-			{
-				path: RoutePaths.StartPage,
-				name: RouteNames.StartPage,
-				component: TheStartPage,
-			},
+			...startPageRoutes,
 			{
 				path: RoutePaths.Scorecards,
 				name: AuditorSections.Scorecards,
