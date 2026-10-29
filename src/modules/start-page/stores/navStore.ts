@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
-import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import ScorecardsRoutePaths from '../../scorecards/router/internals/scorecards-route-paths';
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import ScorecardsSecDark from '../assets/scorecards-section-dark.svg';
 import ScorecardsSecLight from '../assets/scorecards-section-light.svg';
@@ -37,7 +37,7 @@ export const useNavStore = defineStore('nav', () => {
 			name: t(
 				`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Scorecards}`,
 			),
-			route: RoutePaths.Scorecards,
+			route: ScorecardsRoutePaths.Scorecards,
 		};
 		const navItems = [
 			scorecards,
