@@ -44,19 +44,19 @@
 		"zod": "^4.x"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.5",
+		"@biomejs/biome": "^2.6.3",
 		"@vitejs/plugin-vue": "^6.x",
 		"@vitest/coverage-v8": "^4.x",
 		"@vue/test-utils": "^2.x",
 		"happy-dom": "^21.0.4",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.x",
-		"sass": "^1.102.0",
+		"sass": "^1.106.1",
 		"typescript": "5.9.x",
 		"vite": "^8.x",
 		"vite-plugin-node-polyfills": "^0.x",
 		"vite-plugin-vue-devtools": "^8.x",
 		"vitest": "^4.x",
-		"vue-tsc": "^3.3.8"
+		"vue-tsc": "^3.3.13"
 	}
 }
