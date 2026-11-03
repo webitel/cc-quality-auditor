@@ -42,12 +42,36 @@
           <h3 class="table-title__title typo-heading-3">
             {{ t('interactions.allInteractions') }}
           </h3>
+          <div class="table-title__actions-wrap">
+            <wt-action-bar
+              :include="[IconAction.COLUMNS, IconAction.REFRESH]"
+              @click:refresh="loadDataList"
+            >
+              <template #columns>
+                <wt-table-column-select
+                  :headers="headers"
+                  @change="updateShownHeaders"
+                />
+              </template>
+            </wt-action-bar>
+          </div>
         </header>
 
         <div class="table-section__table-wrapper">
+          <wt-loader v-show="isLoading" />
+
           <wt-table
+            v-show="!isLoading"
             :data="dataList"
-            :headers="headers"
+            :headers="shownHeaders"
+            :selected="selected"
+            sortable
+            resizable-columns
+            reorderable-columns
+            @sort="updateSort"
+            @update:selected="updateSelected"
+            @column-resize="columnResize"
+            @column-reorder="columnReorder"
           >
             <template #interactionType="{ item }">
               {{ t(`channel.type.${item.interactionType}`) }}
@@ -61,10 +85,23 @@
             <template #empty>
               <wt-empty
                 :image="imageEmpty"
+                :headline="headlineEmpty"
+                :title="titleEmpty"
                 :text="textEmpty"
               />
             </template>
           </wt-table>
+
+          <wt-pagination
+            v-show="dataList.length"
+            :next="next"
+            :prev="page > 1"
+            :size="size"
+            debounce
+            @change="updateSize"
+            @next="updatePage(page + 1)"
+            @prev="updatePage(page - 1)"
+          />
         </div>
       </section>
     </template>
@@ -72,18 +109,50 @@
 </template>
 
 <script setup lang="ts">
-import { AuditorSections, WtApplication } from '@webitel/ui-sdk/enums';
+import {
+	AuditorSections,
+	IconAction,
+	WtApplication,
+} from '@webitel/ui-sdk/enums';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
-import { headers } from '../stores/datalist/_internals/headers';
+import { useInteractionsDatalistStore } from '../stores';
 
 const { t } = useI18n();
 
-const dataList = computed(() => []);
+const tableStore = useInteractionsDatalistStore();
+
+const {
+	dataList,
+	selected,
+	error,
+	isLoading,
+	page,
+	size,
+	next,
+	headers,
+	shownHeaders,
+	filtersManager,
+} = storeToRefs(tableStore);
+
+const {
+	initialize,
+	loadDataList,
+	updateSelected,
+	updatePage,
+	updateSize,
+	updateSort,
+	updateShownHeaders,
+	columnResize,
+	columnReorder,
+} = tableStore;
+
+initialize();
 
 const path = computed(() => [
 	{
@@ -98,8 +167,16 @@ const path = computed(() => [
 	},
 ]);
 
-const { image: imageEmpty, text: textEmpty } = useTableEmpty({
+const {
+	image: imageEmpty,
+	headline: headlineEmpty,
+	title: titleEmpty,
+	text: textEmpty,
+} = useTableEmpty({
 	dataList,
+	error,
+	filters: computed(() => filtersManager.value.getAllValues()),
+	isLoading,
 });
 </script>
 
