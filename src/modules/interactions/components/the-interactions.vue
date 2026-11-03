@@ -49,6 +49,15 @@
             :data="dataList"
             :headers="headers"
           >
+            <template #interactionType="{ item }">
+              {{ t(`channel.type.${item.interactionType}`) }}
+            </template>
+            <template #status="{ item }">
+              <wt-indicator
+                :color="InteractionStatusColor[item.status]"
+                :text="t(`interactions.statuses.${item.status}`)"
+              />
+            </template>
             <template #empty>
               <wt-empty
                 :image="imageEmpty"
@@ -69,6 +78,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { headers } from '../stores/datalist/_internals/headers';
 
 const { t } = useI18n();
