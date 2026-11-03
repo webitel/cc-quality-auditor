@@ -22,6 +22,8 @@ const OpenedScorecard = () =>
 	import('../../modules/scorecards/components/opened-scorecard.vue');
 const Scorecards = () =>
 	import('../../modules/scorecards/components/the-scorecards.vue');
+const TheInteractions = () =>
+	import('../../modules/interactions/components/the-interactions.vue');
 const AccessDenied = () =>
 	import('../components/utils/access-denied-component.vue');
 
@@ -81,6 +83,11 @@ const routes: RouteRecordRaw[] = [
 						component: Criteria,
 					},
 				],
+			},
+			{
+				path: RoutePaths.Interactions,
+				name: AuditorSections.Interactions,
+				component: TheInteractions,
 			},
 			{
 				path: '/:pathMatch(.*)*',
