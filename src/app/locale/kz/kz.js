@@ -1,3 +1,5 @@
+import { InteractionStatus } from '../../../modules/interactions/enums/InteractionStatus.enum';
+
 export default {
 	audit: 'Аудит',
 	scorecards: {
@@ -14,6 +16,12 @@ export default {
 		interactionDate: 'Өзара әрекет күні',
 		interactionType: 'Өзара әрекет түрі',
 		customer: 'Клиент',
+		statuses: {
+			[InteractionStatus.NotEvaluated]: 'Бағаланбаған',
+			[InteractionStatus.Pending]: 'Күтуде',
+			[InteractionStatus.Skipped]: 'Өткізілген',
+			[InteractionStatus.Completed]: 'Бағаланған',
+		},
 	},
 	startPage: {
 		scorecards: {
