@@ -1,3 +1,5 @@
+import { InteractionStatus } from '../../../modules/interactions/enums/InteractionStatus.enum';
+
 export default {
 	audit: 'Kiểm toán',
 	scorecards: {
@@ -15,6 +17,12 @@ export default {
 		interactionDate: 'Ngày tương tác',
 		interactionType: 'Loại tương tác',
 		customer: 'Khách hàng',
+		statuses: {
+			[InteractionStatus.NotEvaluated]: 'Chưa đánh giá',
+			[InteractionStatus.Pending]: 'Đang chờ',
+			[InteractionStatus.Skipped]: 'Đã bỏ qua',
+			[InteractionStatus.Completed]: 'Đã đánh giá',
+		},
 	},
 	startPage: {
 		scorecards: {
