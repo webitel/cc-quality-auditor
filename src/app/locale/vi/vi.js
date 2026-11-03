@@ -8,6 +8,14 @@ export default {
 		usedScorecardCantDelete:
 			'Phiếu chấm điểm này đang được sử dụng và không thể xóa.',
 	},
+	interactions: {
+		allInteractions: 'Tất cả tương tác',
+		transcribe: 'Chuyển đổi bản ghi',
+		assign: 'Chỉ định',
+		interactionDate: 'Ngày tương tác',
+		interactionType: 'Loại tương tác',
+		customer: 'Khách hàng',
+	},
 	startPage: {
 		scorecards: {
 			text: 'Tạo phiếu chấm điểm, đặt trọng số tiêu chí và nhóm câu hỏi.',

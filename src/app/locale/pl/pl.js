@@ -8,6 +8,14 @@ export default {
 		usedScorecardCantDelete:
 			'Ten arkusz ocen jest używany i nie można go usunąć.',
 	},
+	interactions: {
+		allInteractions: 'Wszystkie interakcje',
+		transcribe: 'Transkrybuj',
+		assign: 'Przypisz',
+		interactionDate: 'Data interakcji',
+		interactionType: 'Typ interakcji',
+		customer: 'Klient',
+	},
 	startPage: {
 		scorecards: {
 			text: 'Twórz arkusze ocen, ustawiaj wagi kryteriów i grupuj pytania.',

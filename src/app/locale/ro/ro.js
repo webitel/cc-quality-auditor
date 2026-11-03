@@ -8,6 +8,14 @@ export default {
 		usedScorecardCantDelete:
 			'Această fișă de evaluare este în uz și nu poate fi ștearsă.',
 	},
+	interactions: {
+		allInteractions: 'Toate interacțiunile',
+		transcribe: 'Transcrie',
+		assign: 'Atribuie',
+		interactionDate: 'Data interacțiunii',
+		interactionType: 'Tipul interacțiunii',
+		customer: 'Client',
+	},
 	startPage: {
 		scorecards: {
 			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
