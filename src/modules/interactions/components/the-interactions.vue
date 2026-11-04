@@ -44,9 +44,20 @@
           </h3>
           <div class="table-title__actions-wrap">
             <wt-action-bar
-              :include="[IconAction.COLUMNS, IconAction.REFRESH]"
+              :include="[
+                IconAction.REFRESH,
+                IconAction.FILTERS,
+                IconAction.COLUMNS,
+              ]"
               @click:refresh="loadDataList"
             >
+              <template #filters>
+                <filters-actions-menu
+                  :filters-manager="filtersManager"
+                  :filter-options="filtersOptions"
+                  @filter:reset-all="resetFilters"
+                />
+              </template>
               <template #columns>
                 <wt-table-column-select
                   :headers="headers"
@@ -82,6 +93,9 @@
                 :text="t(`interactions.statuses.${item.status}`)"
               />
             </template>
+            <template #column-filter="scope">
+              <interactions-column-filter v-bind="scope" />
+            </template>
             <template #empty>
               <wt-empty
                 :image="imageEmpty"
@@ -109,6 +123,7 @@
 </template>
 
 <script setup lang="ts">
+import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
 	IconAction,
@@ -120,8 +135,17 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
+import InteractionsColumnFilter from './interactions-column-filter.vue';
+
+defineOptions({
+	components: {
+		FiltersActionsMenu,
+		InteractionsColumnFilter,
+	},
+});
 
 const { t } = useI18n();
 
@@ -153,6 +177,10 @@ const {
 } = tableStore;
 
 initialize();
+
+const resetFilters = () => {
+	filtersManager.value.reset();
+};
 
 const path = computed(() => [
 	{
