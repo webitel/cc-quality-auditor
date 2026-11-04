@@ -1,3 +1,4 @@
+import { InteractionStatus } from '@webitel/api-services/enums';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { convertDuration } from '@webitel/ui-sdk/scripts';
 import { snakeToCamel } from '@webitel/ui-sdk/scripts/caseConverters';
@@ -26,6 +27,17 @@ const transformResponseItems = (items: InteractionRaw[]) =>
 		agent: item.agent?.name,
 		team: item.team?.name,
 		assignee: item.assignee?.name,
+		plan: item.plan?.name,
+		dueDate: computeDateAndTime(item.dueDate),
+		isOverdue:
+			item.status === InteractionStatus.Pending &&
+			!!item.dueDate &&
+			item.dueDate < Date.now(),
+		ratedAt: computeDateAndTime(item.ratedAt),
+		scorecard: item.scorecard?.name,
+		firstResponse: item.firstResponse && convertDuration(item.firstResponse),
+		skippedBy: item.skippedBy?.name,
+		skippedAt: computeDateAndTime(item.skippedAt),
 	}));
 
 const getSortValue = (item: InteractionRaw, key: string) => {
