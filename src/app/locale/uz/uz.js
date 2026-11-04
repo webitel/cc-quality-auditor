@@ -1,5 +1,3 @@
-import { InteractionStatus } from '../../../modules/interactions/enums/InteractionStatus.enum';
-
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -15,14 +13,7 @@ export default {
 		transcribe: 'Transkriptsiya qilish',
 		assign: 'Tayinlash',
 		interactionDate: "O'zaro aloqa sanasi",
-		interactionType: "O'zaro aloqa turi",
 		customer: 'Mijoz',
-		statuses: {
-			[InteractionStatus.NotEvaluated]: 'Baholanmagan',
-			[InteractionStatus.Pending]: 'Kutilmoqda',
-			[InteractionStatus.Skipped]: "O'tkazib yuborilgan",
-			[InteractionStatus.Completed]: 'Baholangan',
-		},
 	},
 	startPage: {
 		scorecards: {

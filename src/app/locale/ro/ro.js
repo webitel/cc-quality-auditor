@@ -1,5 +1,3 @@
-import { InteractionStatus } from '../../../modules/interactions/enums/InteractionStatus.enum';
-
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -15,14 +13,7 @@ export default {
 		transcribe: 'Transcrie',
 		assign: 'Atribuie',
 		interactionDate: 'Data interacțiunii',
-		interactionType: 'Tipul interacțiunii',
 		customer: 'Client',
-		statuses: {
-			[InteractionStatus.NotEvaluated]: 'Neevaluat',
-			[InteractionStatus.Pending]: 'În așteptare',
-			[InteractionStatus.Skipped]: 'Omis',
-			[InteractionStatus.Completed]: 'Evaluat',
-		},
 	},
 	startPage: {
 		scorecards: {
