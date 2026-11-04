@@ -6,6 +6,8 @@ export default {
 		usedScorecardCantEdit:
 			'У анкеты есть оценки, её нельзя редактировать. Откройте её и используйте СОХРАНИТЬ КАК, чтобы создать копию.',
 		usedScorecardCantDelete: 'Анкета используется, её нельзя удалить.',
+		noPositiveRequiredCriterion:
+			'Добавьте хотя бы один обязательный критерий с максимальным баллом больше 0.',
 	},
 	startPage: {
 		scorecards: {
