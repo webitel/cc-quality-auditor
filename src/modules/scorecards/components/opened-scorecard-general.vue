@@ -15,8 +15,19 @@
       />
       <wt-textarea
         v-model:model-value="modelValue.description"
+        class="opened-scorecard-general__description"
         :label="t('vocabulary.description')"
         :disabled="disableUserInput"
+      />
+      <wt-multi-select
+        v-model:model-value="modelValue.interactionType"
+        :label="t('scorecards.interactionType')"
+        :options="interactionTypeOptions"
+        :regle-validation="validationFields?.interactionType"
+        :disabled="disableUserInput"
+        data-key="value"
+        option-value="value"
+        required
       />
       <wt-multi-select
         v-model:model-value="modelValue.teams"
@@ -39,9 +50,11 @@ import type { RegleSchemaFieldStatus } from '@regle/schemas';
 import { TeamsAPI } from '@webitel/api-services/api';
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { WtObject } from '@webitel/ui-sdk/enums';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
+import { InteractionType } from '../enums/InteractionType.enum';
 
 const modelValue = defineModel<EngineAuditForm>({
 	required: true,
@@ -60,4 +73,17 @@ const { disableUserInput } = useUserAccessControl();
 const { hasReadAccess: hasTeamsReadAccess } = useUserAccessControl(
 	WtObject.Team,
 );
+
+const interactionTypeOptions = computed(() =>
+	Object.values(InteractionType).map((value) => ({
+		value,
+		name: t(`scorecards.interactionTypes.${value}`),
+	})),
+);
 </script>
+
+<style lang="scss" scoped>
+.opened-scorecard-general__description {
+  grid-row: span 2;
+}
+</style>
