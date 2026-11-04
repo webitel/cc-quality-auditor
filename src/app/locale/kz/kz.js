@@ -1,3 +1,5 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+
 export default {
 	audit: 'Аудит',
 	scorecards: {
@@ -13,6 +15,23 @@ export default {
 		assign: 'Тағайындау',
 		interactionDate: 'Өзара әрекет күні',
 		customer: 'Клиент',
+		plan: 'Жоспар',
+		dueDate: 'Мерзім',
+		contactReason: 'Хабарласу себебі',
+		contactResult: 'Хабарласу нәтижесі',
+		csat: 'CSAT',
+		ratedAt: 'Бағалау күні',
+		handledBy: 'Қызмет көрсеткен',
+		firstResponse: 'Алғашқы жауап',
+		messages: 'Хабарламалар',
+		skipReason: 'Өткізіп жіберу себебі',
+		skippedBy: 'Кім өткізіп жіберді',
+		skippedAt: 'Өткізіп жіберу күні',
+		handledByTypes: {
+			[HandledBy.Agent]: 'Оператор',
+			[HandledBy.Bot]: 'Бот',
+			[HandledBy.Ivr]: 'IVR',
+		},
 	},
 	startPage: {
 		scorecards: {

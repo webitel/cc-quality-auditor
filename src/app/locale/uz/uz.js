@@ -1,3 +1,5 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -14,6 +16,23 @@ export default {
 		assign: 'Tayinlash',
 		interactionDate: "O'zaro aloqa sanasi",
 		customer: 'Mijoz',
+		plan: 'Reja',
+		dueDate: 'Muddat',
+		contactReason: 'Murojaat sababi',
+		contactResult: 'Murojaat natijasi',
+		csat: 'CSAT',
+		ratedAt: 'Baholangan sana',
+		handledBy: "Xizmat ko'rsatgan",
+		firstResponse: 'Birinchi javob',
+		messages: 'Xabarlar',
+		skipReason: "O'tkazib yuborish sababi",
+		skippedBy: "Kim o'tkazib yubordi",
+		skippedAt: "O'tkazib yuborilgan sana",
+		handledByTypes: {
+			[HandledBy.Agent]: 'Agent',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
 	},
 	startPage: {
 		scorecards: {
