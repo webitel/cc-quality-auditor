@@ -1,4 +1,5 @@
 import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
+import { EngineCallFileType } from '@webitel/api-services/gen/models';
 
 import { HandledBy } from '../../enums/HandledBy.enum';
 
@@ -28,6 +29,8 @@ export const interactionsMock = Array.from(
 		const isInPlan =
 			status !== InteractionStatus.NotEvaluated && index % 4 !== 0;
 		const interactionDate = now - (index + 1) * hour;
+		const hasRecording = !isChat && index % 5 !== 2;
+		const hasTranscript = hasRecording && index % 6 === 3;
 
 		return {
 			id: `${index + 1}`,
@@ -97,6 +100,25 @@ export const interactionsMock = Array.from(
 							name: `Evaluator ${(index % 2) + 1}`,
 						}
 					: undefined,
+			files: hasRecording
+				? [
+						{
+							id: `file-${index + 1}`,
+							name: `recording_${index + 1}.mp3`,
+							type: EngineCallFileType.FileTypeAudio,
+						},
+					]
+				: [],
+			transcripts: hasTranscript
+				? [
+						{
+							id: `transcript-${index + 1}`,
+							file: {
+								name: `recording_${index + 1}.mp3`,
+							},
+						},
+					]
+				: [],
 			skippedAt:
 				status === InteractionStatus.Skipped
 					? interactionDate + hour

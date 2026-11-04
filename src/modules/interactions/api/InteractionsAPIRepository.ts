@@ -1,3 +1,4 @@
+import { CallTranscriptAPI } from '@webitel/api-services/api';
 import {
 	getDefaultGetListResponse,
 	getDefaultGetParams,
@@ -12,6 +13,10 @@ import {
 } from '@webitel/api-services/api/transformers';
 import type { ChannelType } from '@webitel/api-services/enums';
 import { InteractionStatus } from '@webitel/api-services/enums';
+import type {
+	EngineCallFile,
+	EngineTranscriptLookup,
+} from '@webitel/api-services/gen/models';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { convertDuration, normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
@@ -53,6 +58,8 @@ export type InteractionRaw = {
 	skipReason?: string;
 	skippedBy?: Lookup;
 	skippedAt?: number;
+	files: EngineCallFile[];
+	transcripts: EngineTranscriptLookup[];
 };
 
 type GetInteractionsParams = {
@@ -93,6 +100,14 @@ const normalizeInteractionDate = (value?: string | Range) => {
 	};
 };
 
+const groupFilesByType = (files: EngineCallFile[]) =>
+	files.reduce<Record<string, EngineCallFile[]>>((acc, file) => {
+		const type = String(file.type);
+		acc[type] = acc[type] || [];
+		acc[type].push(file);
+		return acc;
+	}, {});
+
 const transformResponseItems = (items: InteractionRaw[]) =>
 	items.map((item) => ({
 		...item,
@@ -112,6 +127,7 @@ const transformResponseItems = (items: InteractionRaw[]) =>
 		firstResponse: item.firstResponse && convertDuration(item.firstResponse),
 		skippedBy: item.skippedBy?.name,
 		skippedAt: computeDateAndTime(item.skippedAt),
+		files: groupFilesByType(item.files),
 	}));
 
 const getList = async ({
@@ -173,8 +189,14 @@ const getList = async ({
 	}
 };
 
+const transcribe = ({ callId }: { callId: string[] }) =>
+	CallTranscriptAPI.create({
+		callId: callId as unknown as string,
+	});
+
 const InteractionsAPIRepository = {
 	getList,
+	transcribe,
 };
 
 export default InteractionsAPIRepository;
