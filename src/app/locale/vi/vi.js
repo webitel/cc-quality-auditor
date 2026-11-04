@@ -1,3 +1,5 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+
 export default {
 	audit: 'Kiểm toán',
 	scorecards: {
@@ -14,6 +16,23 @@ export default {
 		assign: 'Chỉ định',
 		interactionDate: 'Ngày tương tác',
 		customer: 'Khách hàng',
+		plan: 'Kế hoạch',
+		dueDate: 'Hạn chót',
+		contactReason: 'Lý do liên hệ',
+		contactResult: 'Kết quả liên hệ',
+		csat: 'CSAT',
+		ratedAt: 'Thời điểm đánh giá',
+		handledBy: 'Xử lý bởi',
+		firstResponse: 'Phản hồi đầu tiên',
+		messages: 'Tin nhắn',
+		skipReason: 'Lý do bỏ qua',
+		skippedBy: 'Người bỏ qua',
+		skippedAt: 'Thời điểm bỏ qua',
+		handledByTypes: {
+			[HandledBy.Agent]: 'Tổng đài viên',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
 	},
 	startPage: {
 		scorecards: {
