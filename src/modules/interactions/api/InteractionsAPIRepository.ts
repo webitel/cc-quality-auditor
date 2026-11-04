@@ -1,22 +1,96 @@
+import {
+	getDefaultGetListResponse,
+	getDefaultGetParams,
+	getDefaultInstance,
+} from '@webitel/api-services/api/defaults';
+import {
+	applyTransform,
+	generateUrl,
+	merge,
+	notify,
+	snakeToCamel,
+} from '@webitel/api-services/api/transformers';
+import type { ChannelType } from '@webitel/api-services/enums';
 import { InteractionStatus } from '@webitel/api-services/enums';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
-import { convertDuration } from '@webitel/ui-sdk/scripts';
-import { snakeToCamel } from '@webitel/ui-sdk/scripts/caseConverters';
+import { convertDuration, normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
-import { interactionsMock } from './mock/interactionsMock';
+import type { HandledBy } from '../enums/HandledBy.enum';
 
-type InteractionRaw = (typeof interactionsMock)[number];
+type Lookup = {
+	id: string;
+	name: string;
+};
+
+type Range = {
+	from?: number | null;
+	to?: number | null;
+};
+
+export type InteractionRaw = {
+	id: string;
+	interactionDate: number;
+	interactionType: ChannelType;
+	customer: string;
+	agent?: Lookup;
+	team?: Lookup;
+	duration: number;
+	status: InteractionStatus;
+	assignee?: Lookup;
+	score?: number;
+	plan?: Lookup;
+	dueDate?: number;
+	contactReason?: string;
+	contactResult?: string;
+	csat?: number;
+	ratedAt?: number;
+	scorecard?: Lookup;
+	handledBy: HandledBy;
+	source?: string;
+	firstResponse?: number;
+	messages?: number;
+	skipReason?: string;
+	skippedBy?: Lookup;
+	skippedAt?: number;
+};
 
 type GetInteractionsParams = {
 	page?: number;
 	size?: number;
 	sort?: string | null;
+	fields?: string[];
+	createdAt?: string | Range;
+	interactionType?: string[];
+	contact?: number[];
+	agent?: number[];
+	team?: number[];
+	talkDuration?: Range;
+	interactionStatus?: string[];
+	user?: number[];
+	score?: Range;
 };
+
+// URL і назви параметрів — припущення до контракту DT-65
+export const InteractionsUrl = '/interactions';
+
+const instance = getDefaultInstance();
 
 const computeDateAndTime = (timestamp?: number) => {
 	if (!timestamp) return null;
 	return formatDate(timestamp, FormatDateMode.DATETIME);
+};
+
+const normalizeInteractionDate = (value?: string | Range) => {
+	if (typeof value !== 'string') return value;
+	return {
+		from: normalizeToTimestamp(value, {
+			round: 'start',
+		}),
+		to: normalizeToTimestamp(value, {
+			round: 'end',
+		}),
+	};
 };
 
 const transformResponseItems = (items: InteractionRaw[]) =>
@@ -40,41 +114,63 @@ const transformResponseItems = (items: InteractionRaw[]) =>
 		skippedAt: computeDateAndTime(item.skippedAt),
 	}));
 
-const getSortValue = (item: InteractionRaw, key: string) => {
-	const value = item[key as keyof InteractionRaw];
-	return value && typeof value === 'object' && 'name' in value
-		? value.name
-		: value;
-};
-
-const sortItems = (items: InteractionRaw[], sort?: string | null) => {
-	if (!sort) return items;
-
-	const direction = sort.startsWith('-') ? -1 : 1;
-	const key = snakeToCamel(sort.replace(/^[+-]/, ''));
-
-	return [
-		...items,
-	].sort((a, b) => {
-		const aValue = getSortValue(a, key) ?? '';
-		const bValue = getSortValue(b, key) ?? '';
-		if (aValue === bValue) return 0;
-		return aValue > bValue ? direction : -direction;
-	});
-};
-
 const getList = async ({
-	page = 1,
-	size = 10,
+	page,
+	size,
 	sort,
+	fields,
+	createdAt,
+	interactionType,
+	contact,
+	agent,
+	team,
+	talkDuration,
+	interactionStatus,
+	user,
+	score,
 }: GetInteractionsParams) => {
-	const sortedItems = sortItems(interactionsMock, sort);
-	const start = (page - 1) * size;
+	const interactionDate = normalizeInteractionDate(createdAt);
 
-	return {
-		items: transformResponseItems(sortedItems.slice(start, start + size)),
-		next: sortedItems.length > start + size,
-	};
+	const url = applyTransform(
+		{
+			page,
+			size,
+			sort,
+			fields,
+			'interaction_date.from': interactionDate?.from,
+			'interaction_date.to': interactionDate?.to,
+			interaction_type: interactionType,
+			contact_id: contact,
+			agent_id: agent,
+			team_id: team,
+			'duration.from': talkDuration?.from,
+			'duration.to': talkDuration?.to,
+			status: interactionStatus,
+			assignee_id: user,
+			'score.from': score?.from,
+			'score.to': score?.to,
+		},
+		[
+			merge(getDefaultGetParams()),
+			generateUrl(InteractionsUrl),
+		],
+	);
+
+	try {
+		const response = await instance.get(url);
+		const { items, next } = applyTransform(response.data, [
+			snakeToCamel(),
+			merge(getDefaultGetListResponse()),
+		]);
+		return {
+			items: transformResponseItems(items),
+			next,
+		};
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
 };
 
 const InteractionsAPIRepository = {
