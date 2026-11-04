@@ -8,8 +8,10 @@
         <wt-breadcrumb :path="path" />
         <template #actions>
           <wt-button
+            :disabled="isTranscribeDisabled"
+            :loading="isTranscribing"
             color="secondary"
-            disabled
+            @click="transcribe"
           >
             {{ t('interactions.transcribe') }}
           </wt-button>
@@ -134,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
@@ -142,10 +145,11 @@ import {
 } from '@webitel/ui-sdk/enums';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
@@ -191,6 +195,30 @@ initialize();
 
 const resetFilters = () => {
 	filtersManager.value.reset();
+};
+
+const isTranscribing = ref(false);
+
+const isTranscribeDisabled = computed(
+	() =>
+		!selected.value.length ||
+		selected.value.some(
+			({ files, transcripts }) =>
+				!files[EngineCallFileType.FileTypeAudio] || transcripts.length,
+		),
+);
+
+const transcribe = async () => {
+	try {
+		isTranscribing.value = true;
+		await InteractionsAPIRepository.transcribe({
+			callId: selected.value.map(({ id }) => id),
+		});
+	} finally {
+		updateSelected([]);
+		await loadDataList();
+		isTranscribing.value = false;
+	}
 };
 
 const path = computed(() => [
