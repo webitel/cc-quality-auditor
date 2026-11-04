@@ -1,3 +1,5 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -13,8 +15,24 @@ export default {
 		transcribe: 'Transcrie',
 		assign: 'Atribuie',
 		interactionDate: 'Data interacțiunii',
-		interactionType: 'Tipul interacțiunii',
 		customer: 'Client',
+		plan: 'Plan',
+		dueDate: 'Termen',
+		contactReason: 'Motivul contactului',
+		contactResult: 'Rezultatul contactului',
+		csat: 'CSAT',
+		ratedAt: 'Data evaluării',
+		handledBy: 'Gestionat de',
+		firstResponse: 'Primul răspuns',
+		messages: 'Mesaje',
+		skipReason: 'Motivul omiterii',
+		skippedBy: 'Omis de',
+		skippedAt: 'Data omiterii',
+		handledByTypes: {
+			[HandledBy.Agent]: 'Agent',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
 	},
 	startPage: {
 		scorecards: {

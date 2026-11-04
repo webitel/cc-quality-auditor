@@ -1,3 +1,5 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+
 export default {
 	audit: 'Audyt',
 	scorecards: {
@@ -13,8 +15,24 @@ export default {
 		transcribe: 'Transkrybuj',
 		assign: 'Przypisz',
 		interactionDate: 'Data interakcji',
-		interactionType: 'Typ interakcji',
 		customer: 'Klient',
+		plan: 'Plan',
+		dueDate: 'Termin',
+		contactReason: 'Powód kontaktu',
+		contactResult: 'Wynik kontaktu',
+		csat: 'CSAT',
+		ratedAt: 'Data oceny',
+		handledBy: 'Obsłużone przez',
+		firstResponse: 'Pierwsza odpowiedź',
+		messages: 'Wiadomości',
+		skipReason: 'Powód pominięcia',
+		skippedBy: 'Pominięte przez',
+		skippedAt: 'Data pominięcia',
+		handledByTypes: {
+			[HandledBy.Agent]: 'Agent',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
 	},
 	startPage: {
 		scorecards: {
