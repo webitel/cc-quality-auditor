@@ -93,6 +93,17 @@
                 :text="t(`objects.interactionStatus.${item.status}`)"
               />
             </template>
+            <template #dueDate="{ item }">
+              <span
+                class="interactions__due-date"
+                :class="{ 'interactions__due-date--overdue': item.isOverdue }"
+              >
+                {{ item.dueDate }}
+              </span>
+            </template>
+            <template #handledBy="{ item }">
+              {{ t(`interactions.handledByTypes.${item.handledBy}`) }}
+            </template>
             <template #column-filter="scope">
               <interactions-column-filter v-bind="scope" />
             </template>
@@ -211,5 +222,9 @@ const {
 <style lang="scss" scoped>
 .interactions {
   width: 100%;
+
+  &__due-date--overdue {
+    color: var(--error-color);
+  }
 }
 </style>
