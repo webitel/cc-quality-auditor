@@ -1,5 +1,8 @@
 import type { DatalistTableHeader } from '@webitel/ui-datalist';
+import { FilterOption } from '@webitel/ui-datalist/filters';
 import { SortSymbols } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
+
+import { filterConfigs } from '../../../configs/filtersOptions';
 
 export const headers: DatalistTableHeader[] = [
 	{
@@ -8,6 +11,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'interaction_date',
 		sort: SortSymbols.DESC,
+		filter: filterConfigs[FilterOption.CreatedAt],
 	},
 	{
 		value: 'interactionType',
@@ -15,6 +19,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'interaction_type',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionType],
 	},
 	{
 		value: 'customer',
@@ -22,6 +27,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'customer',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Contact],
 	},
 	{
 		value: 'agent',
@@ -32,6 +38,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'agent',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Agent],
 	},
 	{
 		value: 'team',
@@ -42,6 +49,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'team',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Team],
 	},
 	{
 		value: 'duration',
@@ -49,6 +57,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'duration',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.TalkDuration],
 	},
 	{
 		value: 'status',
@@ -56,6 +65,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'status',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionStatus],
 	},
 	{
 		value: 'assignee',
@@ -63,6 +73,7 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'assignee',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.User],
 	},
 	{
 		value: 'score',
@@ -73,5 +84,6 @@ export const headers: DatalistTableHeader[] = [
 		show: true,
 		field: 'score',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Score],
 	},
 ];
