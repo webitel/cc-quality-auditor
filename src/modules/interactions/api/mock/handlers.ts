@@ -62,4 +62,27 @@ export const interactionsHandlers = [
 			);
 		},
 	),
+	http.post(
+		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
+		async ({ request }) => {
+			const { uuid } = (await request.json()) as {
+				uuid: string[];
+			};
+
+			interactionsMock
+				.filter(({ id }) => uuid.includes(id))
+				.forEach((item) => {
+					item.transcripts.push({
+						id: `transcript-${item.id}`,
+						file: {
+							name: item.files[0]?.name,
+						},
+					});
+				});
+
+			return HttpResponse.json({
+				items: [],
+			});
+		},
+	),
 ];
