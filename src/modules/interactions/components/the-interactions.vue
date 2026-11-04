@@ -90,7 +90,7 @@
             <template #status="{ item }">
               <wt-indicator
                 :color="InteractionStatusColor[item.status]"
-                :text="t(`interactions.statuses.${item.status}`)"
+                :text="t(`objects.interactionStatus.${item.status}`)"
               />
             </template>
             <template #column-filter="scope">

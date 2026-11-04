@@ -1,4 +1,4 @@
-import { InteractionStatus } from './InteractionStatus.enum';
+import { InteractionStatus } from '@webitel/api-services/enums';
 
 export const InteractionStatusColor = {
 	[InteractionStatus.NotEvaluated]: 'disabled',

@@ -15,7 +15,7 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'interactionType',
-		locale: 'interactions.interactionType',
+		locale: 'objects.interactionType.interactionType',
 		show: true,
 		field: 'interaction_type',
 		sort: SortSymbols.NONE,
@@ -61,7 +61,7 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'status',
-		locale: 'reusable.status',
+		locale: 'objects.interactionStatus.interactionStatus',
 		show: true,
 		field: 'status',
 		sort: SortSymbols.NONE,
