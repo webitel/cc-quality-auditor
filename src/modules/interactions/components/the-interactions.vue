@@ -16,8 +16,9 @@
             {{ t('interactions.transcribe') }}
           </wt-button>
           <wt-button
+            :disabled="isAssignDisabled"
             color="secondary"
-            disabled
+            @click="isAssignPopupOpened = true"
           >
             {{ t('interactions.assign') }}
           </wt-button>
@@ -131,11 +132,18 @@
           />
         </div>
       </section>
+      <interactions-assign-popup
+        v-if="isAssignPopupOpened"
+        :ids="selected.map(({ id }) => id)"
+        @close="isAssignPopupOpened = false"
+        @assigned="handleAssigned"
+      />
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup lang="ts">
+import { InteractionStatus } from '@webitel/api-services/enums';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
@@ -153,11 +161,13 @@ import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
+import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
 
 defineOptions({
 	components: {
 		FiltersActionsMenu,
+		InteractionsAssignPopup,
 		InteractionsColumnFilter,
 	},
 });
@@ -219,6 +229,20 @@ const transcribe = async () => {
 		await loadDataList();
 		isTranscribing.value = false;
 	}
+};
+
+const isAssignPopupOpened = ref(false);
+
+const isAssignDisabled = computed(
+	() =>
+		!selected.value.length ||
+		selected.value.some(({ status }) => status === InteractionStatus.Completed),
+);
+
+const handleAssigned = async () => {
+	isAssignPopupOpened.value = false;
+	updateSelected([]);
+	await loadDataList();
 };
 
 const path = computed(() => [
