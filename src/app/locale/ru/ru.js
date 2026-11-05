@@ -13,6 +13,9 @@ export default {
 		allInteractions: 'Все взаимодействия',
 		transcribe: 'Транскрибировать',
 		assign: 'Назначить',
+		assignInteractions:
+			'Назначить взаимодействие | Назначить взаимодействия: {n}',
+		me: '(я)',
 		interactionDate: 'Дата взаимодействия',
 		customer: 'Клиент',
 		plan: 'План',

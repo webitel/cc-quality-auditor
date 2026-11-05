@@ -14,6 +14,9 @@ export default {
 		allInteractions: "Barcha o'zaro aloqalar",
 		transcribe: 'Transkriptsiya qilish',
 		assign: 'Tayinlash',
+		assignInteractions:
+			"O'zaro aloqani tayinlash | O'zaro aloqalarni tayinlash: {n}",
+		me: '(men)',
 		interactionDate: "O'zaro aloqa sanasi",
 		customer: 'Mijoz',
 		plan: 'Reja',

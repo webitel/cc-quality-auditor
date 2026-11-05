@@ -14,6 +14,8 @@ export default {
 		allInteractions: 'Toate interacțiunile',
 		transcribe: 'Transcrie',
 		assign: 'Atribuie',
+		assignInteractions: 'Atribuie interacțiunea | Atribuie {n} interacțiuni',
+		me: '(eu)',
 		interactionDate: 'Data interacțiunii',
 		customer: 'Client',
 		plan: 'Plan',

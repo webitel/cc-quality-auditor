@@ -13,6 +13,8 @@ export default {
 		allInteractions: 'All interactions',
 		transcribe: 'Transcribe',
 		assign: 'Assign',
+		assignInteractions: 'Assign interaction | Assign {n} interactions',
+		me: '(me)',
 		interactionDate: 'Interaction date',
 		customer: 'Customer',
 		plan: 'Plan',

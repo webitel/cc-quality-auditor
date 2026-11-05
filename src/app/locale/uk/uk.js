@@ -13,6 +13,8 @@ export default {
 		allInteractions: 'Усі взаємодії',
 		transcribe: 'Транскрибувати',
 		assign: 'Призначити',
+		assignInteractions: 'Призначити взаємодію | Призначити взаємодії: {n}',
+		me: '(я)',
 		interactionDate: 'Дата взаємодії',
 		customer: 'Клієнт',
 		plan: 'План',
