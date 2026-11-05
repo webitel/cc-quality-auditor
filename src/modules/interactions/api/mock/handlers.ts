@@ -1,4 +1,5 @@
 import { camelToSnake } from '@webitel/api-services/api/transformers';
+import { InteractionStatus } from '@webitel/api-services/enums';
 import { HttpResponse, http } from 'msw';
 
 import {
@@ -83,6 +84,27 @@ export const interactionsHandlers = [
 			return HttpResponse.json({
 				items: [],
 			});
+		},
+	),
+	http.post(
+		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/assign`,
+		async ({ request }) => {
+			const { interaction_ids, assignee } = (await request.json()) as {
+				interaction_ids: string[];
+				assignee: {
+					id: string;
+					name: string;
+				};
+			};
+
+			interactionsMock
+				.filter(({ id }) => interaction_ids.includes(id))
+				.forEach((item) => {
+					item.status = InteractionStatus.Pending;
+					item.assignee = assignee;
+				});
+
+			return HttpResponse.json({});
 		},
 	),
 ];

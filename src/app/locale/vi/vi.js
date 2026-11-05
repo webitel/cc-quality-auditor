@@ -14,6 +14,8 @@ export default {
 		allInteractions: 'Tất cả tương tác',
 		transcribe: 'Chuyển đổi bản ghi',
 		assign: 'Chỉ định',
+		assignInteractions: 'Chỉ định tương tác | Chỉ định {n} tương tác',
+		me: '(tôi)',
 		interactionDate: 'Ngày tương tác',
 		customer: 'Khách hàng',
 		plan: 'Kế hoạch',
