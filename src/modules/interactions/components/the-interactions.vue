@@ -22,12 +22,13 @@
           >
             {{ t('interactions.assign') }}
           </wt-button>
-          <wt-button
-            color="secondary"
-            disabled
-          >
-            {{ t('reusable.export') }}
-          </wt-button>
+          <export-action
+            :filters="filters"
+            :fields="fields"
+            :selected="selected"
+            filename="interactions"
+            @fetch="InteractionsAPIRepository.exportToFile"
+          />
           <wt-button-select
             :options="[]"
             color="secondary"
@@ -151,6 +152,7 @@ import {
 	IconAction,
 	WtApplication,
 } from '@webitel/ui-sdk/enums';
+import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
@@ -166,6 +168,7 @@ import InteractionsColumnFilter from './interactions-column-filter.vue';
 
 defineOptions({
 	components: {
+		ExportAction,
 		FiltersActionsMenu,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
@@ -202,6 +205,10 @@ const {
 } = tableStore;
 
 initialize();
+
+const filters = computed(() => filtersManager.value.getAllValues());
+
+const fields = computed(() => shownHeaders.value.map(({ field }) => field));
 
 const resetFilters = () => {
 	filtersManager.value.reset();
@@ -266,7 +273,7 @@ const {
 } = useTableEmpty({
 	dataList,
 	error,
-	filters: computed(() => filtersManager.value.getAllValues()),
+	filters,
 	isLoading,
 });
 </script>
