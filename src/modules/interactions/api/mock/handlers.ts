@@ -52,7 +52,8 @@ export const interactionsHandlers = [
 					isInRange(item.duration, getRange(query, 'duration')) &&
 					isOneOf(item.status, query.getAll('status')) &&
 					isOneOf(item.assignee?.id, query.getAll('assignee_id')) &&
-					isInRange(item.score, getRange(query, 'score')),
+					isInRange(item.score, getRange(query, 'score')) &&
+					isOneOf(item.id, query.getAll('id')),
 			);
 
 			return HttpResponse.json(

@@ -76,6 +76,7 @@ type GetInteractionsParams = {
 	interactionStatus?: string[];
 	user?: number[];
 	score?: Range;
+	id?: (string | number)[];
 };
 
 // URL і назви параметрів — припущення до контракту DT-65
@@ -130,7 +131,7 @@ const transformResponseItems = (items: InteractionRaw[]) =>
 		files: groupFilesByType(item.files),
 	}));
 
-const getList = async ({
+const getListUrl = ({
 	page,
 	size,
 	sort,
@@ -144,10 +145,11 @@ const getList = async ({
 	interactionStatus,
 	user,
 	score,
+	id,
 }: GetInteractionsParams) => {
 	const interactionDate = normalizeInteractionDate(createdAt);
 
-	const url = applyTransform(
+	return applyTransform(
 		{
 			page,
 			size,
@@ -165,21 +167,47 @@ const getList = async ({
 			assignee_id: user,
 			'score.from': score?.from,
 			'score.to': score?.to,
+			id,
 		},
 		[
 			merge(getDefaultGetParams()),
 			generateUrl(InteractionsUrl),
 		],
 	);
+};
 
+const getList = async (params: GetInteractionsParams) => {
 	try {
-		const response = await instance.get(url);
+		const response = await instance.get(getListUrl(params));
 		const { items, next } = applyTransform(response.data, [
 			snakeToCamel(),
 			merge(getDefaultGetListResponse()),
 		]);
 		return {
 			items: transformResponseItems(items),
+			next,
+		};
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
+const exportToFile = async (params: GetInteractionsParams) => {
+	try {
+		const response = await instance.get(getListUrl(params));
+		const { items, next } = applyTransform(response.data, [
+			merge(getDefaultGetListResponse()),
+		]);
+		return {
+			items: items.map((item: Record<string, number>) => ({
+				...item,
+				interaction_date: computeDateAndTime(item.interaction_date),
+				due_date: computeDateAndTime(item.due_date),
+				rated_at: computeDateAndTime(item.rated_at),
+				skipped_at: computeDateAndTime(item.skipped_at),
+			})),
 			next,
 		};
 	} catch (err) {
@@ -216,6 +244,7 @@ const assign = async ({
 
 const InteractionsAPIRepository = {
 	getList,
+	exportToFile,
 	transcribe,
 	assign,
 };
