@@ -194,9 +194,30 @@ const transcribe = ({ callId }: { callId: string[] }) =>
 		callId: callId as unknown as string,
 	});
 
+const assign = async ({
+	ids,
+	assignee,
+}: {
+	ids: string[];
+	assignee: Lookup;
+}) => {
+	try {
+		const response = await instance.post(`${InteractionsUrl}/assign`, {
+			interaction_ids: ids,
+			assignee,
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const InteractionsAPIRepository = {
 	getList,
 	transcribe,
+	assign,
 };
 
 export default InteractionsAPIRepository;
