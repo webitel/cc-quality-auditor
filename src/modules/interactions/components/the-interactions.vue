@@ -26,13 +26,13 @@
             :loading="isExporting"
             @export="exportFile"
           />
-          <wt-button-select
-            :options="[]"
-            color="secondary"
-            disabled
-          >
-            {{ t('reusable.download') }}
-          </wt-button-select>
+          <download-action
+            :selected="selected"
+            :types="downloadTypes"
+            :disabled="!selected.length"
+            filename="interactions"
+            @downloaded="handleDownloaded"
+          />
         </template>
       </wt-page-header>
     </template>
@@ -148,8 +148,10 @@ import {
 	IconAction,
 	WtApplication,
 } from '@webitel/ui-sdk/enums';
+import { DownloadType } from '@webitel/ui-sdk/modules/FilesExport';
 import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
 import { useServerExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useServerExportFile';
+import DownloadAction from '@webitel/ui-sdk/src/modules/FilesExport/components/download-action.vue';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
@@ -167,6 +169,7 @@ import InteractionsColumnFilter from './interactions-column-filter.vue';
 
 defineOptions({
 	components: {
+		DownloadAction,
 		ExportAction,
 		FiltersActionsMenu,
 		InteractionsAssignPopup,
@@ -259,6 +262,17 @@ const { isExporting, exportFile } = useServerExportFile({
 		}),
 	}),
 });
+
+const downloadTypes = [
+	DownloadType.AudioRecordings,
+	DownloadType.ScreenRecordings,
+	DownloadType.Transcriptions,
+];
+
+const handleDownloaded = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
 
 const path = computed(() => [
 	{
