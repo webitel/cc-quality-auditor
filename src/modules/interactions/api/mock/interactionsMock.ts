@@ -31,6 +31,7 @@ export const interactionsMock = Array.from(
 		const interactionDate = now - (index + 1) * hour;
 		const hasRecording = !isChat && index % 5 !== 2;
 		const hasTranscript = hasRecording && index % 6 === 3;
+		const hasScreenRecording = hasRecording && index % 4 === 3;
 
 		return {
 			id: `${index + 1}`,
@@ -100,15 +101,26 @@ export const interactionsMock = Array.from(
 							name: `Evaluator ${(index % 2) + 1}`,
 						}
 					: undefined,
-			files: hasRecording
-				? [
-						{
-							id: `file-${index + 1}`,
-							name: `recording_${index + 1}.mp3`,
-							type: EngineCallFileType.FileTypeAudio,
-						},
-					]
-				: [],
+			files: [
+				...(hasRecording
+					? [
+							{
+								id: `file-${index + 1}`,
+								name: `recording_${index + 1}.mp3`,
+								type: EngineCallFileType.FileTypeAudio,
+							},
+						]
+					: []),
+				...(hasScreenRecording
+					? [
+							{
+								id: `screen-${index + 1}`,
+								name: `screen_${index + 1}.mp4`,
+								type: EngineCallFileType.FileTypeScreensharing,
+							},
+						]
+					: []),
+			],
 			transcripts: hasTranscript
 				? [
 						{

@@ -87,6 +87,35 @@ export const interactionsHandlers = [
 			});
 		},
 	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/transcript_file/:id/phrases`,
+		() =>
+			HttpResponse.json({
+				items: [
+					{
+						channel: 0,
+						start_sec: 0,
+						end_sec: 4,
+						phrase: 'Hello, how can I help you?',
+					},
+					{
+						channel: 1,
+						start_sec: 5,
+						end_sec: 9,
+						phrase: 'I would like to check my order.',
+					},
+				],
+			}),
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/recordings/:id/download`,
+		() =>
+			new HttpResponse(new Uint8Array(16), {
+				headers: {
+					'Content-Type': 'application/octet-stream',
+				},
+			}),
+	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/assign`,
 		async ({ request }) => {
