@@ -52,6 +52,18 @@
               ]"
               @click:refresh="loadDataList"
             >
+              <template #search-bar>
+                <dynamic-filter-search
+                  :filters-manager="filtersManager"
+                  :is-filters-restoring="isFiltersRestoring"
+                  :search-mode="searchMode"
+                  :search-mode-options="searchModeOptions"
+                  @filter:add="addFilter"
+                  @filter:update="updateFilter"
+                  @filter:delete="deleteFilter"
+                  @update:search-mode="updateSearchMode"
+                />
+              </template>
               <template #filters>
                 <filters-actions-menu
                   :filters-manager="filtersManager"
@@ -142,7 +154,10 @@
 
 <script setup lang="ts">
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
-import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
+import {
+	DynamicFilterSearchComponent as DynamicFilterSearch,
+	FiltersActionsMenuComponent as FiltersActionsMenu,
+} from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
 	IconAction,
@@ -163,6 +178,7 @@ import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
+import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
@@ -170,6 +186,7 @@ import InteractionsColumnFilter from './interactions-column-filter.vue';
 defineOptions({
 	components: {
 		DownloadAction,
+		DynamicFilterSearch,
 		ExportAction,
 		FiltersActionsMenu,
 		InteractionsAssignPopup,
@@ -194,6 +211,8 @@ const {
 	fields,
 	sort,
 	filtersManager,
+	isFiltersRestoring,
+	searchMode,
 } = storeToRefs(tableStore);
 
 const {
@@ -206,6 +225,10 @@ const {
 	updateShownHeaders,
 	columnResize,
 	columnReorder,
+	addFilter,
+	updateFilter,
+	deleteFilter,
+	updateSearchMode,
 } = tableStore;
 
 initialize();
@@ -213,8 +236,17 @@ initialize();
 const filters = computed(() => filtersManager.value.getAllValues());
 
 const resetFilters = () => {
-	filtersManager.value.reset();
+	filtersManager.value.reset({
+		exclude: Object.values(SearchMode),
+	});
 };
+
+const searchModeOptions = computed(() =>
+	Object.values(SearchMode).map((mode) => ({
+		value: mode,
+		text: t(`interactions.searchModes.${mode}`),
+	})),
+);
 
 const selectedAudioFileIds = computed(() => [
 	...new Set(
