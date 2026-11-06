@@ -2,6 +2,7 @@ import { ChannelType } from '@webitel/api-services/enums';
 
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Kiểm toán',
@@ -45,6 +46,11 @@ export default {
 				linked('objects.interactionType.chat'),
 			[InteractionType[ChannelType.Email]]: ({ linked }) =>
 				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Tìm kiếm thông thường',
+			[SearchMode.Fts]: 'Tìm kiếm toàn văn bản',
+			[SearchMode.Description]: 'Bình luận của tác vụ',
 		},
 	},
 	startPage: {

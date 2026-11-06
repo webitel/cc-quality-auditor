@@ -2,6 +2,7 @@ import { ChannelType } from '@webitel/api-services/enums';
 
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Audit',
@@ -46,6 +47,11 @@ export default {
 				linked('objects.interactionType.chat'),
 			[InteractionType[ChannelType.Email]]: ({ linked }) =>
 				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Oddiy qidiruv',
+			[SearchMode.Fts]: "To'liq matnli qidiruv",
+			[SearchMode.Description]: 'Agent izohi',
 		},
 	},
 	startPage: {
