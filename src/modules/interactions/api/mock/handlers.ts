@@ -38,6 +38,7 @@ export const interactionsHandlers = [
 		({ request }) => {
 			const query = new URL(request.url).searchParams;
 			const items = camelToSnake()(interactionsMock) as InteractionWire[];
+			const search = query.get('number')?.toLowerCase();
 
 			const filteredItems = items.filter(
 				(item) =>
@@ -53,7 +54,8 @@ export const interactionsHandlers = [
 					isOneOf(item.status, query.getAll('status')) &&
 					isOneOf(item.assignee?.id, query.getAll('assignee_id')) &&
 					isInRange(item.score, getRange(query, 'score')) &&
-					isOneOf(item.id, query.getAll('id')),
+					isOneOf(item.id, query.getAll('id')) &&
+					(!search || String(item.customer).toLowerCase().includes(search)),
 			);
 
 			return HttpResponse.json(

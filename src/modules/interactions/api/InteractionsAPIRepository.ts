@@ -77,6 +77,9 @@ type GetInteractionsParams = {
 	user?: number[];
 	score?: Range;
 	id?: (string | number)[];
+	search?: string;
+	fts?: string;
+	description?: string;
 };
 
 // URL і назви параметрів — припущення до контракту DT-65
@@ -146,6 +149,9 @@ const getListUrl = ({
 	user,
 	score,
 	id,
+	search,
+	fts,
+	description,
 }: GetInteractionsParams) => {
 	const interactionDate = normalizeInteractionDate(createdAt);
 
@@ -168,6 +174,9 @@ const getListUrl = ({
 			'score.from': score?.from,
 			'score.to': score?.to,
 			id,
+			number: search,
+			fts,
+			agent_description: description,
 		},
 		[
 			merge(getDefaultGetParams()),

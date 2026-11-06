@@ -1,4 +1,5 @@
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Аудит',
@@ -34,6 +35,11 @@ export default {
 			[HandledBy.Agent]: 'Оператор',
 			[HandledBy.Bot]: 'Бот',
 			[HandledBy.Ivr]: 'IVR',
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Қарапайым іздеу',
+			[SearchMode.Fts]: 'Толық мәтінді іздеу',
+			[SearchMode.Description]: 'Оператордың түсініктемесі',
 		},
 	},
 	startPage: {
