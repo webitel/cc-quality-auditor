@@ -1,4 +1,5 @@
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Аудит',
@@ -33,6 +34,11 @@ export default {
 			[HandledBy.Agent]: 'Оператор',
 			[HandledBy.Bot]: 'Бот',
 			[HandledBy.Ivr]: 'IVR',
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Звичайний пошук',
+			[SearchMode.Fts]: 'Повнотекстовий пошук',
+			[SearchMode.Description]: 'Коментар оператора',
 		},
 	},
 	startPage: {

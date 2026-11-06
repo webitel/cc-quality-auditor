@@ -1,4 +1,5 @@
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Kiểm toán',
@@ -34,6 +35,11 @@ export default {
 			[HandledBy.Agent]: 'Tổng đài viên',
 			[HandledBy.Bot]: 'Bot',
 			[HandledBy.Ivr]: 'IVR',
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Tìm kiếm thông thường',
+			[SearchMode.Fts]: 'Tìm kiếm toàn văn bản',
+			[SearchMode.Description]: 'Bình luận của tác vụ',
 		},
 	},
 	startPage: {
