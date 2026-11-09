@@ -99,6 +99,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.due_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.DueDate],
 	},
 	{
 		value: 'contactReason',
@@ -127,6 +128,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.rated_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.RatedAt],
 	},
 	{
 		value: 'scorecard',
@@ -137,6 +139,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.scorecard',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Scorecard],
 	},
 	{
 		value: 'handledBy',
@@ -144,6 +147,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'handled_by',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionHandledBy],
 	},
 	{
 		value: 'source',
@@ -158,6 +162,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'chat.first_response_sec',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.FirstResponse],
 	},
 	{
 		value: 'messages',
@@ -165,6 +170,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'chat.message_count',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Messages],
 	},
 	{
 		value: 'skipReason',
@@ -179,6 +185,7 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.skipped_by',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.SkippedBy],
 	},
 	{
 		value: 'skippedAt',
@@ -186,5 +193,6 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.skipped_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.SkippedAt],
 	},
 ];
