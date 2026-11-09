@@ -95,7 +95,7 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'dueDate',
-		locale: 'interactions.dueDate',
+		locale: 'objects.interaction.dueDate',
 		show: false,
 		field: 'evaluation.due_at',
 		sort: SortSymbols.NONE,
@@ -123,7 +123,7 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'ratedAt',
-		locale: 'interactions.ratedAt',
+		locale: 'objects.interaction.ratedAt',
 		show: false,
 		field: 'evaluation.rated_at',
 		sort: SortSymbols.NONE,
@@ -140,7 +140,7 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'handledBy',
-		locale: 'interactions.handledBy',
+		locale: 'objects.interactionHandledBy.interactionHandledBy',
 		show: false,
 		field: 'handled_by',
 		sort: SortSymbols.NONE,
@@ -154,14 +154,14 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'firstResponse',
-		locale: 'interactions.firstResponse',
+		locale: 'objects.interaction.firstResponse',
 		show: false,
 		field: 'chat.first_response_sec',
 		sort: SortSymbols.NONE,
 	},
 	{
 		value: 'messages',
-		locale: 'interactions.messages',
+		locale: 'objects.interaction.messages',
 		show: false,
 		field: 'chat.message_count',
 		sort: SortSymbols.NONE,
@@ -175,14 +175,14 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'skippedBy',
-		locale: 'interactions.skippedBy',
+		locale: 'objects.interaction.skippedBy',
 		show: false,
 		field: 'evaluation.skipped_by',
 		sort: SortSymbols.NONE,
 	},
 	{
 		value: 'skippedAt',
-		locale: 'interactions.skippedAt',
+		locale: 'objects.interaction.skippedAt',
 		show: false,
 		field: 'evaluation.skipped_at',
 		sort: SortSymbols.NONE,
