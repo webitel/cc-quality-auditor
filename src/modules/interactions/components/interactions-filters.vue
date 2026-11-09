@@ -2,11 +2,15 @@
   <table-filters-panel
     :filters-manager="filtersManager"
     :filter-options="filtersOptions"
+    :preset-namespace="namespace"
+    :use-presets-store="useInteractionsFilterPresetsStore"
     :has-read-access="userinfoStore.hasReadAccess"
     @filter:add="addFilter"
     @filter:update="updateFilter"
     @filter:delete="deleteFilter"
     @filter:reset-all="resetFilters"
+    @preset:apply="applyPreset"
+    @preset:restore="restorePreset"
     @hide="emit('hide')"
   />
 </template>
@@ -22,7 +26,11 @@ import { storeToRefs } from 'pinia';
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import { filtersOptions } from '../configs/filtersOptions';
 import { SearchMode } from '../enums/SearchMode.enum';
-import { useInteractionsDatalistStore } from '../stores';
+import {
+	InteractionsNamespace as namespace,
+	useInteractionsDatalistStore,
+	useInteractionsFilterPresetsStore,
+} from '../stores';
 
 defineOptions({
 	components: {
@@ -74,5 +82,14 @@ const resetFilters = () => {
 		name: FilterOption.CreatedAt,
 		value: RelativeDatetimeValue.Today,
 	});
+};
+
+const applyPreset = (snapshot: string) => {
+	resetFilters();
+	filtersManager.value.fromString(snapshot);
+};
+
+const restorePreset = (snapshot: string) => {
+	filtersManager.value.fromString(snapshot);
 };
 </script>
