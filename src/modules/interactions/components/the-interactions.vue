@@ -96,6 +96,7 @@
             :data="dataList"
             :headers="shownHeaders"
             :selected="selected"
+            fixed-actions
             sortable
             resizable-columns
             reorderable-columns
@@ -126,6 +127,14 @@
             </template>
             <template #column-filter="scope">
               <interactions-column-filter v-bind="scope" />
+            </template>
+            <template #actions="{ item }">
+              <wt-call-media-action
+                :playing-file-id="currentlyMediaPlaying"
+                :files="item.files"
+                @play="play"
+                @stop="closePlayer"
+              />
             </template>
             <template #empty>
               <wt-empty
@@ -163,6 +172,24 @@
       />
     </template>
   </wt-page-wrapper>
+
+  <wt-player
+    v-if="audioData"
+    :src="audioData.src"
+    :id="audioData.id"
+    position="fixed"
+    @close="closePlayer"
+    @play="isMediaPlayingNow = true"
+  />
+
+  <wt-vidstack-player
+    v-if="videoData"
+    closable
+    :src="videoData.src"
+    :title="videoData.text"
+    :size="ComponentSize.MD"
+    @close="closePlayer"
+  />
 </template>
 
 <script setup lang="ts">
@@ -172,7 +199,14 @@ import {
 	FilterOption,
 } from '@webitel/ui-datalist/filters';
 import {
+	WtCallMediaAction,
+	WtPlayer,
+	WtVidstackPlayer,
+} from '@webitel/ui-sdk/components';
+import { usePlayMedia } from '@webitel/ui-sdk/composables';
+import {
 	AuditorSections,
+	ComponentSize,
 	IconAction,
 	WtApplication,
 } from '@webitel/ui-sdk/enums';
@@ -206,6 +240,9 @@ defineOptions({
 		InteractionsColumnFilter,
 		InteractionsDeleteEvaluationsPopup,
 		InteractionsFilters,
+		WtCallMediaAction,
+		WtPlayer,
+		WtVidstackPlayer,
 	},
 });
 
@@ -341,6 +378,16 @@ const handleDownloaded = async () => {
 	await loadDataList();
 };
 
+const {
+	audioData,
+	videoData,
+	currentlyMediaPlaying,
+	isMediaPlayingNow,
+
+	play,
+	closePlayer,
+} = usePlayMedia();
+
 const path = computed(() => [
 	{
 		name: t('audit'),
@@ -374,5 +421,11 @@ const {
   &__due-date--overdue {
     color: var(--error-color);
   }
+}
+
+.wt-player {
+  right: var(--spacing-xs);
+  left: var(--spacing-xs);
+  bottom: var(--spacing-xs);
 }
 </style>
