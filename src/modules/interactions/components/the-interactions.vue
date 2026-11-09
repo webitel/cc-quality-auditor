@@ -51,9 +51,12 @@
                 IconAction.REFRESH,
                 IconAction.FILTERS,
                 IconAction.COLUMNS,
+                IconAction.DELETE,
               ]"
+              :disabled:delete="isDeleteDisabled"
               @click:refresh="loadDataList"
               @click:filters="showActionsPanel = !showActionsPanel"
+              @click:delete="isDeleteEvaluationsPopupOpened = true"
             >
               <template #search-bar>
                 <dynamic-filter-search
@@ -152,11 +155,18 @@
         @close="isAssignPopupOpened = false"
         @assigned="handleAssigned"
       />
+      <interactions-delete-evaluations-popup
+        v-if="isDeleteEvaluationsPopupOpened"
+        :ids="selectedIds"
+        @close="isDeleteEvaluationsPopupOpened = false"
+        @deleted="handleEvaluationsDeleted"
+      />
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup lang="ts">
+import { InteractionStatus } from '@webitel/api-services/enums';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import {
 	DynamicFilterSearchComponent as DynamicFilterSearch,
@@ -185,6 +195,7 @@ import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
+import InteractionsDeleteEvaluationsPopup from './interactions-delete-evaluations-popup.vue';
 import InteractionsFilters from './interactions-filters.vue';
 
 defineOptions({
@@ -194,6 +205,7 @@ defineOptions({
 		ExportAction,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
+		InteractionsDeleteEvaluationsPopup,
 		InteractionsFilters,
 	},
 });
@@ -238,6 +250,8 @@ const {
 initialize();
 
 const filters = computed(() => filtersManager.value.getAllValues());
+
+const selectedIds = computed(() => selected.value.map(({ id }) => id));
 
 const showActionsPanel = ref(true);
 
@@ -305,6 +319,21 @@ const { isExporting, exportFile } = useExportFile({
 		}),
 	filename: 'interactions',
 });
+
+const isDeleteEvaluationsPopupOpened = ref(false);
+
+const isDeleteDisabled = computed(
+	() =>
+		!selected.value.length ||
+		selected.value.some(
+			({ status }) => status === InteractionStatus.NotEvaluated,
+		),
+);
+
+const handleEvaluationsDeleted = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
 
 const downloadTypes = [
 	DownloadType.AudioRecordings,
