@@ -135,6 +135,10 @@
                 @play="play"
                 @stop="closePlayer"
               />
+              <wt-icon-btn
+                icon="arrow-right"
+                @click="openCard(item)"
+              />
             </template>
             <template #empty>
               <wt-empty
@@ -218,6 +222,7 @@ import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
@@ -247,6 +252,8 @@ defineOptions({
 });
 
 const { t } = useI18n();
+
+const router = useRouter();
 
 const tableStore = useInteractionsDatalistStore();
 
@@ -387,6 +394,14 @@ const {
 	play,
 	closePlayer,
 } = usePlayMedia();
+
+const openCard = ({ id }: { id: string }) =>
+	router.push({
+		name: `${AuditorSections.Interactions}-card`,
+		params: {
+			id,
+		},
+	});
 
 const path = computed(() => [
 	{
