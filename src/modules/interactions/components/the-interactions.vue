@@ -115,7 +115,7 @@
               </span>
             </template>
             <template #handledBy="{ item }">
-              {{ t(`interactions.handledByTypes.${item.handledBy}`) }}
+              {{ t(`objects.interactionHandledBy.${item.handledBy}`) }}
             </template>
             <template #column-filter="scope">
               <interactions-column-filter v-bind="scope" />

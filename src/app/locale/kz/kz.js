@@ -1,4 +1,3 @@
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -21,22 +20,10 @@ export default {
 		interactionDate: 'Өзара әрекет күні',
 		customer: 'Клиент',
 		plan: 'Жоспар',
-		dueDate: 'Мерзім',
 		contactReason: 'Хабарласу себебі',
 		contactResult: 'Хабарласу нәтижесі',
 		csat: 'CSAT',
-		ratedAt: 'Бағалау күні',
-		handledBy: 'Қызмет көрсеткен',
-		firstResponse: 'Алғашқы жауап',
-		messages: 'Хабарламалар',
 		skipReason: 'Өткізіп жіберу себебі',
-		skippedBy: 'Кім өткізіп жіберді',
-		skippedAt: 'Өткізіп жіберу күні',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Оператор',
-			[HandledBy.Bot]: 'Бот',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType.Call]: ({ linked }) =>
 				linked('objects.interactionType.call'),
