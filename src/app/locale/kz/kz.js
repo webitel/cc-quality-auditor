@@ -17,6 +17,10 @@ export default {
 		assignInteractions:
 			'Өзара әрекетті тағайындау | Өзара әрекеттерді тағайындау: {n}',
 		me: '(мен)',
+		deleteEvaluations: 'Бағалауларды жою | Бағалауларды жою: {n}',
+		evaluationsWillBeDeleted: 'Бағалау жойылады. | Бұл бағалаулар жойылады.',
+		interactionReturnsToNotEvaluated:
+			'Өзара әрекет «Бағаланбаған» күйіне оралады.',
 		interactionDate: 'Өзара әрекет күні',
 		customer: 'Клиент',
 		plan: 'Жоспар',
