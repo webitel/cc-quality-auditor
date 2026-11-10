@@ -132,6 +132,7 @@
             </template>
             <template #actions="{ item }">
               <wt-call-media-action
+                v-if="hasPlaybackAccess"
                 :playing-file-id="currentlyMediaPlaying"
                 :files="item.files"
                 @play="play"
@@ -273,6 +274,17 @@ const hasExportDataGridAccess = computed(() =>
 	),
 );
 
+const playbackActions = [
+	SpecialGlobalAction.PlaybackRecordFile,
+	SpecialGlobalAction.TimeLimitedRecordFile,
+];
+
+const hasPlaybackAccess = computed(() =>
+	playbackActions.some((action) =>
+		userinfoStore.hasSpecialGlobalActionAccess(action),
+	),
+);
+
 const tableStore = useInteractionsDatalistStore();
 
 const {
@@ -343,6 +355,7 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 	useTranscribeAction({
 		selected,
 		fileIds: selectedAudioFileIds,
+		hasAccess: hasPlaybackAccess,
 		onTranscribed: async () => {
 			updateSelected([]);
 			await loadDataList();
@@ -398,11 +411,6 @@ const downloadTypes = [
 	DownloadType.AudioRecordings,
 	DownloadType.ScreenRecordings,
 	DownloadType.Transcriptions,
-];
-
-const playbackActions = [
-	SpecialGlobalAction.PlaybackRecordFile,
-	SpecialGlobalAction.TimeLimitedRecordFile,
 ];
 
 const downloadTypeActions = {

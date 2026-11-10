@@ -10,12 +10,14 @@ import type {
 export const useTranscribeAction = ({
 	selected,
 	fileIds,
+	hasAccess,
 	onTranscribed,
 }: UseTranscribeActionOptions): UseTranscribeActionReturn => {
 	const isTranscribing = ref(false);
 
 	const isTranscribeDisabled = computed(
 		() =>
+			!(hasAccess?.value ?? true) ||
 			!selected.value.length ||
 			selected.value.some(
 				({ files, transcripts }) =>
