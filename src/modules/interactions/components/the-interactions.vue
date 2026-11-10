@@ -33,7 +33,7 @@
             :disabled-types="downloadDisabledTypes"
             :disabled="!selected.length"
             filename="interactions"
-            @downloaded="handleDownloaded"
+            @downloaded="resetSelectionAndReload"
           />
         </template>
       </wt-page-header>
@@ -175,7 +175,7 @@
         v-if="isDeleteEvaluationsPopupOpened"
         :interactions="selected"
         @close="isDeleteEvaluationsPopupOpened = false"
-        @deleted="handleEvaluationsDeleted"
+        @deleted="resetSelectionAndReload"
       />
     </template>
   </wt-page-wrapper>
@@ -268,10 +268,13 @@ const { hasCreateAccess, hasDeleteAccess } = useUserAccessControl(
 	WtObject.AuditRating,
 );
 
+const hasAnySpecialAccess = (actions: SpecialGlobalAction[]) =>
+	actions.some((action) => userinfoStore.hasSpecialGlobalActionAccess(action));
+
 const hasExportDataGridAccess = computed(() =>
-	userinfoStore.hasSpecialGlobalActionAccess(
+	hasAnySpecialAccess([
 		SpecialGlobalAction.ExportDataGrid,
-	),
+	]),
 );
 
 const playbackActions = [
@@ -279,11 +282,7 @@ const playbackActions = [
 	SpecialGlobalAction.TimeLimitedRecordFile,
 ];
 
-const hasPlaybackAccess = computed(() =>
-	playbackActions.some((action) =>
-		userinfoStore.hasSpecialGlobalActionAccess(action),
-	),
-);
+const hasPlaybackAccess = computed(() => hasAnySpecialAccess(playbackActions));
 
 const tableStore = useInteractionsDatalistStore();
 
@@ -322,6 +321,11 @@ const {
 
 initialize();
 
+const resetSelectionAndReload = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
+
 const filters = computed(() => filtersManager.value.getAllValues());
 
 const showActionsPanel = ref(true);
@@ -356,10 +360,7 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 		selected,
 		fileIds: selectedAudioFileIds,
 		hasAccess: hasPlaybackAccess,
-		onTranscribed: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		onTranscribed: resetSelectionAndReload,
 	});
 
 const selectedInteractionKeys = computed(() =>
@@ -373,10 +374,7 @@ const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 	useAssignAction({
 		selected,
 		hasAccess: hasCreateAccess,
-		onAssigned: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		onAssigned: resetSelectionAndReload,
 	});
 
 const { isExporting, exportFile } = useExportFile({
@@ -402,11 +400,6 @@ const isDeleteDisabled = computed(
 		selected.value.some(({ evaluationId }) => !evaluationId),
 );
 
-const handleEvaluationsDeleted = async () => {
-	updateSelected([]);
-	await loadDataList();
-};
-
 const downloadTypes = [
 	DownloadType.AudioRecordings,
 	DownloadType.ScreenRecordings,
@@ -423,17 +416,9 @@ const downloadTypeActions = {
 
 const downloadDisabledTypes = computed(() =>
 	downloadTypes.filter(
-		(type) =>
-			!downloadTypeActions[type].some((action) =>
-				userinfoStore.hasSpecialGlobalActionAccess(action),
-			),
+		(type) => !hasAnySpecialAccess(downloadTypeActions[type]),
 	),
 );
-
-const handleDownloaded = async () => {
-	updateSelected([]);
-	await loadDataList();
-};
 
 const {
 	audioData,
