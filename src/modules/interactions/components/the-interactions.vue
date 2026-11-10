@@ -23,12 +23,14 @@
             {{ t('interactions.assign') }}
           </wt-button>
           <export-action
+            :disabled="!hasExportDataGridAccess"
             :loading="isExporting"
             @export="exportFile"
           />
           <download-action
             :selected="selected"
             :types="downloadTypes"
+            :disabled-types="downloadDisabledTypes"
             :disabled="!selected.length"
             filename="interactions"
             @downloaded="handleDownloaded"
@@ -213,8 +215,10 @@ import {
 	ComponentSize,
 	IconAction,
 	WtApplication,
+	WtObject,
 } from '@webitel/ui-sdk/enums';
 import { DownloadType } from '@webitel/ui-sdk/modules/FilesExport';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
 import { useExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useExportFile';
 import DownloadAction from '@webitel/ui-sdk/src/modules/FilesExport/components/download-action.vue';
@@ -224,7 +228,9 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
@@ -254,6 +260,18 @@ defineOptions({
 const { t } = useI18n();
 
 const router = useRouter();
+
+const userinfoStore = useUserinfoStore();
+
+const { hasCreateAccess, hasDeleteAccess } = useUserAccessControl(
+	WtObject.AuditRating,
+);
+
+const hasExportDataGridAccess = computed(() =>
+	userinfoStore.hasSpecialGlobalActionAccess(
+		SpecialGlobalAction.ExportDataGrid,
+	),
+);
 
 const tableStore = useInteractionsDatalistStore();
 
@@ -341,6 +359,7 @@ const selectedInteractionKeys = computed(() =>
 const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 	useAssignAction({
 		selected,
+		hasAccess: hasCreateAccess,
 		onAssigned: async () => {
 			updateSelected([]);
 			await loadDataList();
@@ -365,6 +384,7 @@ const isDeleteEvaluationsPopupOpened = ref(false);
 
 const isDeleteDisabled = computed(
 	() =>
+		!hasDeleteAccess.value ||
 		!selected.value.length ||
 		selected.value.some(({ evaluationId }) => !evaluationId),
 );
@@ -379,6 +399,28 @@ const downloadTypes = [
 	DownloadType.ScreenRecordings,
 	DownloadType.Transcriptions,
 ];
+
+const playbackActions = [
+	SpecialGlobalAction.PlaybackRecordFile,
+	SpecialGlobalAction.TimeLimitedRecordFile,
+];
+
+const downloadTypeActions = {
+	[DownloadType.AudioRecordings]: playbackActions,
+	[DownloadType.ScreenRecordings]: [
+		SpecialGlobalAction.ControlAgentScreen,
+	],
+	[DownloadType.Transcriptions]: playbackActions,
+};
+
+const downloadDisabledTypes = computed(() =>
+	downloadTypes.filter(
+		(type) =>
+			!downloadTypeActions[type].some((action) =>
+				userinfoStore.hasSpecialGlobalActionAccess(action),
+			),
+	),
+);
 
 const handleDownloaded = async () => {
 	updateSelected([]);
