@@ -72,7 +72,7 @@ export const interactionsMock = Array.from(
 			5,
 		].includes(index % 9);
 		const isOutbound = !isChat && index % 7 === 6;
-		const createdAt = now - (index + 1) * hour;
+		const createdAt = now - (index + 1) * 2 * minute;
 		const id = `${isChat ? 'chat' : 'call'}-${index + 1}`;
 		const agent = isHandledByBot ? undefined : getLookup('Agent', index % 3);
 		const customer = getCustomer(isChat, index);

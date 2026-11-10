@@ -1,5 +1,6 @@
 import { getDefaultGetParams } from '@webitel/api-services/api/defaults';
 import { applyTransform, merge } from '@webitel/api-services/api/transformers';
+import { RelativeDatetimeValue } from '@webitel/api-services/enums';
 import { normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 
 import { NotRequestedFields, RequiredFields } from '../configs/searchFields';
@@ -11,15 +12,22 @@ import type {
 } from '../types/interaction';
 
 const normalizeInteractionDate = (value?: string | InteractionsRange) => {
-	if (typeof value !== 'string') return value;
-	return {
-		from: normalizeToTimestamp(value, {
-			round: 'start',
-		}),
-		to: normalizeToTimestamp(value, {
-			round: 'end',
-		}),
-	};
+	if (typeof value === 'string')
+		return {
+			from: normalizeToTimestamp(value, {
+				round: 'start',
+			}),
+			to: normalizeToTimestamp(value, {
+				round: 'end',
+			}),
+		};
+	if (value?.from == null && value?.to == null)
+		return {
+			from: normalizeToTimestamp(RelativeDatetimeValue.Today, {
+				round: 'start',
+			}),
+		};
+	return value;
 };
 
 const toWireRange = (range?: InteractionsRange) => {
