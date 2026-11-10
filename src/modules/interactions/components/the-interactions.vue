@@ -85,7 +85,7 @@
             @column-reorder="columnReorder"
           >
             <template #interactionType="{ item }">
-              {{ t(`channel.type.${item.interactionType}`) }}
+              {{ t(`interactions.interactionTypes.${item.interactionType}`) }}
             </template>
             <template #status="{ item }">
               <wt-indicator

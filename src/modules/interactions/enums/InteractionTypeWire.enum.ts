@@ -1,13 +1,9 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-export const InteractionTypeWire = {
-	[ChannelType.Call]: 'INTERACTION_TYPE_CALL',
-	[ChannelType.Chat]: 'INTERACTION_TYPE_CHAT',
-	[ChannelType.Email]: 'INTERACTION_TYPE_EMAIL',
-} as const;
+import { InteractionType } from './InteractionType.enum';
 
-export const InteractionTypeFromWire: Record<string, ChannelType> = {
-	[InteractionTypeWire[ChannelType.Call]]: ChannelType.Call,
-	[InteractionTypeWire[ChannelType.Chat]]: ChannelType.Chat,
-	[InteractionTypeWire[ChannelType.Email]]: ChannelType.Email,
-};
+export const InteractionTypeWire = {
+	[ChannelType.Call]: InteractionType.Call,
+	[ChannelType.Chat]: InteractionType.Chat,
+	[ChannelType.Email]: InteractionType.Email,
+} as const;

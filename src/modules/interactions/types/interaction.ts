@@ -1,7 +1,4 @@
-import type {
-	ChannelType,
-	InteractionStatus,
-} from '@webitel/api-services/enums';
+import type { InteractionStatus } from '@webitel/api-services/enums';
 import type {
 	EngineEndpoint,
 	EngineHistoryCall,
@@ -9,6 +6,7 @@ import type {
 } from '@webitel/api-services/gen/models';
 
 import type { HandledBy } from '../enums/HandledBy.enum';
+import type { InteractionType } from '../enums/InteractionType.enum';
 
 export type InteractionsRange = {
 	from?: number | null;
@@ -16,7 +14,7 @@ export type InteractionsRange = {
 };
 
 export type InteractionResponseItem = {
-	type: string;
+	type: InteractionType;
 	id: string;
 	parentId: string;
 	createdAt: string;
@@ -54,7 +52,7 @@ export type InteractionsListItem = {
 	type: string;
 	parentId: string;
 	interactionDate: string | null;
-	interactionType: ChannelType;
+	interactionType: InteractionType;
 	customer?: string;
 	agent?: string;
 	team?: string;

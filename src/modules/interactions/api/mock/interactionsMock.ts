@@ -1,7 +1,7 @@
-import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
+import { InteractionStatus } from '@webitel/api-services/enums';
 
 import { HandledBy } from '../../enums/HandledBy.enum';
-import { InteractionTypeWire } from '../../enums/InteractionTypeWire.enum';
+import { InteractionType } from '../../enums/InteractionType.enum';
 
 const minute = 60 * 1000;
 const hour = 60 * minute;
@@ -82,7 +82,7 @@ export const interactionsMock = Array.from(
 			: HandledBy.Agent;
 
 		return {
-			type: InteractionTypeWire[isChat ? ChannelType.Chat : ChannelType.Call],
+			type: isChat ? InteractionType.Chat : InteractionType.Call,
 			id,
 			parent_id: `parent-${id}`,
 			domain_id: '1',

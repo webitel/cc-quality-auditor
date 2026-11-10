@@ -3,7 +3,6 @@ import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { convertDuration } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
-import { InteractionTypeFromWire } from '../enums/InteractionTypeWire.enum';
 import type {
 	InteractionResponseItem,
 	InteractionsListItem,
@@ -28,7 +27,7 @@ export const toInteractionsListItem = (
 		type: item.type,
 		parentId: item.parentId,
 		interactionDate: computeDateAndTime(item.createdAt),
-		interactionType: InteractionTypeFromWire[item.type],
+		interactionType: item.type,
 		customer: getCustomer(item),
 		agent: item.agent?.name,
 		team: item.team?.name,
