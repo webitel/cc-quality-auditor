@@ -2,13 +2,13 @@ import type {
 	ChannelType,
 	InteractionStatus,
 } from '@webitel/api-services/enums';
+import type {
+	EngineEndpoint,
+	EngineHistoryCall,
+	EngineLookup,
+} from '@webitel/api-services/gen/models';
 
 import type { HandledBy } from '../enums/HandledBy.enum';
-
-type Lookup = {
-	id: string;
-	name: string;
-};
 
 export type InteractionsRange = {
 	from?: number | null;
@@ -16,30 +16,64 @@ export type InteractionsRange = {
 };
 
 export type InteractionResponseItem = {
+	type: string;
 	id: string;
-	interactionDate: number;
-	interactionType: ChannelType;
-	customer: string;
-	agent?: Lookup;
-	team?: Lookup;
+	parentId: string;
+	createdAt: string;
+	handledBy: string;
+	direction: string;
+	from?: EngineEndpoint;
+	to?: EngineEndpoint;
+	contact?: EngineLookup;
+	agent?: EngineLookup;
+	team?: EngineLookup;
+	source?: EngineLookup;
 	duration: number;
+	status: string;
+	evaluation?: {
+		id: string;
+		assignee?: EngineLookup;
+		plan?: EngineLookup;
+		dueAt?: string;
+		scorecard?: EngineLookup;
+		score?: number;
+		ratedAt?: string;
+		skipReason?: string;
+		skippedBy?: EngineLookup;
+		skippedAt?: string;
+	};
+	call?: EngineHistoryCall;
+	chat?: {
+		firstResponseSec?: number;
+		messageCount?: number;
+	};
+};
+
+export type InteractionsListItem = {
+	id: string;
+	type: string;
+	parentId: string;
+	interactionDate: string | null;
+	interactionType: ChannelType;
+	customer?: string;
+	agent?: string;
+	team?: string;
+	duration: string;
 	status: InteractionStatus;
-	assignee?: Lookup;
+	assignee?: string;
 	score?: number;
-	plan?: Lookup;
-	dueDate?: number;
-	contactReason?: string;
-	contactResult?: string;
-	csat?: number;
-	ratedAt?: number;
-	scorecard?: Lookup;
+	plan?: string;
+	dueDate: string | null;
+	isOverdue: boolean;
+	ratedAt: string | null;
+	scorecard?: string;
 	handledBy: HandledBy;
 	source?: string;
-	firstResponse?: number;
+	firstResponse?: string;
 	messages?: number;
 	skipReason?: string;
-	skippedBy?: Lookup;
-	skippedAt?: number;
+	skippedBy?: string;
+	skippedAt: string | null;
 };
 
 export type GetInteractionsParams = {

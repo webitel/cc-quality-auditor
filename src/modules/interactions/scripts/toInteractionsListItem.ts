@@ -3,29 +3,59 @@ import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { convertDuration } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
-import type { InteractionResponseItem } from '../types/interaction';
+import { HandledByFromWire } from '../enums/HandledByWire.enum';
+import { InteractionStatusFromWire } from '../enums/InteractionStatusWire.enum';
+import { InteractionTypeFromWire } from '../enums/InteractionTypeWire.enum';
+import type {
+	InteractionResponseItem,
+	InteractionsListItem,
+} from '../types/interaction';
 
-const computeDateAndTime = (timestamp?: number) => {
+const computeDateAndTime = (timestamp?: string) => {
 	if (!timestamp) return null;
-	return formatDate(timestamp, FormatDateMode.DATETIME);
+	return formatDate(Number(timestamp), FormatDateMode.DATETIME);
 };
 
-export const toInteractionsListItem = (item: InteractionResponseItem) => ({
-	...item,
-	interactionDate: computeDateAndTime(item.interactionDate),
-	duration: convertDuration(item.duration),
-	agent: item.agent?.name,
-	team: item.team?.name,
-	assignee: item.assignee?.name,
-	plan: item.plan?.name,
-	dueDate: computeDateAndTime(item.dueDate),
-	isOverdue:
-		item.status === InteractionStatus.Pending &&
-		!!item.dueDate &&
-		item.dueDate < Date.now(),
-	ratedAt: computeDateAndTime(item.ratedAt),
-	scorecard: item.scorecard?.name,
-	firstResponse: item.firstResponse && convertDuration(item.firstResponse),
-	skippedBy: item.skippedBy?.name,
-	skippedAt: computeDateAndTime(item.skippedAt),
-});
+const getCustomer = ({ direction, from, to }: InteractionResponseItem) => {
+	const customer = direction === 'outbound' ? to : from;
+	return customer?.number || customer?.name;
+};
+
+export const toInteractionsListItem = (
+	item: InteractionResponseItem,
+): InteractionsListItem => {
+	const { evaluation, chat } = item;
+	const status = InteractionStatusFromWire[item.status];
+	return {
+		id: item.id,
+		type: item.type,
+		parentId: item.parentId,
+		interactionDate: computeDateAndTime(item.createdAt),
+		interactionType: InteractionTypeFromWire[item.type],
+		customer: getCustomer(item),
+		agent: item.agent?.name,
+		team: item.team?.name,
+		duration: convertDuration(item.duration),
+		status,
+		assignee: evaluation?.assignee?.name,
+		score: evaluation?.score,
+		plan: evaluation?.plan?.name,
+		dueDate: computeDateAndTime(evaluation?.dueAt),
+		isOverdue:
+			status === InteractionStatus.Pending &&
+			!!evaluation?.dueAt &&
+			Number(evaluation.dueAt) < Date.now(),
+		ratedAt: computeDateAndTime(evaluation?.ratedAt),
+		scorecard: evaluation?.scorecard?.name,
+		handledBy: HandledByFromWire[item.handledBy],
+		source: item.source?.name,
+		firstResponse:
+			chat?.firstResponseSec == null
+				? undefined
+				: convertDuration(chat.firstResponseSec),
+		messages: chat?.messageCount,
+		skipReason: evaluation?.skipReason,
+		skippedBy: evaluation?.skippedBy?.name,
+		skippedAt: computeDateAndTime(evaluation?.skippedAt),
+	};
+};
