@@ -20,7 +20,7 @@ export type InteractionResponseItem = {
 	id: string;
 	parentId: string;
 	createdAt: string;
-	handledBy: string;
+	handledBy: HandledBy;
 	direction: string;
 	from?: EngineEndpoint;
 	to?: EngineEndpoint;
@@ -29,7 +29,7 @@ export type InteractionResponseItem = {
 	team?: EngineLookup;
 	source?: EngineLookup;
 	duration: number;
-	status: string;
+	status: InteractionStatus;
 	evaluation?: {
 		id: string;
 		assignee?: EngineLookup;

@@ -1,8 +1,6 @@
 import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { HandledBy } from '../../enums/HandledBy.enum';
-import { HandledByWire } from '../../enums/HandledByWire.enum';
-import { InteractionStatusWire } from '../../enums/InteractionStatusWire.enum';
 import { InteractionTypeWire } from '../../enums/InteractionTypeWire.enum';
 
 const minute = 60 * 1000;
@@ -89,7 +87,7 @@ export const interactionsMock = Array.from(
 			parent_id: `parent-${id}`,
 			domain_id: '1',
 			created_at: String(createdAt),
-			handled_by: HandledByWire[handledBy],
+			handled_by: handledBy,
 			direction: isOutbound ? 'outbound' : 'inbound',
 			from: isOutbound ? agentEndpoint : customer,
 			to: isOutbound ? customer : agentEndpoint,
@@ -106,7 +104,7 @@ export const interactionsMock = Array.from(
 					}
 				: getLookup('Trunk', index % 2),
 			duration: 45 + ((index * 337) % 3600),
-			status: InteractionStatusWire[status],
+			status,
 			evaluation: getEvaluation(index, status, createdAt),
 			call: isChat
 				? undefined

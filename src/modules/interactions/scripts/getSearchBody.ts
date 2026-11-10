@@ -4,7 +4,6 @@ import { RelativeDatetimeValue } from '@webitel/api-services/enums';
 import { normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 
 import { NotRequestedFields, RequiredFields } from '../configs/searchFields';
-import { InteractionStatusWire } from '../enums/InteractionStatusWire.enum';
 import { InteractionTypeWire } from '../enums/InteractionTypeWire.enum';
 import type {
 	GetInteractionsParams,
@@ -82,7 +81,7 @@ export const getSearchBody = ({
 				agent_id: toWireList(agent),
 				team_id: toWireList(team),
 				duration: toWireRange(talkDuration),
-				status: toWireList(interactionStatus, InteractionStatusWire),
+				status: toWireList(interactionStatus),
 				assignee_id: toWireList(user),
 				score: toWireRange(score),
 			},

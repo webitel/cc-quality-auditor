@@ -3,8 +3,6 @@ import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { convertDuration } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
-import { HandledByFromWire } from '../enums/HandledByWire.enum';
-import { InteractionStatusFromWire } from '../enums/InteractionStatusWire.enum';
 import { InteractionTypeFromWire } from '../enums/InteractionTypeWire.enum';
 import type {
 	InteractionResponseItem,
@@ -24,8 +22,7 @@ const getCustomer = ({ direction, from, to }: InteractionResponseItem) => {
 export const toInteractionsListItem = (
 	item: InteractionResponseItem,
 ): InteractionsListItem => {
-	const { evaluation, chat } = item;
-	const status = InteractionStatusFromWire[item.status];
+	const { evaluation, chat, status } = item;
 	return {
 		id: item.id,
 		type: item.type,
@@ -47,7 +44,7 @@ export const toInteractionsListItem = (
 			Number(evaluation.dueAt) < Date.now(),
 		ratedAt: computeDateAndTime(evaluation?.ratedAt),
 		scorecard: evaluation?.scorecard?.name,
-		handledBy: HandledByFromWire[item.handledBy],
+		handledBy: item.handledBy,
 		source: item.source?.name,
 		firstResponse:
 			chat?.firstResponseSec == null
