@@ -43,6 +43,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Busque llamadas, chats y correos electrónicos, asígnelos o evalúelos.',
+		},
 		scorecards: {
 			text: 'Cree hojas de puntuación, defina el peso de los criterios y agrupe las preguntas.',
 		},
