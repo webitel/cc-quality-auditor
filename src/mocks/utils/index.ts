@@ -3,6 +3,14 @@ type MockItem = Record<string, unknown>;
 const getSortValue = (value: unknown) =>
 	value && typeof value === 'object' && 'name' in value ? value.name : value;
 
+const getByPath = (item: MockItem, path: string) =>
+	path
+		.split('.')
+		.reduce<unknown>(
+			(value, key) => (value as MockItem | undefined)?.[key],
+			item,
+		);
+
 export const sortItems = <T extends MockItem>(
 	items: T[],
 	sort?: string | null,
@@ -15,8 +23,8 @@ export const sortItems = <T extends MockItem>(
 	return [
 		...items,
 	].sort((a, b) => {
-		const aValue = getSortValue(a[key]) ?? '';
-		const bValue = getSortValue(b[key]) ?? '';
+		const aValue = getSortValue(getByPath(a, key)) ?? '';
+		const bValue = getSortValue(getByPath(b, key)) ?? '';
 		if (aValue === bValue) return 0;
 		return aValue > bValue ? direction : -direction;
 	});
