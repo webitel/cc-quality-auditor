@@ -1,4 +1,5 @@
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 
 export default {
 	audit: 'Audyt',
@@ -32,6 +33,14 @@ export default {
 			[HandledBy.Agent]: 'Agent',
 			[HandledBy.Bot]: 'Bot',
 			[HandledBy.Ivr]: 'IVR',
+		},
+		interactionTypes: {
+			[InteractionType.Call]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType.Chat]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType.Email]: ({ linked }) =>
+				linked('objects.interactionType.email'),
 		},
 	},
 	startPage: {
