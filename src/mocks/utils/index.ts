@@ -39,7 +39,7 @@ export const paginateItems = <T>(
 	};
 };
 
-export const isOneOf = (value: unknown, values: string[]) =>
+export const isOneOf = (value: unknown, values: string[] = []) =>
 	!values.length || values.includes(String(value));
 
 export const isInRange = (
@@ -48,13 +48,14 @@ export const isInRange = (
 		from,
 		to,
 	}: {
-		from: string | null;
-		to: string | null;
-	},
+		from?: string | null;
+		to?: string | null;
+	} = {},
 ) => {
-	if (from === null && to === null) return true;
-	if (typeof value !== 'number') return false;
-	if (from !== null && value < Number(from)) return false;
-	if (to !== null && value > Number(to)) return false;
+	if (from == null && to == null) return true;
+	if (value == null || value === '') return false;
+	const number = Number(value);
+	if (from != null && number < Number(from)) return false;
+	if (to != null && number > Number(to)) return false;
 	return true;
 };
