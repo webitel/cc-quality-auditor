@@ -7,7 +7,7 @@ import {
 	sortItems,
 } from '../../../../mocks/utils';
 import { InteractionsUrl } from '../InteractionsAPIRepository';
-import { interactionsMock } from './interactionsMock';
+import { getCallTranscripts, interactionsMock } from './interactionsMock';
 
 type Range = {
 	from?: string;
@@ -39,6 +39,30 @@ const getCustomer = ({
 	(direction === 'outbound' ? to : from)?.number;
 
 export const interactionsHandlers = [
+	http.post(
+		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
+		async ({ request }) => {
+			const { file_id } = (await request.json()) as {
+				file_id: string[];
+			};
+
+			const items = interactionsMock.flatMap(({ call }) => {
+				const files = call?.files.filter(({ id }) => file_id.includes(id));
+				if (!call || !files?.length) return [];
+				const transcripts = getCallTranscripts(files);
+				call.transcripts.push(...transcripts);
+				return transcripts.map(({ id, file_id }) => ({
+					id,
+					file_id,
+					created_at: String(Date.now()),
+				}));
+			});
+
+			return HttpResponse.json({
+				items,
+			});
+		},
+	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/search`,
 		async ({ request }) => {
