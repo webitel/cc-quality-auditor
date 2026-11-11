@@ -9,9 +9,10 @@ import {
 	snakeToCamel,
 } from '@webitel/api-services/api/transformers';
 
-import { getSearchBody } from '../scripts/getSearchBody';
+import { getExportBody, getSearchBody } from '../scripts/getRequestBody';
 import { toInteractionsListItem } from '../scripts/toInteractionsListItem';
 import type {
+	ExportInteractionsParams,
 	GetInteractionsParams,
 	InteractionKey,
 	InteractionResponseItem,
@@ -63,9 +64,29 @@ const assign = async ({
 	}
 };
 
+const exportData = async (params: ExportInteractionsParams) => {
+	try {
+		const response = await instance.post(
+			`${InteractionsUrl}/export`,
+			getExportBody(params),
+			{
+				responseType: 'blob',
+			},
+		);
+		return {
+			response,
+		};
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const InteractionsAPIRepository = {
 	getList,
 	assign,
+	exportData,
 };
 
 export default InteractionsAPIRepository;
