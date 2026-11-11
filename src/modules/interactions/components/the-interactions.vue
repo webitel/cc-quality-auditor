@@ -136,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import { CallTranscriptAPI } from '@webitel/api-services/api';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
@@ -149,7 +150,6 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
-import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
@@ -208,11 +208,19 @@ const isTranscribeDisabled = computed(
 		),
 );
 
+const selectedAudioFileIds = computed(() => [
+	...new Set(
+		selected.value
+			.flatMap(({ files }) => files[EngineCallFileType.FileTypeAudio] ?? [])
+			.map(({ id }) => id),
+	),
+]);
+
 const transcribe = async () => {
 	try {
 		isTranscribing.value = true;
-		await InteractionsAPIRepository.transcribe({
-			callId: selected.value.map(({ id }) => id),
+		await CallTranscriptAPI.create({
+			fileId: selectedAudioFileIds.value,
 		});
 	} finally {
 		updateSelected([]);
