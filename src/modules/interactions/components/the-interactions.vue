@@ -134,7 +134,7 @@
       </section>
       <interactions-assign-popup
         v-if="isAssignPopupOpened"
-        :ids="selected.map(({ id }) => id)"
+        :interactions="selectedInteractionKeys"
         @close="isAssignPopupOpened = false"
         @assigned="handleAssigned"
       />
@@ -226,6 +226,13 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 	});
 
 const isAssignPopupOpened = ref(false);
+
+const selectedInteractionKeys = computed(() =>
+	selected.value.map(({ type, id }) => ({
+		type,
+		id,
+	})),
+);
 
 const isAssignDisabled = computed(
 	() =>

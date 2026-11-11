@@ -6,7 +6,7 @@
     @close="emit('close')"
   >
     <template #title>
-      {{ t('interactions.assignInteractions', ids.length) }}
+      {{ t('interactions.assignInteractions', interactions.length) }}
     </template>
     <template #main>
       <wt-single-select
@@ -49,6 +49,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
+import type { InteractionKey } from '../types/interaction';
 
 type Assignee = {
 	id: string;
@@ -56,7 +57,7 @@ type Assignee = {
 };
 
 const props = defineProps<{
-	ids: string[];
+	interactions: InteractionKey[];
 }>();
 
 const emit = defineEmits<{
@@ -96,11 +97,12 @@ const getAssigneesOptions = async (
 };
 
 const assign = async () => {
+	if (!assignee.value) return;
 	try {
 		isAssigning.value = true;
 		await InteractionsAPIRepository.assign({
-			ids: props.ids,
-			assignee: assignee.value as Assignee,
+			interactions: props.interactions,
+			assigneeId: assignee.value.id,
 		});
 		emit('assigned');
 	} finally {
