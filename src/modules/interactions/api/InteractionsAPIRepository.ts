@@ -65,22 +65,16 @@ const assign = async ({
 };
 
 const exportData = async (params: ExportInteractionsParams) => {
-	try {
-		const response = await instance.post(
-			`${InteractionsUrl}/export`,
-			getExportBody(params),
-			{
-				responseType: 'blob',
-			},
-		);
-		return {
-			response,
-		};
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
+	const response = await instance.post(
+		`${InteractionsUrl}/export`,
+		getExportBody(params),
+		{
+			responseType: 'blob',
+		},
+	);
+	return {
+		response,
+	};
 };
 
 const InteractionsAPIRepository = {
