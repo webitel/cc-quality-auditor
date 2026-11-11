@@ -13,10 +13,12 @@ import { getSearchBody } from '../scripts/getSearchBody';
 import { toInteractionsListItem } from '../scripts/toInteractionsListItem';
 import type {
 	GetInteractionsParams,
+	InteractionKey,
 	InteractionResponseItem,
 } from '../types/interaction';
 
 export const InteractionsUrl = '/v1/audit/interactions';
+export const EvaluationsUrl = '/v1/audit/evaluations';
 
 const instance = getDefaultInstance();
 
@@ -41,8 +43,29 @@ const getList = async (params: GetInteractionsParams) => {
 	}
 };
 
+const assign = async ({
+	interactions,
+	assigneeId,
+}: {
+	interactions: InteractionKey[];
+	assigneeId: string;
+}) => {
+	try {
+		const response = await instance.post(`${EvaluationsUrl}/assign`, {
+			interactions,
+			assignee_id: assigneeId,
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const InteractionsAPIRepository = {
 	getList,
+	assign,
 };
 
 export default InteractionsAPIRepository;
