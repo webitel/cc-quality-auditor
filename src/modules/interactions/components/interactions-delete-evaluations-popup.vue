@@ -1,13 +1,13 @@
 <template>
   <wt-confirm-dialog
     class="interactions-delete-evaluations-popup"
-    :title="t('interactions.deleteEvaluations', ids.length)"
+    :title="t('interactions.deleteEvaluations', interactions.length)"
     :callback="deleteEvaluations"
     @close="emit('close')"
   >
     <template #main>
       <div class="interactions-delete-evaluations-popup__content">
-        <p>{{ t('interactions.evaluationsWillBeDeleted', ids.length) }}</p>
+        <p>{{ t('interactions.evaluationsWillBeDeleted', interactions.length) }}</p>
         <p>{{ t('interactions.interactionReturnsToNotEvaluated') }}</p>
       </div>
     </template>
@@ -34,9 +34,10 @@
 import { useI18n } from 'vue-i18n';
 
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
+import type { InteractionsListItem } from '../types/interaction';
 
 const props = defineProps<{
-	ids: string[];
+	interactions: InteractionsListItem[];
 }>();
 
 const emit = defineEmits<{
@@ -48,7 +49,7 @@ const { t } = useI18n();
 
 const deleteEvaluations = async () => {
 	await InteractionsAPIRepository.deleteEvaluations({
-		ids: props.ids,
+		ids: props.interactions.flatMap(({ evaluationId }) => evaluationId ?? []),
 	});
 	emit('deleted');
 };

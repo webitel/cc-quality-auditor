@@ -157,7 +157,7 @@
       />
       <interactions-delete-evaluations-popup
         v-if="isDeleteEvaluationsPopupOpened"
-        :ids="selectedIds"
+        :interactions="selected"
         @close="isDeleteEvaluationsPopupOpened = false"
         @deleted="handleEvaluationsDeleted"
       />
@@ -166,7 +166,6 @@
 </template>
 
 <script setup lang="ts">
-import { InteractionStatus } from '@webitel/api-services/enums';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import {
 	DynamicFilterSearchComponent as DynamicFilterSearch,
@@ -251,8 +250,6 @@ initialize();
 
 const filters = computed(() => filtersManager.value.getAllValues());
 
-const selectedIds = computed(() => selected.value.map(({ id }) => id));
-
 const showActionsPanel = ref(true);
 
 const anyFiltersOnFiltersPanel = computed(() =>
@@ -325,9 +322,7 @@ const isDeleteEvaluationsPopupOpened = ref(false);
 const isDeleteDisabled = computed(
 	() =>
 		!selected.value.length ||
-		selected.value.some(
-			({ status }) => status === InteractionStatus.NotEvaluated,
-		),
+		selected.value.some(({ evaluationId }) => !evaluationId),
 );
 
 const handleEvaluationsDeleted = async () => {
