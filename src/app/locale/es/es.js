@@ -15,6 +15,8 @@ export default {
 		allInteractions: 'Todas las interacciones',
 		transcribe: 'Transcribir',
 		assign: 'Asignar',
+		assignInteractions: 'Asignar interacción | Asignar {n} interacciones',
+		me: '(yo)',
 		interactionDate: 'Fecha de interacción',
 		customer: 'Cliente',
 		plan: 'Plan',

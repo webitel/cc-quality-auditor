@@ -16,8 +16,9 @@
             {{ t('interactions.transcribe') }}
           </wt-button>
           <wt-button
+            :disabled="isAssignDisabled"
             color="secondary"
-            disabled
+            @click="isAssignPopupOpened = true"
           >
             {{ t('interactions.assign') }}
           </wt-button>
@@ -131,6 +132,12 @@
           />
         </div>
       </section>
+      <interactions-assign-popup
+        v-if="isAssignPopupOpened"
+        :interactions="selectedInteractionKeys"
+        @close="isAssignPopupOpened = false"
+        @assigned="handleAssigned"
+      />
     </template>
   </wt-page-wrapper>
 </template>
@@ -149,15 +156,18 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
+import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
 
 defineOptions({
 	components: {
 		FiltersActionsMenu,
+		InteractionsAssignPopup,
 		InteractionsColumnFilter,
 	},
 });
@@ -210,6 +220,22 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 		selected,
 		fileIds: selectedAudioFileIds,
 		onTranscribed: async () => {
+			updateSelected([]);
+			await loadDataList();
+		},
+	});
+
+const selectedInteractionKeys = computed(() =>
+	selected.value.map(({ type, id }) => ({
+		type,
+		id,
+	})),
+);
+
+const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
+	useAssignAction({
+		selected,
+		onAssigned: async () => {
 			updateSelected([]);
 			await loadDataList();
 		},

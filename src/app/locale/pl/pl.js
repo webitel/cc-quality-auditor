@@ -15,6 +15,8 @@ export default {
 		allInteractions: 'Wszystkie interakcje',
 		transcribe: 'Transkrybuj',
 		assign: 'Przypisz',
+		assignInteractions: 'Przypisz interakcję | Przypisz interakcje: {n}',
+		me: '(ja)',
 		interactionDate: 'Data interakcji',
 		customer: 'Klient',
 		plan: 'Plan',

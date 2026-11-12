@@ -14,6 +14,9 @@ export default {
 		allInteractions: 'Барлық өзара әрекеттер',
 		transcribe: 'Транскриберлеу',
 		assign: 'Тағайындау',
+		assignInteractions:
+			'Өзара әрекетті тағайындау | Өзара әрекеттерді тағайындау: {n}',
+		me: '(мен)',
 		interactionDate: 'Өзара әрекет күні',
 		customer: 'Клиент',
 		plan: 'Жоспар',
