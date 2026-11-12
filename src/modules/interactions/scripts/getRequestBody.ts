@@ -6,6 +6,7 @@ import { normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 import { NotRequestedFields, RequiredFields } from '../configs/searchFields';
 import { InteractionTypeWire } from '../enums/InteractionTypeWire.enum';
 import type {
+	ExportInteractionsParams,
 	GetInteractionsParams,
 	InteractionsRange,
 } from '../types/interaction';
@@ -53,11 +54,7 @@ const getRequestFields = (fields: string[] = []) => [
 	]),
 ];
 
-export const getSearchBody = ({
-	page,
-	size,
-	sort,
-	fields,
+const getSearchFilter = ({
 	createdAt,
 	interactionType,
 	contact,
@@ -67,26 +64,48 @@ export const getSearchBody = ({
 	interactionStatus,
 	user,
 	score,
+}: GetInteractionsParams) => ({
+	created_at: toWireRange(normalizeInteractionDate(createdAt)),
+	type: toWireList(interactionType, InteractionTypeWire),
+	contact_id: toWireList(contact),
+	agent_id: toWireList(agent),
+	team_id: toWireList(team),
+	duration: toWireRange(talkDuration),
+	status: toWireList(interactionStatus),
+	assignee_id: toWireList(user),
+	score: toWireRange(score),
+});
+
+const getQueryBody = ({ sort, fields, ...filters }: GetInteractionsParams) => ({
+	sort,
+	fields: getRequestFields(fields),
+	filter: getSearchFilter(filters),
+});
+
+export const getSearchBody = ({
+	page,
+	size,
+	...params
 }: GetInteractionsParams) =>
 	applyTransform(
 		{
 			page,
 			size,
-			sort,
-			fields: getRequestFields(fields),
-			filter: {
-				created_at: toWireRange(normalizeInteractionDate(createdAt)),
-				type: toWireList(interactionType, InteractionTypeWire),
-				contact_id: toWireList(contact),
-				agent_id: toWireList(agent),
-				team_id: toWireList(team),
-				duration: toWireRange(talkDuration),
-				status: toWireList(interactionStatus),
-				assignee_id: toWireList(user),
-				score: toWireRange(score),
-			},
+			...getQueryBody(params),
 		},
 		[
 			merge(getDefaultGetParams()),
 		],
 	);
+
+export const getExportBody = ({
+	format,
+	separator,
+	interactions,
+	...params
+}: ExportInteractionsParams) => ({
+	...getQueryBody(params),
+	format,
+	separator,
+	interactions,
+});

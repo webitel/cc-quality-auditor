@@ -6,6 +6,7 @@ import type {
 	EngineLookup,
 	EngineTranscriptLookup,
 } from '@webitel/api-services/gen/models';
+import type { ExportOptions } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useExportFile';
 
 import type { HandledBy } from '../enums/HandledBy.enum';
 import type { InteractionType } from '../enums/InteractionType.enum';
@@ -79,6 +80,11 @@ export type InteractionsListItem = {
 };
 
 export type InteractionKey = Pick<InteractionsListItem, 'type' | 'id'>;
+
+export type ExportInteractionsParams = GetInteractionsParams &
+	ExportOptions & {
+		interactions?: InteractionKey[];
+	};
 
 export type GetInteractionsParams = {
 	page?: number;
