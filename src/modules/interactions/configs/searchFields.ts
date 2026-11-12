@@ -6,6 +6,7 @@ export const RequiredFields = [
 	'from',
 	'to',
 	'status',
+	'call',
 ];
 
 export const NotRequestedFields = [

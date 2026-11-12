@@ -1,4 +1,5 @@
 import { InteractionStatus } from '@webitel/api-services/enums';
+import { EngineCallFileType } from '@webitel/api-services/gen/models';
 
 import { HandledBy } from '../../enums/HandledBy.enum';
 import { InteractionType } from '../../enums/InteractionType.enum';
@@ -32,6 +33,35 @@ const getAgentEndpoint = (agent?: { id: string; name: string }) =>
 		number: `100${agent.id}`,
 		...agent,
 	};
+
+const getCallFiles = (index: number, createdAt: number) =>
+	index % 5 === 2
+		? []
+		: [
+				{
+					id: `${88000 + index}`,
+					name: `recording_${index + 1}.mp3`,
+					mime_type: 'audio/mpeg',
+					type: EngineCallFileType.FileTypeAudio,
+					start_at: String(createdAt),
+					stop_at: String(createdAt + minute),
+				},
+			];
+
+export const getCallTranscripts = (
+	files: {
+		id: string;
+		name: string;
+	}[],
+) =>
+	files.map(({ id, name }) => ({
+		id: `transcript-${id}`,
+		file_id: id,
+		file: {
+			id,
+			name,
+		},
+	}));
 
 const getEvaluation = (
 	index: number,
@@ -75,6 +105,7 @@ export const interactionsMock = Array.from(
 		const agent = isHandledByBot ? undefined : getLookup('Agent', index % 3);
 		const customer = getCustomer(isChat, index);
 		const agentEndpoint = getAgentEndpoint(agent);
+		const files = isChat ? [] : getCallFiles(index, createdAt);
 		const handledBy = isHandledByBot
 			? isChat
 				? HandledBy.Bot
@@ -110,8 +141,8 @@ export const interactionsMock = Array.from(
 				? undefined
 				: {
 						id,
-						files: [],
-						transcripts: [],
+						files,
+						transcripts: index % 6 === 3 ? getCallTranscripts(files) : [],
 					},
 			chat: isChat
 				? {

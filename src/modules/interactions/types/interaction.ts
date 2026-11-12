@@ -1,8 +1,10 @@
 import type { InteractionStatus } from '@webitel/api-services/enums';
 import type {
+	EngineCallFile,
 	EngineEndpoint,
 	EngineHistoryCall,
 	EngineLookup,
+	EngineTranscriptLookup,
 } from '@webitel/api-services/gen/models';
 
 import type { HandledBy } from '../enums/HandledBy.enum';
@@ -72,6 +74,8 @@ export type InteractionsListItem = {
 	skipReason?: string;
 	skippedBy?: string;
 	skippedAt: string | null;
+	files: Record<string, EngineCallFile[]>;
+	transcripts: EngineTranscriptLookup[];
 };
 
 export type GetInteractionsParams = {
