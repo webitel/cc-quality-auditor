@@ -49,7 +49,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
-import type { InteractionKey } from '../types/interaction';
+import type { InteractionsListItem } from '../types/interaction';
 
 type Assignee = {
 	id: string;
@@ -57,7 +57,7 @@ type Assignee = {
 };
 
 const props = defineProps<{
-	interactions: InteractionKey[];
+	interactions: InteractionsListItem[];
 }>();
 
 const emit = defineEmits<{
@@ -101,7 +101,10 @@ const assign = async () => {
 	try {
 		isAssigning.value = true;
 		await InteractionsAPIRepository.assign({
-			interactions: props.interactions,
+			interactions: props.interactions.map(({ type, id }) => ({
+				type,
+				id,
+			})),
 			assigneeId: assignee.value.id,
 		});
 		emit('assigned');
