@@ -63,6 +63,7 @@ export type InteractionsListItem = {
 	team?: string;
 	duration: string;
 	status: InteractionStatus;
+	evaluationId?: string;
 	assignee?: string;
 	score?: number;
 	plan?: string;
