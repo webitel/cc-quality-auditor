@@ -1,3 +1,6 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+
 export default {
 	audit: 'Kiểm toán',
 	scorecards: {
@@ -13,8 +16,32 @@ export default {
 		transcribe: 'Chuyển đổi bản ghi',
 		assign: 'Chỉ định',
 		interactionDate: 'Ngày tương tác',
-		interactionType: 'Loại tương tác',
 		customer: 'Khách hàng',
+		plan: 'Kế hoạch',
+		dueDate: 'Hạn chót',
+		contactReason: 'Lý do liên hệ',
+		contactResult: 'Kết quả liên hệ',
+		csat: 'CSAT',
+		ratedAt: 'Thời điểm đánh giá',
+		handledBy: 'Xử lý bởi',
+		firstResponse: 'Phản hồi đầu tiên',
+		messages: 'Tin nhắn',
+		skipReason: 'Lý do bỏ qua',
+		skippedBy: 'Người bỏ qua',
+		skippedAt: 'Thời điểm bỏ qua',
+		handledByTypes: {
+			[HandledBy.Agent]: 'Tổng đài viên',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
+		interactionTypes: {
+			[InteractionType.Call]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType.Chat]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType.Email]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
 	},
 	startPage: {
 		scorecards: {
