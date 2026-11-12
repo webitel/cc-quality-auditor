@@ -1,3 +1,6 @@
+import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -13,8 +16,32 @@ export default {
 		transcribe: 'Transkriptsiya qilish',
 		assign: 'Tayinlash',
 		interactionDate: "O'zaro aloqa sanasi",
-		interactionType: "O'zaro aloqa turi",
 		customer: 'Mijoz',
+		plan: 'Reja',
+		dueDate: 'Muddat',
+		contactReason: 'Murojaat sababi',
+		contactResult: 'Murojaat natijasi',
+		csat: 'CSAT',
+		ratedAt: 'Baholangan sana',
+		handledBy: "Xizmat ko'rsatgan",
+		firstResponse: 'Birinchi javob',
+		messages: 'Xabarlar',
+		skipReason: "O'tkazib yuborish sababi",
+		skippedBy: "Kim o'tkazib yubordi",
+		skippedAt: "O'tkazib yuborilgan sana",
+		handledByTypes: {
+			[HandledBy.Agent]: 'Agent',
+			[HandledBy.Bot]: 'Bot',
+			[HandledBy.Ivr]: 'IVR',
+		},
+		interactionTypes: {
+			[InteractionType.Call]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType.Chat]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType.Email]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
 	},
 	startPage: {
 		scorecards: {
