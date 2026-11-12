@@ -8,6 +8,14 @@ export default {
 		usedScorecardCantDelete:
 			'Esta hoja de puntuación está en uso y no se puede eliminar.',
 	},
+	interactions: {
+		allInteractions: 'Todas las interacciones',
+		transcribe: 'Transcribir',
+		assign: 'Asignar',
+		interactionDate: 'Fecha de interacción',
+		interactionType: 'Tipo de interacción',
+		customer: 'Cliente',
+	},
 	startPage: {
 		scorecards: {
 			text: 'Cree hojas de puntuación, defina el peso de los criterios y agrupe las preguntas.',
