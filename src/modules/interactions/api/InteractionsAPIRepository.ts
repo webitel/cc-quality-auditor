@@ -64,6 +64,21 @@ const assign = async ({
 	}
 };
 
+const deleteEvaluations = async ({ ids }: { ids: string[] }) => {
+	try {
+		const response = await instance.delete(EvaluationsUrl, {
+			params: {
+				id: ids,
+			},
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const exportData = async (params: ExportInteractionsParams) => {
 	const response = await instance.post(
 		`${InteractionsUrl}/export`,
@@ -80,6 +95,7 @@ const exportData = async (params: ExportInteractionsParams) => {
 const InteractionsAPIRepository = {
 	getList,
 	assign,
+	deleteEvaluations,
 	exportData,
 };
 
