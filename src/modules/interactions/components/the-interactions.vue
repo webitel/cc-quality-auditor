@@ -151,7 +151,7 @@
       </section>
       <interactions-assign-popup
         v-if="isAssignPopupOpened"
-        :interactions="selectedInteractionKeys"
+        :interactions="selected"
         @close="isAssignPopupOpened = false"
         @assigned="handleAssigned"
       />
