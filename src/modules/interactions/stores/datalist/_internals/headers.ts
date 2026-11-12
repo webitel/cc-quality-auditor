@@ -1,20 +1,33 @@
-import type { WtTableHeader } from '@webitel/ui-sdk/src/components/wt-table/types/WtTable';
+import type { DatalistTableHeader } from '@webitel/ui-datalist';
+import { FilterOption } from '@webitel/ui-datalist/filters';
+import { SortSymbols } from '@webitel/ui-sdk/src/scripts/sortQueryAdapters';
 
-export const headers: WtTableHeader[] = [
+import { filterConfigs } from '../../../configs/filtersOptions';
+
+export const headers: DatalistTableHeader[] = [
 	{
 		value: 'interactionDate',
 		locale: 'interactions.interactionDate',
 		show: true,
+		field: 'created_at',
+		sort: SortSymbols.DESC,
+		filter: filterConfigs[FilterOption.CreatedAt],
 	},
 	{
 		value: 'interactionType',
-		locale: 'interactions.interactionType',
+		locale: 'objects.interactionType.interactionType',
 		show: true,
+		field: 'type',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionType],
 	},
 	{
 		value: 'customer',
 		locale: 'interactions.customer',
 		show: true,
+		field: 'customer',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Contact],
 	},
 	{
 		value: 'agent',
@@ -23,6 +36,9 @@ export const headers: WtTableHeader[] = [
 			1,
 		],
 		show: true,
+		field: 'agent',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Agent],
 	},
 	{
 		value: 'team',
@@ -31,21 +47,33 @@ export const headers: WtTableHeader[] = [
 			1,
 		],
 		show: true,
+		field: 'team',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Team],
 	},
 	{
 		value: 'duration',
 		locale: 'vocabulary.duration',
 		show: true,
+		field: 'duration',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.TalkDuration],
 	},
 	{
 		value: 'status',
-		locale: 'reusable.status',
+		locale: 'objects.interactionStatus.interactionStatus',
 		show: true,
+		field: 'status',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionStatus],
 	},
 	{
 		value: 'assignee',
 		locale: 'cases.assignee',
 		show: true,
+		field: 'evaluation.assignee',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.User],
 	},
 	{
 		value: 'score',
@@ -54,5 +82,109 @@ export const headers: WtTableHeader[] = [
 			1,
 		],
 		show: true,
+		field: 'evaluation.score',
+		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Score],
+	},
+	{
+		value: 'plan',
+		locale: 'interactions.plan',
+		show: false,
+		field: 'evaluation.plan',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'dueDate',
+		locale: 'interactions.dueDate',
+		show: false,
+		field: 'evaluation.due_at',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'contactReason',
+		locale: 'interactions.contactReason',
+		show: false,
+		field: 'contact_reason',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'contactResult',
+		locale: 'interactions.contactResult',
+		show: false,
+		field: 'contact_result',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'csat',
+		locale: 'interactions.csat',
+		show: false,
+		field: 'csat',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'ratedAt',
+		locale: 'interactions.ratedAt',
+		show: false,
+		field: 'evaluation.rated_at',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'scorecard',
+		locale: [
+			'scorecards.scorecards',
+			1,
+		],
+		show: false,
+		field: 'evaluation.scorecard',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'handledBy',
+		locale: 'interactions.handledBy',
+		show: false,
+		field: 'handled_by',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'source',
+		locale: 'cases.source',
+		show: false,
+		field: 'source',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'firstResponse',
+		locale: 'interactions.firstResponse',
+		show: false,
+		field: 'chat.first_response_sec',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'messages',
+		locale: 'interactions.messages',
+		show: false,
+		field: 'chat.message_count',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'skipReason',
+		locale: 'interactions.skipReason',
+		show: false,
+		field: 'evaluation.skip_reason',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'skippedBy',
+		locale: 'interactions.skippedBy',
+		show: false,
+		field: 'evaluation.skipped_by',
+		sort: SortSymbols.NONE,
+	},
+	{
+		value: 'skippedAt',
+		locale: 'interactions.skippedAt',
+		show: false,
+		field: 'evaluation.skipped_at',
+		sort: SortSymbols.NONE,
 	},
 ];
