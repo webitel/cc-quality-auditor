@@ -1,6 +1,8 @@
 import { getDefaultGetParams } from '@webitel/api-services/api/defaults';
 import { applyTransform, merge } from '@webitel/api-services/api/transformers';
 import { RelativeDatetimeValue } from '@webitel/api-services/enums';
+import type { DatetimeRangeValue } from '@webitel/api-services/scripts';
+import { normalizeDatetimeRange } from '@webitel/api-services/scripts';
 import { normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 
 import { NotRequestedFields, RequiredFields } from '../configs/searchFields';
@@ -12,25 +14,17 @@ import type {
 } from '../types/interaction';
 
 const normalizeInteractionDate = (value?: string | InteractionsRange) => {
-	if (typeof value === 'string')
-		return {
-			from: normalizeToTimestamp(value, {
-				round: 'start',
-			}),
-			to: normalizeToTimestamp(value, {
-				round: 'end',
-			}),
-		};
-	if (value?.from == null && value?.to == null)
+	const range = normalizeDatetimeRange(value);
+	if (range?.from == null && range?.to == null)
 		return {
 			from: normalizeToTimestamp(RelativeDatetimeValue.Today, {
 				round: 'start',
 			}),
 		};
-	return value;
+	return range;
 };
 
-const toWireRange = (range?: InteractionsRange) => {
+const toWireRange = (range?: DatetimeRangeValue) => {
 	if (!range) return undefined;
 	const { from, to } = range;
 	if (from == null && to == null) return undefined;
@@ -64,6 +58,14 @@ const getSearchFilter = ({
 	interactionStatus,
 	user,
 	score,
+	dueDate,
+	ratedAt,
+	scorecard,
+	interactionHandledBy,
+	firstResponse,
+	messages,
+	skippedBy,
+	skippedAt,
 	search,
 	fts,
 	description,
@@ -77,6 +79,14 @@ const getSearchFilter = ({
 	status: toWireList(interactionStatus),
 	assignee_id: toWireList(user),
 	score: toWireRange(score),
+	due_at: toWireRange(normalizeDatetimeRange(dueDate)),
+	rated_at: toWireRange(normalizeDatetimeRange(ratedAt)),
+	scorecard_id: toWireList(scorecard),
+	handled_by: toWireList(interactionHandledBy),
+	first_response_sec: toWireRange(firstResponse),
+	message_count: toWireRange(messages),
+	skipped_by_id: toWireList(skippedBy),
+	skipped_at: toWireRange(normalizeDatetimeRange(skippedAt)),
 	q: search,
 	fts,
 	agent_description: description,
