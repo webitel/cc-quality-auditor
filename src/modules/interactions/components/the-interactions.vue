@@ -136,7 +136,6 @@
 </template>
 
 <script setup lang="ts">
-import { CallTranscriptAPI } from '@webitel/api-services/api';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
@@ -146,10 +145,11 @@ import {
 } from '@webitel/ui-sdk/enums';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
@@ -197,17 +197,6 @@ const resetFilters = () => {
 	filtersManager.value.reset();
 };
 
-const isTranscribing = ref(false);
-
-const isTranscribeDisabled = computed(
-	() =>
-		!selected.value.length ||
-		selected.value.some(
-			({ files, transcripts }) =>
-				!files[EngineCallFileType.FileTypeAudio] || transcripts.length,
-		),
-);
-
 const selectedAudioFileIds = computed(() => [
 	...new Set(
 		selected.value
@@ -216,18 +205,15 @@ const selectedAudioFileIds = computed(() => [
 	),
 ]);
 
-const transcribe = async () => {
-	try {
-		isTranscribing.value = true;
-		await CallTranscriptAPI.create({
-			fileId: selectedAudioFileIds.value,
-		});
-	} finally {
-		updateSelected([]);
-		await loadDataList();
-		isTranscribing.value = false;
-	}
-};
+const { isTranscribing, isTranscribeDisabled, transcribe } =
+	useTranscribeAction({
+		selected,
+		fileIds: selectedAudioFileIds,
+		onTranscribed: async () => {
+			updateSelected([]);
+			await loadDataList();
+		},
+	});
 
 const path = computed(() => [
 	{
