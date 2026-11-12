@@ -30,6 +30,9 @@ type SearchFilter = {
 	status?: string[];
 	assignee_id?: string[];
 	score?: Range;
+	q?: string;
+	fts?: string;
+	agent_description?: string;
 };
 
 type SearchRequest = {
@@ -61,6 +64,26 @@ const getCustomer = ({
 }: (typeof interactionsMock)[number]) =>
 	(direction === 'outbound' ? to : from)?.number;
 
+const SearchTopics = [
+	'order delivery',
+	'refund request',
+	'password reset',
+	'tariff change',
+	'connection issue',
+] as const;
+
+const getTopic = (item: (typeof interactionsMock)[number], shift = 0) =>
+	SearchTopics[(interactionsMock.indexOf(item) + shift) % SearchTopics.length];
+
+const getConversationText = (item: (typeof interactionsMock)[number]) =>
+	item.chat || item.call?.transcripts.length ? getTopic(item) : undefined;
+
+const getAgentComment = (item: (typeof interactionsMock)[number]) =>
+	item.agent ? `Customer asked about ${getTopic(item, 2)}` : undefined;
+
+const includesText = (text?: string, query?: string) =>
+	!query || !!text?.toLowerCase().includes(query.toLowerCase());
+
 const findItems = (filter: SearchFilter = {}, sort?: string) =>
 	sortItems(
 		interactionsMock
@@ -74,7 +97,10 @@ const findItems = (filter: SearchFilter = {}, sort?: string) =>
 					isInRange(item.duration, filter.duration) &&
 					isOneOf(item.status, filter.status) &&
 					isOneOf(item.evaluation?.assignee.id, filter.assignee_id) &&
-					isInRange(item.evaluation?.score, filter.score),
+					isInRange(item.evaluation?.score, filter.score) &&
+					includesText(getCustomer(item), filter.q) &&
+					includesText(getConversationText(item), filter.fts) &&
+					includesText(getAgentComment(item), filter.agent_description),
 			)
 			.map((item) => ({
 				...item,

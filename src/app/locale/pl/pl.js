@@ -1,5 +1,6 @@
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Audyt',
@@ -43,6 +44,11 @@ export default {
 				linked('objects.interactionType.chat'),
 			[InteractionType.Email]: ({ linked }) =>
 				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Zwykłe wyszukiwanie',
+			[SearchMode.Fts]: 'Wyszukiwanie pełnotekstowe',
+			[SearchMode.Description]: 'Komentarz agenta',
 		},
 	},
 	startPage: {
