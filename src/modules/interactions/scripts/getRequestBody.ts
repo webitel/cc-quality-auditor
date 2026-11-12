@@ -64,6 +64,9 @@ const getSearchFilter = ({
 	interactionStatus,
 	user,
 	score,
+	search,
+	fts,
+	description,
 }: GetInteractionsParams) => ({
 	created_at: toWireRange(normalizeInteractionDate(createdAt)),
 	type: toWireList(interactionType, InteractionTypeWire),
@@ -74,6 +77,9 @@ const getSearchFilter = ({
 	status: toWireList(interactionStatus),
 	assignee_id: toWireList(user),
 	score: toWireRange(score),
+	q: search,
+	fts,
+	agent_description: description,
 });
 
 const getQueryBody = ({ sort, fields, ...filters }: GetInteractionsParams) => ({
