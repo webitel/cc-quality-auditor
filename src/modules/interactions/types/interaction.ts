@@ -102,6 +102,14 @@ export type GetInteractionsParams = {
 	interactionStatus?: string[];
 	user?: number[];
 	score?: InteractionsRange;
+	dueDate?: string | InteractionsRange;
+	ratedAt?: string | InteractionsRange;
+	scorecard?: number[];
+	interactionHandledBy?: string[];
+	firstResponse?: InteractionsRange;
+	messages?: InteractionsRange;
+	skippedBy?: number[];
+	skippedAt?: string | InteractionsRange;
 	search?: string;
 	fts?: string;
 	description?: string;
