@@ -143,7 +143,6 @@
 </template>
 
 <script setup lang="ts">
-import { InteractionStatus } from '@webitel/api-services/enums';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
@@ -153,10 +152,11 @@ import {
 } from '@webitel/ui-sdk/enums';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
@@ -225,8 +225,6 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 		},
 	});
 
-const isAssignPopupOpened = ref(false);
-
 const selectedInteractionKeys = computed(() =>
 	selected.value.map(({ type, id }) => ({
 		type,
@@ -234,17 +232,14 @@ const selectedInteractionKeys = computed(() =>
 	})),
 );
 
-const isAssignDisabled = computed(
-	() =>
-		!selected.value.length ||
-		selected.value.some(({ status }) => status === InteractionStatus.Completed),
-);
-
-const handleAssigned = async () => {
-	isAssignPopupOpened.value = false;
-	updateSelected([]);
-	await loadDataList();
-};
+const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
+	useAssignAction({
+		selected,
+		onAssigned: async () => {
+			updateSelected([]);
+			await loadDataList();
+		},
+	});
 
 const path = computed(() => [
 	{
