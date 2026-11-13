@@ -90,11 +90,19 @@ const routes: RouteRecordRaw[] = [
 				path: RoutePaths.Interactions,
 				name: AuditorSections.Interactions,
 				component: TheInteractions,
+				meta: {
+					WtObject: WtObject.AuditRating,
+					UiSection: AuditorSections.Interactions,
+				},
 			},
 			{
 				path: `${RoutePaths.Interactions}/:id`,
 				name: `${AuditorSections.Interactions}-card`,
 				component: TheEvaluationCard,
+				meta: {
+					WtObject: WtObject.AuditRating,
+					UiSection: AuditorSections.Interactions,
+				},
 			},
 			{
 				path: '/:pathMatch(.*)*',

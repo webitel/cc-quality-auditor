@@ -44,6 +44,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Tìm kiếm cuộc gọi, cuộc trò chuyện và email, phân công hoặc đánh giá chúng.',
+		},
 		scorecards: {
 			text: 'Tạo phiếu chấm điểm, đặt trọng số tiêu chí và nhóm câu hỏi.',
 		},

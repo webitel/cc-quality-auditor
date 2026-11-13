@@ -44,6 +44,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Wyszukuj połączenia, czaty i e-maile, przydzielaj je lub oceniaj.',
+		},
 		scorecards: {
 			text: 'Twórz arkusze ocen, ustawiaj wagi kryteriów i grupuj pytania.',
 		},

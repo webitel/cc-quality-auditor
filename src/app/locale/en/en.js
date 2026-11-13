@@ -43,6 +43,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Search calls, chats, and emails, assign or evaluate them.',
+		},
 		scorecards: {
 			text: 'Create evaluation forms, set criteria weights, and group questions.',
 		},

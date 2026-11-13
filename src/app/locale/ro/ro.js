@@ -43,6 +43,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Căutați apeluri, chaturi și e-mailuri, atribuiți-le sau evaluați-le.',
+		},
 		scorecards: {
 			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
 		},

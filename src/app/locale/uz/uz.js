@@ -44,6 +44,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: "Qo'ng'iroqlar, chatlar va xatlarni qidiring, ularni tayinlang yoki baholang.",
+		},
 		scorecards: {
 			text: 'Baholash varaqalarini yarating, mezonlar vaznini belgilang va savollarni guruhlang.',
 		},

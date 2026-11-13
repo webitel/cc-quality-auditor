@@ -8,12 +8,14 @@ import type {
 
 export const useAssignAction = ({
 	selected,
+	hasAccess,
 	onAssigned,
 }: UseAssignActionOptions): UseAssignActionReturn => {
 	const isAssignPopupOpened = ref(false);
 
 	const isAssignDisabled = computed(
 		() =>
+			!(hasAccess?.value ?? true) ||
 			!selected.value.length ||
 			selected.value.some(
 				({ status }) => status === InteractionStatus.Completed,
