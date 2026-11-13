@@ -8,6 +8,7 @@ export const filterConfigs = {
 	[FilterOption.CreatedAt]: createFilterConfig({
 		name: FilterOption.CreatedAt,
 		showFilterName: true,
+		notDeletable: true,
 	}),
 	[FilterOption.InteractionType]: createFilterConfig({
 		name: FilterOption.InteractionType,
@@ -39,6 +40,38 @@ export const filterConfigs = {
 	}),
 	[FilterOption.Score]: createFilterConfig({
 		name: FilterOption.Score,
+		showFilterName: true,
+	}),
+	[FilterOption.DueDate]: createFilterConfig({
+		name: FilterOption.DueDate,
+		showFilterName: true,
+	}),
+	[FilterOption.RatedAt]: createFilterConfig({
+		name: FilterOption.RatedAt,
+		showFilterName: true,
+	}),
+	[FilterOption.Scorecard]: createFilterConfig({
+		name: FilterOption.Scorecard,
+		showFilterName: true,
+	}),
+	[FilterOption.InteractionHandledBy]: createFilterConfig({
+		name: FilterOption.InteractionHandledBy,
+		showFilterName: true,
+	}),
+	[FilterOption.FirstResponse]: createFilterConfig({
+		name: FilterOption.FirstResponse,
+		showFilterName: true,
+	}),
+	[FilterOption.Messages]: createFilterConfig({
+		name: FilterOption.Messages,
+		showFilterName: true,
+	}),
+	[FilterOption.SkippedBy]: createFilterConfig({
+		name: FilterOption.SkippedBy,
+		showFilterName: true,
+	}),
+	[FilterOption.SkippedAt]: createFilterConfig({
+		name: FilterOption.SkippedAt,
 		showFilterName: true,
 	}),
 } satisfies Record<string, FilterConfigDefinition>;

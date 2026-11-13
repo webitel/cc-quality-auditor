@@ -1,4 +1,3 @@
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -21,22 +20,10 @@ export default {
 		interactionDate: 'Fecha de interacción',
 		customer: 'Cliente',
 		plan: 'Plan',
-		dueDate: 'Fecha límite',
 		contactReason: 'Motivo de contacto',
 		contactResult: 'Resultado del contacto',
 		csat: 'CSAT',
-		ratedAt: 'Fecha de evaluación',
-		handledBy: 'Atendido por',
-		firstResponse: 'Primera respuesta',
-		messages: 'Mensajes',
 		skipReason: 'Motivo de omisión',
-		skippedBy: 'Omitido por',
-		skippedAt: 'Fecha de omisión',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Agente',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType.Call]: ({ linked }) =>
 				linked('objects.interactionType.call'),
