@@ -17,6 +17,11 @@ export default {
 		assign: 'Chỉ định',
 		assignInteractions: 'Chỉ định tương tác | Chỉ định {n} tương tác',
 		me: '(tôi)',
+		deleteEvaluations: 'Xóa đánh giá | Xóa {n} đánh giá',
+		evaluationsWillBeDeleted:
+			'Đánh giá sẽ bị xóa. | Các đánh giá này sẽ bị xóa.',
+		interactionReturnsToNotEvaluated:
+			'Tương tác trở về trạng thái “Chưa đánh giá”.',
 		interactionDate: 'Ngày tương tác',
 		customer: 'Khách hàng',
 		plan: 'Kế hoạch',

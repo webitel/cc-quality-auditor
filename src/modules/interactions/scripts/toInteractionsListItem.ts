@@ -33,6 +33,7 @@ export const toInteractionsListItem = (
 		team: item.team?.name,
 		duration: convertDuration(item.duration),
 		status,
+		evaluationId: evaluation?.id,
 		assignee: evaluation?.assignee?.name,
 		score: evaluation?.score,
 		plan: evaluation?.plan?.name,

@@ -18,6 +18,10 @@ export default {
 		assignInteractions:
 			"O'zaro aloqani tayinlash | O'zaro aloqalarni tayinlash: {n}",
 		me: '(men)',
+		deleteEvaluations: "Baholarni o'chirish | Baholarni o'chirish: {n}",
+		evaluationsWillBeDeleted: "Baho o'chiriladi. | Bu baholar o'chiriladi.",
+		interactionReturnsToNotEvaluated:
+			"O'zaro aloqa «Baholanmagan» holatiga qaytadi.",
 		interactionDate: "O'zaro aloqa sanasi",
 		customer: 'Mijoz',
 		plan: 'Reja',

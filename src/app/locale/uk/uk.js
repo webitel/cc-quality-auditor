@@ -16,6 +16,10 @@ export default {
 		assign: 'Призначити',
 		assignInteractions: 'Призначити взаємодію | Призначити взаємодії: {n}',
 		me: '(я)',
+		deleteEvaluations: 'Видалити оцінки | Видалити оцінки: {n}',
+		evaluationsWillBeDeleted: 'Оцінку буде видалено. | Оцінки буде видалено.',
+		interactionReturnsToNotEvaluated:
+			'Взаємодія повернеться в статус «Не оцінено».',
 		interactionDate: 'Дата взаємодії',
 		customer: 'Клієнт',
 		plan: 'План',

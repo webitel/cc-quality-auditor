@@ -51,9 +51,12 @@
                 IconAction.REFRESH,
                 IconAction.FILTERS,
                 IconAction.COLUMNS,
+                IconAction.DELETE,
               ]"
+              :disabled:delete="isDeleteDisabled"
               @click:refresh="loadDataList"
               @click:filters="showActionsPanel = !showActionsPanel"
+              @click:delete="isDeleteEvaluationsPopupOpened = true"
             >
               <template #search-bar>
                 <dynamic-filter-search
@@ -148,9 +151,15 @@
       </section>
       <interactions-assign-popup
         v-if="isAssignPopupOpened"
-        :interactions="selectedInteractionKeys"
+        :interactions="selected"
         @close="isAssignPopupOpened = false"
         @assigned="handleAssigned"
+      />
+      <interactions-delete-evaluations-popup
+        v-if="isDeleteEvaluationsPopupOpened"
+        :interactions="selected"
+        @close="isDeleteEvaluationsPopupOpened = false"
+        @deleted="handleEvaluationsDeleted"
       />
     </template>
   </wt-page-wrapper>
@@ -185,6 +194,7 @@ import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
+import InteractionsDeleteEvaluationsPopup from './interactions-delete-evaluations-popup.vue';
 import InteractionsFilters from './interactions-filters.vue';
 
 defineOptions({
@@ -194,6 +204,7 @@ defineOptions({
 		ExportAction,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
+		InteractionsDeleteEvaluationsPopup,
 		InteractionsFilters,
 	},
 });
@@ -305,6 +316,19 @@ const { isExporting, exportFile } = useExportFile({
 		}),
 	filename: 'interactions',
 });
+
+const isDeleteEvaluationsPopupOpened = ref(false);
+
+const isDeleteDisabled = computed(
+	() =>
+		!selected.value.length ||
+		selected.value.some(({ evaluationId }) => !evaluationId),
+);
+
+const handleEvaluationsDeleted = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
 
 const downloadTypes = [
 	DownloadType.AudioRecordings,
