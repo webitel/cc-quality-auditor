@@ -43,6 +43,12 @@ export default {
 			[SearchMode.Description]: 'Bình luận của tác vụ',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Cuộc hội thoại',
+		information: 'Thông tin',
+		evaluation: 'Đánh giá',
+		skip: 'BỎ QUA',
+	},
 	startPage: {
 		interactions: {
 			text: 'Tìm kiếm cuộc gọi, cuộc trò chuyện và email, phân công hoặc đánh giá chúng.',

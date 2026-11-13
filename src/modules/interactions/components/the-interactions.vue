@@ -235,9 +235,12 @@ import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
+import { InteractionChannel } from '../enums/InteractionChannel.enum';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
+import type { InteractionType } from '../enums/InteractionType.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
+import type { InteractionKey } from '../types/interaction';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
 import InteractionsDeleteEvaluationsPopup from './interactions-delete-evaluations-popup.vue';
@@ -430,10 +433,11 @@ const {
 	closePlayer,
 } = usePlayMedia();
 
-const openCard = ({ id }: { id: string }) =>
+const openCard = ({ type, id }: InteractionKey) =>
 	router.push({
 		name: `${AuditorSections.Interactions}-card`,
 		params: {
+			type: InteractionChannel[type as InteractionType],
 			id,
 		},
 	});

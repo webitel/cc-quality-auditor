@@ -44,6 +44,19 @@ const getList = async (params: GetInteractionsParams) => {
 	}
 };
 
+const getInteraction = async ({ type, id }: InteractionKey) => {
+	try {
+		const response = await instance.get(`${InteractionsUrl}/${type}/${id}`);
+		return applyTransform(response.data, [
+			snakeToCamel(),
+		]) as InteractionResponseItem;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const assign = async ({
 	interactions,
 	assigneeId,
@@ -94,6 +107,7 @@ const exportData = async (params: ExportInteractionsParams) => {
 
 const InteractionsAPIRepository = {
 	getList,
+	getInteraction,
 	assign,
 	deleteEvaluations,
 	exportData,
