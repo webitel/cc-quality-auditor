@@ -1,6 +1,6 @@
 <template>
   <wt-page-wrapper
-    :actions-panel="false"
+    :actions-panel="showActionsPanel"
     class="interactions table-page"
   >
     <template #header>
@@ -36,8 +36,10 @@
         </template>
       </wt-page-header>
     </template>
+    <template #actions-panel>
+      <interactions-filters @hide="showActionsPanel = false" />
+    </template>
     <template #main>
-      <section class="interactions-filters" />
       <section class="table-section">
         <header class="table-title">
           <h3 class="table-title__title typo-heading-3">
@@ -51,6 +53,7 @@
                 IconAction.COLUMNS,
               ]"
               @click:refresh="loadDataList"
+              @click:filters="showActionsPanel = !showActionsPanel"
             >
               <template #search-bar>
                 <dynamic-filter-search
@@ -64,12 +67,13 @@
                   @update:search-mode="updateSearchMode"
                 />
               </template>
-              <template #filters>
-                <filters-actions-menu
-                  :filters-manager="filtersManager"
-                  :filter-options="filtersOptions"
-                  @filter:reset-all="resetFilters"
-                />
+              <template #filters="{ action, onClick }">
+                <wt-badge :hidden="!anyFiltersOnFiltersPanel">
+                  <wt-icon-action
+                    :action="action"
+                    @click="onClick"
+                  />
+                </wt-badge>
               </template>
               <template #columns>
                 <wt-table-column-select
@@ -156,7 +160,7 @@
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import {
 	DynamicFilterSearchComponent as DynamicFilterSearch,
-	FiltersActionsMenuComponent as FiltersActionsMenu,
+	FilterOption,
 } from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
@@ -169,28 +173,28 @@ import { useExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables
 import DownloadAction from '@webitel/ui-sdk/src/modules/FilesExport/components/download-action.vue';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
-import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
+import InteractionsFilters from './interactions-filters.vue';
 
 defineOptions({
 	components: {
 		DownloadAction,
 		DynamicFilterSearch,
 		ExportAction,
-		FiltersActionsMenu,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
+		InteractionsFilters,
 	},
 });
 
@@ -235,11 +239,17 @@ initialize();
 
 const filters = computed(() => filtersManager.value.getAllValues());
 
-const resetFilters = () => {
-	filtersManager.value.reset({
-		exclude: Object.values(SearchMode),
-	});
-};
+const showActionsPanel = ref(true);
+
+const anyFiltersOnFiltersPanel = computed(() =>
+	filtersManager.value
+		.getAllKeys()
+		.some(
+			(name) =>
+				name !== FilterOption.CreatedAt &&
+				!Object.values(SearchMode).some((mode) => mode === name),
+		),
+);
 
 const searchModeOptions = computed(() =>
 	Object.values(SearchMode).map((mode) => ({
