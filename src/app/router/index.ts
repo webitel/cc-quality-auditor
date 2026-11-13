@@ -96,7 +96,7 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
-				path: `${RoutePaths.Interactions}/:id`,
+				path: `${RoutePaths.Interactions}/:type/:id`,
 				name: `${AuditorSections.Interactions}-card`,
 				component: TheEvaluationCard,
 				meta: {

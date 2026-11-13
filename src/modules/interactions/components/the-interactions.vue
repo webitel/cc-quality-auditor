@@ -236,8 +236,10 @@ import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
+import { InteractionTypeWire } from '../enums/InteractionTypeWire.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
+import type { InteractionKey } from '../types/interaction';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
 import InteractionsDeleteEvaluationsPopup from './interactions-delete-evaluations-popup.vue';
@@ -430,10 +432,13 @@ const {
 	closePlayer,
 } = usePlayMedia();
 
-const openCard = ({ id }: { id: string }) =>
+const openCard = ({ type, id }: InteractionKey) =>
 	router.push({
 		name: `${AuditorSections.Interactions}-card`,
 		params: {
+			type: Object.keys(InteractionTypeWire).find(
+				(channel) => InteractionTypeWire[channel] === type,
+			),
 			id,
 		},
 	});
