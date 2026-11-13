@@ -235,8 +235,9 @@ import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
+import { InteractionChannel } from '../enums/InteractionChannel.enum';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
-import { InteractionTypeWire } from '../enums/InteractionTypeWire.enum';
+import type { InteractionType } from '../enums/InteractionType.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import type { InteractionKey } from '../types/interaction';
@@ -436,9 +437,7 @@ const openCard = ({ type, id }: InteractionKey) =>
 	router.push({
 		name: `${AuditorSections.Interactions}-card`,
 		params: {
-			type: Object.keys(InteractionTypeWire).find(
-				(channel) => InteractionTypeWire[channel] === type,
-			),
+			type: InteractionChannel[type as InteractionType],
 			id,
 		},
 	});
