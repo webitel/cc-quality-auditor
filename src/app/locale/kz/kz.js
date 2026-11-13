@@ -42,6 +42,12 @@ export default {
 			[SearchMode.Description]: 'Оператордың түсініктемесі',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Әңгіме',
+		information: 'Ақпарат',
+		evaluation: 'Бағалау',
+		skip: 'ӨТКІЗІП ЖІБЕРУ',
+	},
 	startPage: {
 		interactions: {
 			text: 'Қоңыраулар, чаттар мен хаттарды іздеу, тағайындау және бағалау.',

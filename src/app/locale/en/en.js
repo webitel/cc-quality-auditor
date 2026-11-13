@@ -42,6 +42,12 @@ export default {
 			[SearchMode.Description]: "Agent's comment",
 		},
 	},
+	evaluationCard: {
+		conversation: 'Conversation',
+		information: 'Information',
+		evaluation: 'Evaluation',
+		skip: 'SKIP',
+	},
 	startPage: {
 		interactions: {
 			text: 'Search calls, chats, and emails, assign or evaluate them.',

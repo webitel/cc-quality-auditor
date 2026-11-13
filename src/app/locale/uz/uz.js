@@ -43,6 +43,12 @@ export default {
 			[SearchMode.Description]: 'Agent izohi',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Suhbat',
+		information: "Ma'lumot",
+		evaluation: 'Baholash',
+		skip: "O'TKAZIB YUBORISH",
+	},
 	startPage: {
 		interactions: {
 			text: "Qo'ng'iroqlar, chatlar va xatlarni qidiring, ularni tayinlang yoki baholang.",

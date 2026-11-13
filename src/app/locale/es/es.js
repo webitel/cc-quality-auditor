@@ -42,6 +42,12 @@ export default {
 			[SearchMode.Description]: 'Comentario del agente',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Conversación',
+		information: 'Información',
+		evaluation: 'Evaluación',
+		skip: 'OMITIR',
+	},
 	startPage: {
 		interactions: {
 			text: 'Busque llamadas, chats y correos electrónicos, asígnelos o evalúelos.',
