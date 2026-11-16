@@ -269,6 +269,26 @@ export const interactionsHandlers = [
 			});
 		},
 	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/:type/:id`,
+		({ params }) => {
+			const item = interactionsMock.find(
+				({ type, id }) => type === params.type && id === params.id,
+			);
+			if (!item) {
+				return HttpResponse.json(
+					{
+						code: 5,
+						message: 'Interaction not found',
+					},
+					{
+						status: 404,
+					},
+				);
+			}
+			return HttpResponse.json(item);
+		},
+	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/export`,
 		async ({ request }) => {
