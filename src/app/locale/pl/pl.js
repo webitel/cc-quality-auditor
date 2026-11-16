@@ -45,6 +45,12 @@ export default {
 			[SearchMode.Description]: 'Komentarz agenta',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Rozmowa',
+		information: 'Informacje',
+		evaluation: 'Ocena',
+		skip: 'Pomiń',
+	},
 	startPage: {
 		interactions: {
 			text: 'Wyszukuj połączenia, czaty i e-maile, przydzielaj je lub oceniaj.',

@@ -44,6 +44,12 @@ export default {
 			[SearchMode.Description]: 'Comentariul agentului',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Conversație',
+		information: 'Informații',
+		evaluation: 'Evaluare',
+		skip: 'Omite',
+	},
 	startPage: {
 		interactions: {
 			text: 'Căutați apeluri, chaturi și e-mailuri, atribuiți-le sau evaluați-le.',

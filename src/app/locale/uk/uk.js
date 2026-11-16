@@ -43,6 +43,12 @@ export default {
 			[SearchMode.Description]: 'Коментар оператора',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Розмова',
+		information: 'Інформація',
+		evaluation: 'Оцінка',
+		skip: 'Пропустити',
+	},
 	startPage: {
 		interactions: {
 			text: 'Пошук дзвінків, чатів і листів, призначення та оцінювання.',
