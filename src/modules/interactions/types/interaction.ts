@@ -54,7 +54,7 @@ export type InteractionResponseItem = {
 
 export type InteractionsListItem = {
 	id: string;
-	type: string;
+	type: InteractionType;
 	parentId: string;
 	interactionDate: string | null;
 	interactionType: InteractionType;
