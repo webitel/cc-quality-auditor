@@ -42,6 +42,12 @@ export default {
 			[SearchMode.Description]: 'Комментарий оператора',
 		},
 	},
+	evaluationCard: {
+		conversation: 'Разговор',
+		information: 'Информация',
+		evaluation: 'Оценка',
+		skip: 'Пропустить',
+	},
 	startPage: {
 		interactions: {
 			text: 'Поиск звонков, чатов и писем, назначение и оценивание.',
