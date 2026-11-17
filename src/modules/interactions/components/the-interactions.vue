@@ -149,7 +149,7 @@ import {
 	WtApplication,
 } from '@webitel/ui-sdk/enums';
 import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
-import { useExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useExportFile';
+import { useServerExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useServerExportFile';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
@@ -247,18 +247,17 @@ const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 		},
 	});
 
-const { isExporting, exportFile } = useExportFile({
-	exportMethod: (options) =>
-		InteractionsAPIRepository.exportData({
-			...filters.value,
-			sort: sort.value,
-			fields: fields.value,
-			...options,
-			...(selected.value.length && {
-				interactions: selectedInteractionKeys.value,
-			}),
-		}),
+const { isExporting, exportFile } = useServerExportFile({
+	exportMethod: InteractionsAPIRepository.exportData,
 	filename: 'interactions',
+	params: () => ({
+		...filters.value,
+		sort: sort.value,
+		fields: fields.value,
+		...(selected.value.length && {
+			interactions: selectedInteractionKeys.value,
+		}),
+	}),
 });
 
 const path = computed(() => [
