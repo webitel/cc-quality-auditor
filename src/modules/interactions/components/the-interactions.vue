@@ -8,8 +8,10 @@
         <wt-breadcrumb :path="path" />
         <template #actions>
           <wt-button
+            :disabled="isTranscribeDisabled"
+            :loading="isTranscribing"
             color="secondary"
-            disabled
+            @click="transcribe"
           >
             {{ t('interactions.transcribe') }}
           </wt-button>
@@ -134,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import { FiltersActionsMenuComponent as FiltersActionsMenu } from '@webitel/ui-datalist/filters';
 import {
 	AuditorSections,
@@ -146,6 +149,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { useInteractionsDatalistStore } from '../stores';
@@ -192,6 +196,24 @@ initialize();
 const resetFilters = () => {
 	filtersManager.value.reset();
 };
+
+const selectedAudioFileIds = computed(() => [
+	...new Set(
+		selected.value
+			.flatMap(({ files }) => files[EngineCallFileType.FileTypeAudio] ?? [])
+			.map(({ id }) => id),
+	),
+]);
+
+const { isTranscribing, isTranscribeDisabled, transcribe } =
+	useTranscribeAction({
+		selected,
+		fileIds: selectedAudioFileIds,
+		onTranscribed: async () => {
+			updateSelected([]);
+			await loadDataList();
+		},
+	});
 
 const path = computed(() => [
 	{
