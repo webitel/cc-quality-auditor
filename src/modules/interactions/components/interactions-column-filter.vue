@@ -4,7 +4,7 @@
     :form-view="formView"
     :hide="hide"
     :filters-manager="filtersManager"
-    :has-read-access="userinfoStore.hasReadAccess"
+    :has-read-access="hasReadAccess"
     @add:filter="addFilter"
     @update:filter="updateFilter"
     @delete:filter="deleteFilter"
@@ -31,7 +31,7 @@ defineProps<{
 	hide?: () => void;
 }>();
 
-const userinfoStore = useUserinfoStore();
+const { hasReadAccess } = useUserinfoStore();
 const tableStore = useInteractionsDatalistStore();
 const { filtersManager } = storeToRefs(tableStore);
 
