@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -22,22 +21,10 @@ export default {
 		interactionDate: 'Дата взаємодії',
 		customer: 'Клієнт',
 		plan: 'План',
-		dueDate: 'Строк',
 		contactReason: 'Причина звернення',
 		contactResult: 'Результат звернення',
 		csat: 'CSAT',
-		ratedAt: 'Дата оцінки',
-		handledBy: 'Обслуговував',
-		firstResponse: 'Перша відповідь',
-		messages: 'Повідомлення',
 		skipReason: 'Причина пропуску',
-		skippedBy: 'Хто пропустив',
-		skippedAt: 'Дата пропуску',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Оператор',
-			[HandledBy.Bot]: 'Бот',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),

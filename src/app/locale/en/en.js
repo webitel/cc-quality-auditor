@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -22,22 +21,10 @@ export default {
 		interactionDate: 'Interaction date',
 		customer: 'Customer',
 		plan: 'Plan',
-		dueDate: 'Due date',
 		contactReason: 'Contact reason',
 		contactResult: 'Contact result',
 		csat: 'CSAT',
-		ratedAt: 'Rated at',
-		handledBy: 'Handled by',
-		firstResponse: 'First response',
-		messages: 'Messages',
 		skipReason: 'Skip reason',
-		skippedBy: 'Skipped by',
-		skippedAt: 'Skipped at',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Agent',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),

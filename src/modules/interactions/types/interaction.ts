@@ -1,4 +1,7 @@
-import type { InteractionStatus } from '@webitel/api-services/enums';
+import type {
+	InteractionHandledBy,
+	InteractionStatus,
+} from '@webitel/api-services/enums';
 import type {
 	EngineCallFile,
 	EngineEndpoint,
@@ -8,7 +11,6 @@ import type {
 } from '@webitel/api-services/gen/models';
 import type { ExportOptions } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useExportFile';
 
-import type { HandledBy } from '../enums/HandledBy.enum';
 import type { InteractionType } from '../enums/InteractionType.enum';
 
 export type InteractionsRange = {
@@ -21,7 +23,7 @@ export type InteractionResponseItem = {
 	id: string;
 	parentId: string;
 	createdAt: string;
-	handledBy: HandledBy;
+	handledBy: InteractionHandledBy;
 	direction: string;
 	from?: EngineEndpoint;
 	to?: EngineEndpoint;
@@ -68,7 +70,7 @@ export type InteractionsListItem = {
 	isOverdue: boolean;
 	ratedAt: string | null;
 	scorecard?: string;
-	handledBy: HandledBy;
+	handledBy: InteractionHandledBy;
 	source?: string;
 	firstResponse?: string;
 	messages?: number;
@@ -100,6 +102,14 @@ export type GetInteractionsParams = {
 	interactionStatus?: string[];
 	user?: number[];
 	score?: InteractionsRange;
+	dueDate?: string | InteractionsRange;
+	ratedAt?: string | InteractionsRange;
+	scorecard?: number[];
+	interactionHandledBy?: string[];
+	firstResponse?: InteractionsRange;
+	messages?: InteractionsRange;
+	skippedBy?: number[];
+	skippedAt?: string | InteractionsRange;
 	search?: string;
 	fts?: string;
 	description?: string;

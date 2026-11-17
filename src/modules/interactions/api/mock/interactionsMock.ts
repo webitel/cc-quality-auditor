@@ -1,7 +1,10 @@
-import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
+import {
+	ChannelType,
+	InteractionHandledBy,
+	InteractionStatus,
+} from '@webitel/api-services/enums';
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 
-import { HandledBy } from '../../enums/HandledBy.enum';
 import { InteractionType } from '../../enums/InteractionType.enum';
 
 const minute = 60 * 1000;
@@ -120,9 +123,9 @@ export const interactionsMock = Array.from(
 		const files = isChat ? [] : getCallFiles(index, createdAt);
 		const handledBy = isHandledByBot
 			? isChat
-				? HandledBy.Bot
-				: HandledBy.Ivr
-			: HandledBy.Agent;
+				? InteractionHandledBy.Bot
+				: InteractionHandledBy.Ivr
+			: InteractionHandledBy.Agent;
 
 		return {
 			type: InteractionType[isChat ? ChannelType.Chat : ChannelType.Call],
