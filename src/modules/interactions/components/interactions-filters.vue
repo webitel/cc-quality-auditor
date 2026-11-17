@@ -4,7 +4,7 @@
     :filter-options="filtersOptions"
     :preset-namespace="namespace"
     :use-presets-store="useInteractionsFilterPresetsStore"
-    :has-read-access="userinfoStore.hasReadAccess"
+    :has-read-access="hasReadAccess"
     @filter:add="addFilter"
     @filter:update="updateFilter"
     @filter:delete="deleteFilter"
@@ -42,7 +42,7 @@ const emit = defineEmits<{
 	hide: [];
 }>();
 
-const userinfoStore = useUserinfoStore();
+const { hasReadAccess } = useUserinfoStore();
 const tableStore = useInteractionsDatalistStore();
 const { filtersManager } = storeToRefs(tableStore);
 
