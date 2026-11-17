@@ -1,3 +1,5 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
 import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 
@@ -35,11 +37,11 @@ export default {
 			[HandledBy.Ivr]: 'IVR',
 		},
 		interactionTypes: {
-			[InteractionType.Call]: ({ linked }) =>
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
-			[InteractionType.Chat]: ({ linked }) =>
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
 				linked('objects.interactionType.chat'),
-			[InteractionType.Email]: ({ linked }) =>
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
 				linked('objects.interactionType.email'),
 		},
 	},
