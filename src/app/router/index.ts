@@ -24,8 +24,8 @@ const Scorecards = () =>
 	import('../../modules/scorecards/components/the-scorecards.vue');
 const TheInteractions = () =>
 	import('../../modules/interactions/components/the-interactions.vue');
-const TheEvaluationCard = () =>
-	import('../../modules/evaluation-card/components/the-evaluation-card.vue');
+const OpenedEvaluation = () =>
+	import('../../modules/evaluation-card/components/opened-evaluation.vue');
 const AccessDenied = () =>
 	import('../components/utils/access-denied-component.vue');
 
@@ -94,7 +94,7 @@ const routes: RouteRecordRaw[] = [
 			{
 				path: `${RoutePaths.Interactions}/:id`,
 				name: `${AuditorSections.Interactions}-card`,
-				component: TheEvaluationCard,
+				component: OpenedEvaluation,
 			},
 			{
 				path: '/:pathMatch(.*)*',
