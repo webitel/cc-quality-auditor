@@ -100,4 +100,7 @@ export type GetInteractionsParams = {
 	interactionStatus?: string[];
 	user?: number[];
 	score?: InteractionsRange;
+	search?: string;
+	fts?: string;
+	description?: string;
 };
