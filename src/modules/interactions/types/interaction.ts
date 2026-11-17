@@ -78,6 +78,8 @@ export type InteractionsListItem = {
 	transcripts: EngineTranscriptLookup[];
 };
 
+export type InteractionKey = Pick<InteractionsListItem, 'type' | 'id'>;
+
 export type GetInteractionsParams = {
 	page?: number;
 	size?: number;
