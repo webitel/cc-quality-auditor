@@ -46,6 +46,18 @@ const getCallFiles = (index: number, createdAt: number) =>
 					start_at: String(createdAt),
 					stop_at: String(createdAt + minute),
 				},
+				...(index % 4 === 3
+					? [
+							{
+								id: `${89000 + index}`,
+								name: `screen_${index + 1}.mp4`,
+								mime_type: 'video/mp4',
+								type: EngineCallFileType.FileTypeScreensharing,
+								start_at: String(createdAt),
+								stop_at: String(createdAt + minute),
+							},
+						]
+					: []),
 			];
 
 export const getCallTranscripts = (
@@ -142,7 +154,14 @@ export const interactionsMock = Array.from(
 				: {
 						id,
 						files,
-						transcripts: index % 6 === 3 ? getCallTranscripts(files) : [],
+						transcripts:
+							index % 6 === 3
+								? getCallTranscripts(
+										files.filter(
+											({ type }) => type === EngineCallFileType.FileTypeAudio,
+										),
+									)
+								: [],
 					},
 			chat: isChat
 				? {
