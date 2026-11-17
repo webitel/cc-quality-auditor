@@ -4,7 +4,7 @@ import { RelativeDatetimeValue } from '@webitel/api-services/enums';
 import { normalizeToTimestamp } from '@webitel/ui-sdk/scripts';
 
 import { NotRequestedFields, RequiredFields } from '../configs/searchFields';
-import { InteractionTypeWire } from '../enums/InteractionTypeWire.enum';
+import { InteractionType } from '../enums/InteractionType.enum';
 import type {
 	GetInteractionsParams,
 	InteractionsRange,
@@ -76,7 +76,7 @@ export const getSearchBody = ({
 			fields: getRequestFields(fields),
 			filter: {
 				created_at: toWireRange(normalizeInteractionDate(createdAt)),
-				type: toWireList(interactionType, InteractionTypeWire),
+				type: toWireList(interactionType, InteractionType),
 				contact_id: toWireList(contact),
 				agent_id: toWireList(agent),
 				team_id: toWireList(team),

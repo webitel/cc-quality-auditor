@@ -1,7 +1,9 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
 export const InteractionType = {
-	Call: 'INTERACTION_TYPE_CALL',
-	Chat: 'INTERACTION_TYPE_CHAT',
-	Email: 'INTERACTION_TYPE_EMAIL',
+	[ChannelType.Call]: 'INTERACTION_TYPE_CALL',
+	[ChannelType.Chat]: 'INTERACTION_TYPE_CHAT',
+	[ChannelType.Email]: 'INTERACTION_TYPE_EMAIL',
 } as const;
 
 export type InteractionType =
