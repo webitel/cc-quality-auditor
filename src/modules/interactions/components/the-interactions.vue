@@ -22,12 +22,10 @@
           >
             {{ t('interactions.assign') }}
           </wt-button>
-          <wt-button
-            color="secondary"
-            disabled
-          >
-            {{ t('reusable.export') }}
-          </wt-button>
+          <export-action
+            :loading="isExporting"
+            @export="exportFile"
+          />
           <wt-button-select
             :options="[]"
             color="secondary"
@@ -150,12 +148,15 @@ import {
 	IconAction,
 	WtApplication,
 } from '@webitel/ui-sdk/enums';
+import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
+import { useServerExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useServerExportFile';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
 import { filtersOptions } from '../configs/filtersOptions';
@@ -166,6 +167,7 @@ import InteractionsColumnFilter from './interactions-column-filter.vue';
 
 defineOptions({
 	components: {
+		ExportAction,
 		FiltersActionsMenu,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
@@ -186,6 +188,8 @@ const {
 	next,
 	headers,
 	shownHeaders,
+	fields,
+	sort,
 	filtersManager,
 } = storeToRefs(tableStore);
 
@@ -202,6 +206,8 @@ const {
 } = tableStore;
 
 initialize();
+
+const filters = computed(() => filtersManager.value.getAllValues());
 
 const resetFilters = () => {
 	filtersManager.value.reset();
@@ -241,6 +247,19 @@ const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 		},
 	});
 
+const { isExporting, exportFile } = useServerExportFile({
+	exportMethod: InteractionsAPIRepository.exportData,
+	filename: 'interactions',
+	params: () => ({
+		...filters.value,
+		sort: sort.value,
+		fields: fields.value,
+		...(selected.value.length && {
+			interactions: selectedInteractionKeys.value,
+		}),
+	}),
+});
+
 const path = computed(() => [
 	{
 		name: t('audit'),
@@ -262,7 +281,7 @@ const {
 } = useTableEmpty({
 	dataList,
 	error,
-	filters: computed(() => filtersManager.value.getAllValues()),
+	filters,
 	isLoading,
 });
 </script>
