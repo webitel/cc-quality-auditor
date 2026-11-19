@@ -47,6 +47,7 @@ export default {
 		information: 'Informații',
 		evaluation: 'Evaluare',
 		skip: 'Omite',
+		matchesCount: '{current} din {total}',
 	},
 	startPage: {
 		interactions: {
