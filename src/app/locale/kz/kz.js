@@ -49,6 +49,7 @@ export default {
 		information: 'Ақпарат',
 		evaluation: 'Бағалау',
 		skip: 'Өткізіп жіберу',
+		matchesCount: '{total} ішінен {current}',
 	},
 	startPage: {
 		interactions: {
