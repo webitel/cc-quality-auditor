@@ -6,15 +6,26 @@
         :tabs="Object.values(tabValues)"
         @change="currentTab = $event"
       />
-      <wt-icon-btn
-        :icon="`panel-${evaluationPanelCollapsed ? 'expand' : 'collapse'}`"
-        @click="emit('toggle-evaluation-panel')"
-      />
+      <div class="evaluation-card-interaction__actions">
+        <evaluation-card-search
+          v-if="isCallConversationShown"
+          v-model:query="searchQuery"
+          v-model:active-match="activeMatch"
+          :matches-count="matchesCount"
+        />
+        <wt-icon-btn
+          :icon="`panel-${evaluationPanelCollapsed ? 'expand' : 'collapse'}`"
+          @click="emit('toggle-evaluation-panel')"
+        />
+      </div>
     </header>
     <evaluation-card-call-conversation
       v-if="isCallConversationShown"
       :call="interaction.call"
+      :search-query="searchQuery"
+      :active-match="activeMatch"
       @reload="emit('reload')"
+      @matches-change="matchesCount = $event"
     />
   </section>
 </template>
@@ -26,6 +37,7 @@ import { useI18n } from 'vue-i18n';
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
 import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
+import EvaluationCardSearch from './evaluation-card-search.vue';
 
 const { interaction } = defineProps<{
 	interaction: InteractionResponseItem | null;
@@ -56,6 +68,12 @@ const tabValues = computed(() => ({
 
 const currentTab = ref(tabValues.value[EvaluationCardTab.Conversation]);
 
+const searchQuery = ref('');
+
+const activeMatch = ref(0);
+
+const matchesCount = ref(0);
+
 const isCallConversationShown = computed(
 	() =>
 		currentTab.value.value === EvaluationCardTab.Conversation &&
@@ -68,6 +86,12 @@ const isCallConversationShown = computed(
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.evaluation-card-interaction__actions {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-xs);
 }
 </style>
