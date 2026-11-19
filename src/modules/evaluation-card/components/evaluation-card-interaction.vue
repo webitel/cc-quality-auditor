@@ -11,6 +11,11 @@
         @click="emit('toggle-evaluation-panel')"
       />
     </header>
+    <evaluation-card-call-conversation
+      v-if="isCallConversationShown"
+      :call="interaction.call"
+      @reload="emit('reload')"
+    />
   </section>
 </template>
 
@@ -18,14 +23,18 @@
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import type { InteractionResponseItem } from '../../interactions/types/interaction';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
+import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
 
-defineProps<{
+const { interaction } = defineProps<{
+	interaction: InteractionResponseItem | null;
 	evaluationPanelCollapsed: boolean;
 }>();
 
 const emit = defineEmits<{
 	'toggle-evaluation-panel': [];
+	reload: [];
 }>();
 
 const { t } = useI18n();
@@ -46,6 +55,12 @@ const tabValues = computed(() => ({
 }));
 
 const currentTab = ref(tabValues.value[EvaluationCardTab.Conversation]);
+
+const isCallConversationShown = computed(
+	() =>
+		currentTab.value.value === EvaluationCardTab.Conversation &&
+		!!interaction?.call,
+);
 </script>
 
 <style scoped>
