@@ -1,4 +1,9 @@
 import { InteractionStatus } from '@webitel/api-services/enums';
+import type {
+	EngineCallAnnotation,
+	EngineCallServiceCreateCallAnnotationBody,
+	EngineCallServiceUpdateCallAnnotationBody,
+} from '@webitel/api-services/gen-wire/models';
 import { HttpResponse, http } from 'msw';
 
 import {
@@ -8,7 +13,11 @@ import {
 	sortItems,
 } from '../../../../mocks/utils';
 import { EvaluationsUrl, InteractionsUrl } from '../InteractionsAPIRepository';
-import { getCallTranscripts, interactionsMock } from './interactionsMock';
+import {
+	DeletedRecordingFileId,
+	getCallTranscripts,
+	interactionsMock,
+} from './interactionsMock';
 
 type Range = {
 	from?: string;
@@ -91,6 +100,52 @@ const getAgentComment = (item: (typeof interactionsMock)[number]) =>
 
 const includesText = (text?: string, query?: string) =>
 	!query || !!text?.toLowerCase().includes(query.toLowerCase());
+
+const getSilentWav = (seconds: number) => {
+	const sampleRate = 8000;
+	const channels = 2;
+	const dataSize = sampleRate * seconds * channels * 2;
+	const view = new DataView(new ArrayBuffer(44 + dataSize));
+	const writeText = (offset: number, text: string) =>
+		[
+			...text,
+		].forEach((char, index) => {
+			view.setUint8(offset + index, char.charCodeAt(0));
+		});
+	writeText(0, 'RIFF');
+	view.setUint32(4, 36 + dataSize, true);
+	writeText(8, 'WAVE');
+	writeText(12, 'fmt ');
+	view.setUint32(16, 16, true);
+	view.setUint16(20, 1, true);
+	view.setUint16(22, channels, true);
+	view.setUint32(24, sampleRate, true);
+	view.setUint32(28, sampleRate * channels * 2, true);
+	view.setUint16(32, channels * 2, true);
+	view.setUint16(34, 16, true);
+	writeText(36, 'data');
+	view.setUint32(40, dataSize, true);
+	return view.buffer;
+};
+
+const MockAnnotationAuthor = {
+	id: '0',
+	name: 'Evaluator 1',
+};
+
+const findCall = (callId: string) =>
+	interactionsMock.find(({ call }) => call?.id === callId)?.call;
+
+const callNotFound = () =>
+	HttpResponse.json(
+		{
+			code: 5,
+			message: 'Call not found',
+		},
+		{
+			status: 404,
+		},
+	);
 
 const findItems = (filter: SearchFilter = {}, sort?: string) =>
 	sortItems(
@@ -238,14 +293,89 @@ export const interactionsHandlers = [
 				],
 			}),
 	),
-	http.get(
-		`${import.meta.env.VITE_API_URL}/storage/recordings/:id/download`,
-		() =>
-			new HttpResponse(new Uint8Array(16), {
-				headers: {
-					'Content-Type': 'application/octet-stream',
+	http.delete(
+		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
+		async ({ request }) => {
+			const { id = [] } = (await request.json()) as {
+				id?: string[];
+			};
+
+			interactionsMock.forEach(({ call }) => {
+				if (!call) return;
+				call.transcripts = call.transcripts.filter(
+					(transcript) => !id.includes(transcript.id),
+				);
+			});
+
+			return HttpResponse.json({
+				items: id,
+			});
+		},
+	),
+	http.post(
+		`${import.meta.env.VITE_API_URL}/calls/history/:callId/annotation`,
+		async ({ params, request }) => {
+			const call = findCall(String(params.callId));
+			if (!call) return callNotFound();
+
+			const body =
+				(await request.json()) as EngineCallServiceCreateCallAnnotationBody;
+			const annotation: EngineCallAnnotation = {
+				...body,
+				id: `${Date.now()}`,
+				call_id: call.id,
+				created_at: String(Date.now()),
+				created_by: MockAnnotationAuthor,
+			};
+			call.annotations.push(annotation);
+
+			return HttpResponse.json(annotation);
+		},
+	),
+	http.put(
+		`${import.meta.env.VITE_API_URL}/calls/history/:callId/annotation/:id`,
+		async ({ params, request }) => {
+			const annotation = findCall(String(params.callId))?.annotations.find(
+				({ id }) => id === params.id,
+			);
+			if (!annotation) return callNotFound();
+
+			Object.assign(
+				annotation,
+				(await request.json()) as EngineCallServiceUpdateCallAnnotationBody,
+				{
+					updated_at: String(Date.now()),
+					updated_by: MockAnnotationAuthor,
 				},
-			}),
+			);
+
+			return HttpResponse.json(annotation);
+		},
+	),
+	http.delete(
+		`${import.meta.env.VITE_API_URL}/calls/history/:callId/annotation/:id`,
+		({ params }) => {
+			const call = findCall(String(params.callId));
+			const annotation = call?.annotations.find(({ id }) => id === params.id);
+			if (!call || !annotation) return callNotFound();
+
+			call.annotations = call.annotations.filter((item) => item !== annotation);
+
+			return HttpResponse.json(annotation);
+		},
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/recordings/:id/:mode`,
+		({ params }) =>
+			params.id === DeletedRecordingFileId
+				? new HttpResponse(null, {
+						status: 404,
+					})
+				: new HttpResponse(getSilentWav(60), {
+						headers: {
+							'Content-Type': 'audio/wav',
+						},
+					}),
 	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}${InteractionsUrl}/search`,
