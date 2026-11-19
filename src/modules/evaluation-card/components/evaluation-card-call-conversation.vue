@@ -22,9 +22,12 @@
           :file="selectedFile"
           :sync-with-playback="isPlayerShown"
           :current-time="currentTime"
+          :search-query="searchQuery"
+          :active-match="activeMatch"
           @row-click="wave?.seekTo($event)"
           @refresh="emit('reload')"
           @deleted="removeTranscript"
+          @matches-change="emit('matches-change', $event)"
         />
       </div>
     </template>
@@ -58,12 +61,17 @@ defineOptions({
 	},
 });
 
-const { call } = defineProps<{
+const { call, searchQuery, activeMatch } = defineProps<{
 	call: EngineHistoryCall;
+	searchQuery: string;
+	activeMatch: number;
 }>();
 
 const emit = defineEmits<{
 	reload: [];
+	'matches-change': [
+		count: number,
+	];
 }>();
 
 const { t } = useI18n();

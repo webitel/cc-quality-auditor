@@ -4,17 +4,28 @@
       <wt-tabs
         :current="currentTab"
         :tabs="Object.values(tabValues)"
-        @change="currentTab = $event"
+        @change="changeTab"
       />
-      <wt-icon-btn
-        :icon="`panel-${evaluationPanelCollapsed ? 'collapse' : 'expand'}`"
-        @click="emit('toggle-evaluation-panel')"
-      />
+      <div class="evaluation-card-interaction__actions">
+        <evaluation-card-search
+          v-if="isSearchShown"
+          v-model:query="searchQuery"
+          v-model:active-match="activeMatch"
+          :matches-count="matchesCount"
+        />
+        <wt-icon-btn
+          :icon="`panel-${evaluationPanelCollapsed ? 'collapse' : 'expand'}`"
+          @click="emit('toggle-evaluation-panel')"
+        />
+      </div>
     </header>
     <evaluation-card-call-conversation
       v-if="isCallConversationShown"
       :call="interaction.call"
+      :search-query="searchQuery"
+      :active-match="activeMatch"
       @reload="emit('reload')"
+      @matches-change="updateMatchesCount"
     />
   </section>
 </template>
@@ -25,7 +36,9 @@ import { useI18n } from 'vue-i18n';
 
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
+import type { EvaluationCardTabItem } from '../types/evaluationCardTab';
 import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
+import EvaluationCardSearch from './evaluation-card-search.vue';
 
 const { interaction } = defineProps<{
 	interaction: InteractionResponseItem | null;
@@ -54,12 +67,37 @@ const tabValues = computed(() => ({
 	},
 }));
 
-const currentTab = ref(tabValues.value[EvaluationCardTab.Conversation]);
+const currentTab = ref<EvaluationCardTabItem>(
+	tabValues.value[EvaluationCardTab.Conversation],
+);
+
+const searchQuery = ref('');
+
+const activeMatch = ref(0);
+
+const matchesCount = ref(0);
+
+function updateMatchesCount(count: number) {
+	matchesCount.value = count;
+	activeMatch.value = 0;
+}
+
+function changeTab(tab: EvaluationCardTabItem) {
+	currentTab.value = tab;
+	searchQuery.value = '';
+	activeMatch.value = 0;
+	matchesCount.value = 0;
+}
 
 const isCallConversationShown = computed(
 	() =>
 		currentTab.value.value === EvaluationCardTab.Conversation &&
 		!!interaction?.call,
+);
+
+const isSearchShown = computed(
+	() =>
+		isCallConversationShown.value && !!interaction?.call?.transcripts?.length,
 );
 </script>
 
@@ -74,6 +112,12 @@ const isCallConversationShown = computed(
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.evaluation-card-interaction__actions {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-xs);
 }
 </style>
