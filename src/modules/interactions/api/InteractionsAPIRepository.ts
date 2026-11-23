@@ -9,14 +9,17 @@ import {
 	snakeToCamel,
 } from '@webitel/api-services/api/transformers';
 
-import { getSearchBody } from '../scripts/getSearchBody';
+import { getExportBody, getSearchBody } from '../scripts/getRequestBody';
 import { toInteractionsListItem } from '../scripts/toInteractionsListItem';
 import type {
+	ExportInteractionsParams,
 	GetInteractionsParams,
+	InteractionKey,
 	InteractionResponseItem,
 } from '../types/interaction';
 
 export const InteractionsUrl = '/v1/audit/interactions';
+export const EvaluationsUrl = '/v1/audit/evaluations';
 
 const instance = getDefaultInstance();
 
@@ -41,8 +44,59 @@ const getList = async (params: GetInteractionsParams) => {
 	}
 };
 
+const assign = async ({
+	interactions,
+	assigneeId,
+}: {
+	interactions: InteractionKey[];
+	assigneeId: string;
+}) => {
+	try {
+		const response = await instance.post(`${EvaluationsUrl}/assign`, {
+			interactions,
+			assignee_id: assigneeId,
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
+const deleteEvaluations = async ({ ids }: { ids: string[] }) => {
+	try {
+		const response = await instance.delete(EvaluationsUrl, {
+			params: {
+				id: ids,
+			},
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
+const exportData = async (params: ExportInteractionsParams) => {
+	const response = await instance.post(
+		`${InteractionsUrl}/export`,
+		getExportBody(params),
+		{
+			responseType: 'blob',
+		},
+	);
+	return {
+		response,
+	};
+};
+
 const InteractionsAPIRepository = {
 	getList,
+	assign,
+	deleteEvaluations,
+	exportData,
 };
 
 export default InteractionsAPIRepository;
