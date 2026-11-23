@@ -4,6 +4,7 @@ import type { InteractionsListItem } from './interaction';
 
 export type UseAssignActionOptions = {
 	selected: Ref<InteractionsListItem[]>;
+	hasAccess?: Ref<boolean>;
 	onAssigned: () => Promise<void>;
 };
 

@@ -6,6 +6,8 @@ import { useRouter } from 'vue-router';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
+import InteractionsSecDark from '../assets/interactions-section-dark.svg';
+import InteractionsSecLight from '../assets/interactions-section-light.svg';
 import ScorecardsSecDark from '../assets/scorecards-section-dark.svg';
 import ScorecardsSecLight from '../assets/scorecards-section-light.svg';
 
@@ -32,6 +34,13 @@ export const useNavStore = defineStore('nav', () => {
 	const { routeAccessGuard } = useUserinfoStore();
 
 	const nav = computed(() => {
+		const interactions = {
+			value: AuditorSections.Interactions,
+			name: t(
+				`WtApplication.${WtApplication.Audit}.sections.${AuditorSections.Interactions}`,
+			),
+			route: RoutePaths.Interactions,
+		};
 		const scorecards = {
 			value: AuditorSections.Scorecards,
 			name: t(
@@ -40,6 +49,7 @@ export const useNavStore = defineStore('nav', () => {
 			route: RoutePaths.Scorecards,
 		};
 		const navItems = [
+			interactions,
 			scorecards,
 		];
 
@@ -60,6 +70,10 @@ export const useNavStore = defineStore('nav', () => {
 
 	const navCards = computed((): NavCard[] => {
 		const cardSectionPic = {
+			[AuditorSections.Interactions]: {
+				dark: InteractionsSecDark,
+				light: InteractionsSecLight,
+			},
 			[AuditorSections.Scorecards]: {
 				dark: ScorecardsSecDark,
 				light: ScorecardsSecLight,
