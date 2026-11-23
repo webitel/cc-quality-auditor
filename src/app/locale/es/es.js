@@ -19,6 +19,10 @@ export default {
 		assign: 'Asignar',
 		assignInteractions: 'Asignar interacción | Asignar {n} interacciones',
 		me: '(yo)',
+		deleteEvaluations: 'Eliminar evaluaciones | Eliminar {n} evaluaciones',
+		evaluationsWillBeDeleted:
+			'La evaluación será eliminada. | Estas evaluaciones serán eliminadas.',
+		interactionReturnsToNotEvaluated: 'La interacción vuelve a «No evaluado».',
 		interactionDate: 'Fecha de interacción',
 		customer: 'Cliente',
 		plan: 'Plan',
@@ -41,6 +45,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Busque llamadas, chats y correos electrónicos, asígnelos o evalúelos.',
+		},
 		scorecards: {
 			text: 'Cree hojas de puntuación, defina el peso de los criterios y agrupe las preguntas.',
 		},

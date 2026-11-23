@@ -18,6 +18,11 @@ export default {
 		assign: 'Assign',
 		assignInteractions: 'Assign interaction | Assign {n} interactions',
 		me: '(me)',
+		deleteEvaluations: 'Delete evaluations | Delete {n} evaluations',
+		evaluationsWillBeDeleted:
+			'The evaluation will be deleted. | These evaluations will be deleted.',
+		interactionReturnsToNotEvaluated:
+			'The interaction returns to Not evaluated.',
 		interactionDate: 'Interaction date',
 		customer: 'Customer',
 		plan: 'Plan',
@@ -40,6 +45,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Search calls, chats, and emails, assign or evaluate them.',
+		},
 		scorecards: {
 			text: 'Create evaluation forms, set criteria weights, and group questions.',
 		},

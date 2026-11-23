@@ -19,6 +19,10 @@ export default {
 		assign: 'Atribuie',
 		assignInteractions: 'Atribuie interacțiunea | Atribuie {n} interacțiuni',
 		me: '(eu)',
+		deleteEvaluations: 'Șterge evaluările | Șterge {n} evaluări',
+		evaluationsWillBeDeleted:
+			'Evaluarea va fi ștearsă. | Aceste evaluări vor fi șterse.',
+		interactionReturnsToNotEvaluated: 'Interacțiunea revine la „Neevaluat”.',
 		interactionDate: 'Data interacțiunii',
 		customer: 'Client',
 		plan: 'Plan',
@@ -41,6 +45,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Căutați apeluri, chaturi și e-mailuri, atribuiți-le sau evaluați-le.',
+		},
 		scorecards: {
 			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
 		},

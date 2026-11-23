@@ -1,6 +1,6 @@
 <template>
   <wt-page-wrapper
-    :actions-panel="false"
+    :actions-panel="showActionsPanel"
     class="interactions table-page"
   >
     <template #header>
@@ -23,21 +23,25 @@
             {{ t('interactions.assign') }}
           </wt-button>
           <export-action
+            :disabled="!hasExportDataGridAccess"
             :loading="isExporting"
             @export="exportFile"
           />
           <download-action
             :selected="selected"
             :types="downloadTypes"
+            :disabled-types="downloadDisabledTypes"
             :disabled="!selected.length"
             filename="interactions"
-            @downloaded="handleDownloaded"
+            @downloaded="resetSelectionAndReload"
           />
         </template>
       </wt-page-header>
     </template>
+    <template #actions-panel>
+      <interactions-filters @hide="showActionsPanel = false" />
+    </template>
     <template #main>
-      <section class="interactions-filters" />
       <section class="table-section">
         <header class="table-title">
           <h3 class="table-title__title typo-heading-3">
@@ -49,8 +53,12 @@
                 IconAction.REFRESH,
                 IconAction.FILTERS,
                 IconAction.COLUMNS,
+                IconAction.DELETE,
               ]"
+              :disabled:delete="isDeleteDisabled"
               @click:refresh="loadDataList"
+              @click:filters="showActionsPanel = !showActionsPanel"
+              @click:delete="isDeleteEvaluationsPopupOpened = true"
             >
               <template #search-bar>
                 <dynamic-filter-search
@@ -64,12 +72,13 @@
                   @update:search-mode="updateSearchMode"
                 />
               </template>
-              <template #filters>
-                <filters-actions-menu
-                  :filters-manager="filtersManager"
-                  :filter-options="filtersOptions"
-                  @filter:reset-all="resetFilters"
-                />
+              <template #filters="{ action, onClick }">
+                <wt-badge :hidden="!anyFiltersOnFiltersPanel">
+                  <wt-icon-action
+                    :action="action"
+                    @click="onClick"
+                  />
+                </wt-badge>
               </template>
               <template #columns>
                 <wt-table-column-select
@@ -89,6 +98,7 @@
             :data="dataList"
             :headers="shownHeaders"
             :selected="selected"
+            fixed-actions
             sortable
             resizable-columns
             reorderable-columns
@@ -120,6 +130,19 @@
             <template #column-filter="scope">
               <interactions-column-filter v-bind="scope" />
             </template>
+            <template #actions="{ item }">
+              <wt-call-media-action
+                v-if="hasPlaybackAccess"
+                :playing-file-id="currentlyMediaPlaying"
+                :files="item.files"
+                @play="play"
+                @stop="closePlayer"
+              />
+              <wt-icon-btn
+                icon="arrow-right"
+                @click="openCard(item)"
+              />
+            </template>
             <template #empty>
               <wt-empty
                 :image="imageEmpty"
@@ -144,57 +167,122 @@
       </section>
       <interactions-assign-popup
         v-if="isAssignPopupOpened"
-        :interactions="selectedInteractionKeys"
+        :interactions="selected"
         @close="isAssignPopupOpened = false"
         @assigned="handleAssigned"
       />
+      <interactions-delete-evaluations-popup
+        v-if="isDeleteEvaluationsPopupOpened"
+        :interactions="selected"
+        @close="isDeleteEvaluationsPopupOpened = false"
+        @deleted="resetSelectionAndReload"
+      />
     </template>
   </wt-page-wrapper>
+
+  <wt-player
+    v-if="audioData"
+    :src="audioData.src"
+    :id="audioData.id"
+    position="fixed"
+    @close="closePlayer"
+    @play="isMediaPlayingNow = true"
+  />
+
+  <wt-vidstack-player
+    v-if="videoData"
+    closable
+    :src="videoData.src"
+    :title="videoData.text"
+    :size="ComponentSize.MD"
+    @close="closePlayer"
+  />
 </template>
 
 <script setup lang="ts">
 import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import {
 	DynamicFilterSearchComponent as DynamicFilterSearch,
-	FiltersActionsMenuComponent as FiltersActionsMenu,
+	FilterOption,
 } from '@webitel/ui-datalist/filters';
 import {
+	WtCallMediaAction,
+	WtPlayer,
+	WtVidstackPlayer,
+} from '@webitel/ui-sdk/components';
+import { usePlayMedia } from '@webitel/ui-sdk/composables';
+import {
 	AuditorSections,
+	ComponentSize,
 	IconAction,
 	WtApplication,
+	WtObject,
 } from '@webitel/ui-sdk/enums';
 import { DownloadType } from '@webitel/ui-sdk/modules/FilesExport';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
 import { useServerExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useServerExportFile';
 import DownloadAction from '@webitel/ui-sdk/src/modules/FilesExport/components/download-action.vue';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
-import { filtersOptions } from '../configs/filtersOptions';
 import { InteractionStatusColor } from '../enums/InteractionStatusColor.enum';
 import { SearchMode } from '../enums/SearchMode.enum';
 import { useInteractionsDatalistStore } from '../stores';
 import InteractionsAssignPopup from './interactions-assign-popup.vue';
 import InteractionsColumnFilter from './interactions-column-filter.vue';
+import InteractionsDeleteEvaluationsPopup from './interactions-delete-evaluations-popup.vue';
+import InteractionsFilters from './interactions-filters.vue';
 
 defineOptions({
 	components: {
 		DownloadAction,
 		DynamicFilterSearch,
 		ExportAction,
-		FiltersActionsMenu,
 		InteractionsAssignPopup,
 		InteractionsColumnFilter,
+		InteractionsDeleteEvaluationsPopup,
+		InteractionsFilters,
+		WtCallMediaAction,
+		WtPlayer,
+		WtVidstackPlayer,
 	},
 });
 
 const { t } = useI18n();
+
+const router = useRouter();
+
+const userinfoStore = useUserinfoStore();
+
+const { hasCreateAccess, hasDeleteAccess } = useUserAccessControl(
+	WtObject.AuditRating,
+);
+
+const hasAnySpecialAccess = (actions: SpecialGlobalAction[]) =>
+	actions.some((action) => userinfoStore.hasSpecialGlobalActionAccess(action));
+
+const hasExportDataGridAccess = computed(() =>
+	hasAnySpecialAccess([
+		SpecialGlobalAction.ExportDataGrid,
+	]),
+);
+
+const playbackActions = [
+	SpecialGlobalAction.PlaybackRecordFile,
+	SpecialGlobalAction.TimeLimitedRecordFile,
+];
+
+const hasPlaybackAccess = computed(() => hasAnySpecialAccess(playbackActions));
 
 const tableStore = useInteractionsDatalistStore();
 
@@ -233,13 +321,24 @@ const {
 
 initialize();
 
+const resetSelectionAndReload = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
+
 const filters = computed(() => filtersManager.value.getAllValues());
 
-const resetFilters = () => {
-	filtersManager.value.reset({
-		exclude: Object.values(SearchMode),
-	});
-};
+const showActionsPanel = ref(true);
+
+const anyFiltersOnFiltersPanel = computed(() =>
+	filtersManager.value
+		.getAllKeys()
+		.some(
+			(name) =>
+				name !== FilterOption.CreatedAt &&
+				!Object.values(SearchMode).some((mode) => mode === name),
+		),
+);
 
 const searchModeOptions = computed(() =>
 	Object.values(SearchMode).map((mode) => ({
@@ -260,10 +359,8 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 	useTranscribeAction({
 		selected,
 		fileIds: selectedAudioFileIds,
-		onTranscribed: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		hasAccess: hasPlaybackAccess,
+		onTranscribed: resetSelectionAndReload,
 	});
 
 const selectedInteractionKeys = computed(() =>
@@ -276,10 +373,8 @@ const selectedInteractionKeys = computed(() =>
 const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 	useAssignAction({
 		selected,
-		onAssigned: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		hasAccess: hasCreateAccess,
+		onAssigned: resetSelectionAndReload,
 	});
 
 const { isExporting, exportFile } = useServerExportFile({
@@ -295,16 +390,52 @@ const { isExporting, exportFile } = useServerExportFile({
 	}),
 });
 
+const isDeleteEvaluationsPopupOpened = ref(false);
+
+const isDeleteDisabled = computed(
+	() =>
+		!hasDeleteAccess.value ||
+		!selected.value.length ||
+		selected.value.some(({ evaluationId }) => !evaluationId),
+);
+
 const downloadTypes = [
 	DownloadType.AudioRecordings,
 	DownloadType.ScreenRecordings,
 	DownloadType.Transcriptions,
 ];
 
-const handleDownloaded = async () => {
-	updateSelected([]);
-	await loadDataList();
+const downloadTypeActions = {
+	[DownloadType.AudioRecordings]: playbackActions,
+	[DownloadType.ScreenRecordings]: [
+		SpecialGlobalAction.ControlAgentScreen,
+	],
+	[DownloadType.Transcriptions]: playbackActions,
 };
+
+const downloadDisabledTypes = computed(() =>
+	downloadTypes.filter(
+		(type) => !hasAnySpecialAccess(downloadTypeActions[type]),
+	),
+);
+
+const {
+	audioData,
+	videoData,
+	currentlyMediaPlaying,
+	isMediaPlayingNow,
+
+	play,
+	closePlayer,
+} = usePlayMedia();
+
+const openCard = ({ id }: { id: string }) =>
+	router.push({
+		name: `${AuditorSections.Interactions}-card`,
+		params: {
+			id,
+		},
+	});
 
 const path = computed(() => [
 	{
@@ -339,5 +470,11 @@ const {
   &__due-date--overdue {
     color: var(--error-color);
   }
+}
+
+.wt-player {
+  right: var(--spacing-xs);
+  left: var(--spacing-xs);
+  bottom: var(--spacing-xs);
 }
 </style>

@@ -19,6 +19,11 @@ export default {
 		assign: 'Chỉ định',
 		assignInteractions: 'Chỉ định tương tác | Chỉ định {n} tương tác',
 		me: '(tôi)',
+		deleteEvaluations: 'Xóa đánh giá | Xóa {n} đánh giá',
+		evaluationsWillBeDeleted:
+			'Đánh giá sẽ bị xóa. | Các đánh giá này sẽ bị xóa.',
+		interactionReturnsToNotEvaluated:
+			'Tương tác trở về trạng thái “Chưa đánh giá”.',
 		interactionDate: 'Ngày tương tác',
 		customer: 'Khách hàng',
 		plan: 'Kế hoạch',
@@ -41,6 +46,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Tìm kiếm cuộc gọi, cuộc trò chuyện và email, phân công hoặc đánh giá chúng.',
+		},
 		scorecards: {
 			text: 'Tạo phiếu chấm điểm, đặt trọng số tiêu chí và nhóm câu hỏi.',
 		},
