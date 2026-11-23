@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -20,25 +19,18 @@ export default {
 		assign: 'Chỉ định',
 		assignInteractions: 'Chỉ định tương tác | Chỉ định {n} tương tác',
 		me: '(tôi)',
+		deleteEvaluations: 'Xóa đánh giá | Xóa {n} đánh giá',
+		evaluationsWillBeDeleted:
+			'Đánh giá sẽ bị xóa. | Các đánh giá này sẽ bị xóa.',
+		interactionReturnsToNotEvaluated:
+			'Tương tác trở về trạng thái “Chưa đánh giá”.',
 		interactionDate: 'Ngày tương tác',
 		customer: 'Khách hàng',
 		plan: 'Kế hoạch',
-		dueDate: 'Hạn chót',
 		contactReason: 'Lý do liên hệ',
 		contactResult: 'Kết quả liên hệ',
 		csat: 'CSAT',
-		ratedAt: 'Thời điểm đánh giá',
-		handledBy: 'Xử lý bởi',
-		firstResponse: 'Phản hồi đầu tiên',
-		messages: 'Tin nhắn',
 		skipReason: 'Lý do bỏ qua',
-		skippedBy: 'Người bỏ qua',
-		skippedAt: 'Thời điểm bỏ qua',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Tổng đài viên',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -54,6 +46,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Tìm kiếm cuộc gọi, cuộc trò chuyện và email, phân công hoặc đánh giá chúng.',
+		},
 		scorecards: {
 			text: 'Tạo phiếu chấm điểm, đặt trọng số tiêu chí và nhóm câu hỏi.',
 		},

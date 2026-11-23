@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -20,25 +19,17 @@ export default {
 		assignInteractions:
 			'Назначить взаимодействие | Назначить взаимодействия: {n}',
 		me: '(я)',
+		deleteEvaluations: 'Удалить оценки | Удалить оценки: {n}',
+		evaluationsWillBeDeleted: 'Оценка будет удалена. | Оценки будут удалены.',
+		interactionReturnsToNotEvaluated:
+			'Взаимодействие вернётся в статус «Не оценено».',
 		interactionDate: 'Дата взаимодействия',
 		customer: 'Клиент',
 		plan: 'План',
-		dueDate: 'Срок',
 		contactReason: 'Причина обращения',
 		contactResult: 'Результат обращения',
 		csat: 'CSAT',
-		ratedAt: 'Дата оценки',
-		handledBy: 'Обслуживал',
-		firstResponse: 'Первый ответ',
-		messages: 'Сообщения',
 		skipReason: 'Причина пропуска',
-		skippedBy: 'Кто пропустил',
-		skippedAt: 'Дата пропуска',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Оператор',
-			[HandledBy.Bot]: 'Бот',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -54,6 +45,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Поиск звонков, чатов и писем, назначение и оценивание.',
+		},
 		scorecards: {
 			text: 'Создание анкет оценивания, веса критериев и группировка вопросов.',
 		},

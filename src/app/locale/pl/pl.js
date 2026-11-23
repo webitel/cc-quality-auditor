@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -20,25 +19,18 @@ export default {
 		assign: 'Przypisz',
 		assignInteractions: 'Przypisz interakcję | Przypisz interakcje: {n}',
 		me: '(ja)',
+		deleteEvaluations: 'Usuń oceny | Usuń oceny: {n}',
+		evaluationsWillBeDeleted:
+			'Ocena zostanie usunięta. | Te oceny zostaną usunięte.',
+		interactionReturnsToNotEvaluated:
+			'Interakcja wróci do statusu „Nieocenione”.',
 		interactionDate: 'Data interakcji',
 		customer: 'Klient',
 		plan: 'Plan',
-		dueDate: 'Termin',
 		contactReason: 'Powód kontaktu',
 		contactResult: 'Wynik kontaktu',
 		csat: 'CSAT',
-		ratedAt: 'Data oceny',
-		handledBy: 'Obsłużone przez',
-		firstResponse: 'Pierwsza odpowiedź',
-		messages: 'Wiadomości',
 		skipReason: 'Powód pominięcia',
-		skippedBy: 'Pominięte przez',
-		skippedAt: 'Data pominięcia',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Agent',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -54,6 +46,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Wyszukuj połączenia, czaty i e-maile, przydzielaj je lub oceniaj.',
+		},
 		scorecards: {
 			text: 'Twórz arkusze ocen, ustawiaj wagi kryteriów i grupuj pytania.',
 		},

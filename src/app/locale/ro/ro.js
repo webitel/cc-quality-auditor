@@ -1,6 +1,5 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -20,25 +19,17 @@ export default {
 		assign: 'Atribuie',
 		assignInteractions: 'Atribuie interacțiunea | Atribuie {n} interacțiuni',
 		me: '(eu)',
+		deleteEvaluations: 'Șterge evaluările | Șterge {n} evaluări',
+		evaluationsWillBeDeleted:
+			'Evaluarea va fi ștearsă. | Aceste evaluări vor fi șterse.',
+		interactionReturnsToNotEvaluated: 'Interacțiunea revine la „Neevaluat”.',
 		interactionDate: 'Data interacțiunii',
 		customer: 'Client',
 		plan: 'Plan',
-		dueDate: 'Termen',
 		contactReason: 'Motivul contactului',
 		contactResult: 'Rezultatul contactului',
 		csat: 'CSAT',
-		ratedAt: 'Data evaluării',
-		handledBy: 'Gestionat de',
-		firstResponse: 'Primul răspuns',
-		messages: 'Mesaje',
 		skipReason: 'Motivul omiterii',
-		skippedBy: 'Omis de',
-		skippedAt: 'Data omiterii',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Agent',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -54,6 +45,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Căutați apeluri, chaturi și e-mailuri, atribuiți-le sau evaluați-le.',
+		},
 		scorecards: {
 			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
 		},
