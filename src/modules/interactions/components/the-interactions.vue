@@ -23,15 +23,17 @@
             {{ t('interactions.assign') }}
           </wt-button>
           <export-action
+            :disabled="!hasExportDataGridAccess"
             :loading="isExporting"
             @export="exportFile"
           />
           <download-action
             :selected="selected"
             :types="downloadTypes"
+            :disabled-types="downloadDisabledTypes"
             :disabled="!selected.length"
             filename="interactions"
-            @downloaded="handleDownloaded"
+            @downloaded="resetSelectionAndReload"
           />
         </template>
       </wt-page-header>
@@ -130,10 +132,15 @@
             </template>
             <template #actions="{ item }">
               <wt-call-media-action
+                v-if="hasPlaybackAccess"
                 :playing-file-id="currentlyMediaPlaying"
                 :files="item.files"
                 @play="play"
                 @stop="closePlayer"
+              />
+              <wt-icon-btn
+                icon="arrow-right"
+                @click="openCard(item)"
               />
             </template>
             <template #empty>
@@ -168,7 +175,7 @@
         v-if="isDeleteEvaluationsPopupOpened"
         :interactions="selected"
         @close="isDeleteEvaluationsPopupOpened = false"
-        @deleted="handleEvaluationsDeleted"
+        @deleted="resetSelectionAndReload"
       />
     </template>
   </wt-page-wrapper>
@@ -209,8 +216,10 @@ import {
 	ComponentSize,
 	IconAction,
 	WtApplication,
+	WtObject,
 } from '@webitel/ui-sdk/enums';
 import { DownloadType } from '@webitel/ui-sdk/modules/FilesExport';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import ExportAction from '@webitel/ui-sdk/src/modules/CSVExport/components/export-action.vue';
 import { useServerExportFile } from '@webitel/ui-sdk/src/modules/CSVExport/composables/useServerExportFile';
 import DownloadAction from '@webitel/ui-sdk/src/modules/FilesExport/components/download-action.vue';
@@ -218,8 +227,11 @@ import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
 import { useAssignAction } from '../composables/useAssignAction';
 import { useTranscribeAction } from '../composables/useTranscribeAction';
@@ -247,6 +259,30 @@ defineOptions({
 });
 
 const { t } = useI18n();
+
+const router = useRouter();
+
+const userinfoStore = useUserinfoStore();
+
+const { hasCreateAccess, hasDeleteAccess } = useUserAccessControl(
+	WtObject.AuditRating,
+);
+
+const hasAnySpecialAccess = (actions: SpecialGlobalAction[]) =>
+	actions.some((action) => userinfoStore.hasSpecialGlobalActionAccess(action));
+
+const hasExportDataGridAccess = computed(() =>
+	hasAnySpecialAccess([
+		SpecialGlobalAction.ExportDataGrid,
+	]),
+);
+
+const playbackActions = [
+	SpecialGlobalAction.PlaybackRecordFile,
+	SpecialGlobalAction.TimeLimitedRecordFile,
+];
+
+const hasPlaybackAccess = computed(() => hasAnySpecialAccess(playbackActions));
 
 const tableStore = useInteractionsDatalistStore();
 
@@ -285,6 +321,11 @@ const {
 
 initialize();
 
+const resetSelectionAndReload = async () => {
+	updateSelected([]);
+	await loadDataList();
+};
+
 const filters = computed(() => filtersManager.value.getAllValues());
 
 const showActionsPanel = ref(true);
@@ -318,10 +359,8 @@ const { isTranscribing, isTranscribeDisabled, transcribe } =
 	useTranscribeAction({
 		selected,
 		fileIds: selectedAudioFileIds,
-		onTranscribed: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		hasAccess: hasPlaybackAccess,
+		onTranscribed: resetSelectionAndReload,
 	});
 
 const selectedInteractionKeys = computed(() =>
@@ -334,10 +373,8 @@ const selectedInteractionKeys = computed(() =>
 const { isAssignPopupOpened, isAssignDisabled, handleAssigned } =
 	useAssignAction({
 		selected,
-		onAssigned: async () => {
-			updateSelected([]);
-			await loadDataList();
-		},
+		hasAccess: hasCreateAccess,
+		onAssigned: resetSelectionAndReload,
 	});
 
 const { isExporting, exportFile } = useServerExportFile({
@@ -357,14 +394,10 @@ const isDeleteEvaluationsPopupOpened = ref(false);
 
 const isDeleteDisabled = computed(
 	() =>
+		!hasDeleteAccess.value ||
 		!selected.value.length ||
 		selected.value.some(({ evaluationId }) => !evaluationId),
 );
-
-const handleEvaluationsDeleted = async () => {
-	updateSelected([]);
-	await loadDataList();
-};
 
 const downloadTypes = [
 	DownloadType.AudioRecordings,
@@ -372,10 +405,19 @@ const downloadTypes = [
 	DownloadType.Transcriptions,
 ];
 
-const handleDownloaded = async () => {
-	updateSelected([]);
-	await loadDataList();
+const downloadTypeActions = {
+	[DownloadType.AudioRecordings]: playbackActions,
+	[DownloadType.ScreenRecordings]: [
+		SpecialGlobalAction.ControlAgentScreen,
+	],
+	[DownloadType.Transcriptions]: playbackActions,
 };
+
+const downloadDisabledTypes = computed(() =>
+	downloadTypes.filter(
+		(type) => !hasAnySpecialAccess(downloadTypeActions[type]),
+	),
+);
 
 const {
 	audioData,
@@ -386,6 +428,14 @@ const {
 	play,
 	closePlayer,
 } = usePlayMedia();
+
+const openCard = ({ id }: { id: string }) =>
+	router.push({
+		name: `${AuditorSections.Interactions}-card`,
+		params: {
+			id,
+		},
+	});
 
 const path = computed(() => [
 	{
