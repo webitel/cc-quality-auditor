@@ -95,10 +95,11 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'dueDate',
-		locale: 'interactions.dueDate',
+		locale: 'objects.interaction.dueDate',
 		show: false,
 		field: 'evaluation.due_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.DueDate],
 	},
 	{
 		value: 'contactReason',
@@ -123,10 +124,11 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'ratedAt',
-		locale: 'interactions.ratedAt',
+		locale: 'objects.interaction.ratedAt',
 		show: false,
 		field: 'evaluation.rated_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.RatedAt],
 	},
 	{
 		value: 'scorecard',
@@ -137,13 +139,15 @@ export const headers: DatalistTableHeader[] = [
 		show: false,
 		field: 'evaluation.scorecard',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Scorecard],
 	},
 	{
 		value: 'handledBy',
-		locale: 'interactions.handledBy',
+		locale: 'objects.interactionHandledBy.interactionHandledBy',
 		show: false,
 		field: 'handled_by',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.InteractionHandledBy],
 	},
 	{
 		value: 'source',
@@ -154,17 +158,19 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'firstResponse',
-		locale: 'interactions.firstResponse',
+		locale: 'objects.interaction.firstResponse',
 		show: false,
 		field: 'chat.first_response_sec',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.FirstResponse],
 	},
 	{
 		value: 'messages',
-		locale: 'interactions.messages',
+		locale: 'objects.interaction.messages',
 		show: false,
 		field: 'chat.message_count',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.Messages],
 	},
 	{
 		value: 'skipReason',
@@ -175,16 +181,18 @@ export const headers: DatalistTableHeader[] = [
 	},
 	{
 		value: 'skippedBy',
-		locale: 'interactions.skippedBy',
+		locale: 'objects.interaction.skippedBy',
 		show: false,
 		field: 'evaluation.skipped_by',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.SkippedBy],
 	},
 	{
 		value: 'skippedAt',
-		locale: 'interactions.skippedAt',
+		locale: 'objects.interaction.skippedAt',
 		show: false,
 		field: 'evaluation.skipped_at',
 		sort: SortSymbols.NONE,
+		filter: filterConfigs[FilterOption.SkippedAt],
 	},
 ];
