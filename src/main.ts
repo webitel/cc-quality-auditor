@@ -21,6 +21,18 @@ const fetchConfig = async () => {
 	return response.json();
 };
 
+const enableMocking = async () => {
+	if (import.meta.env.DEV) {
+		const { worker } = await import('./mocks/browser');
+		await worker.start({
+			onUnhandledRequest: 'bypass',
+			serviceWorker: {
+				url: `${import.meta.env.BASE_URL}/mockServiceWorker.js`,
+			},
+		});
+	}
+};
+
 reloadOnStaleChunk();
 
 const pinia = createPinia();
@@ -64,6 +76,7 @@ const initApp = async () => {
 (async () => {
 	let config: unknown;
 	try {
+		await enableMocking();
 		setTokenFromUrl();
 		config = await fetchConfig();
 	} catch (err) {
