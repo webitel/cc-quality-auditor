@@ -1,3 +1,8 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
+
 export default {
 	audit: 'Auditoría',
 	scorecards: {
@@ -12,11 +17,37 @@ export default {
 		allInteractions: 'Todas las interacciones',
 		transcribe: 'Transcribir',
 		assign: 'Asignar',
+		assignInteractions: 'Asignar interacción | Asignar {n} interacciones',
+		me: '(yo)',
+		deleteEvaluations: 'Eliminar evaluaciones | Eliminar {n} evaluaciones',
+		evaluationsWillBeDeleted:
+			'La evaluación será eliminada. | Estas evaluaciones serán eliminadas.',
+		interactionReturnsToNotEvaluated: 'La interacción vuelve a «No evaluado».',
 		interactionDate: 'Fecha de interacción',
-		interactionType: 'Tipo de interacción',
 		customer: 'Cliente',
+		plan: 'Plan',
+		contactReason: 'Motivo de contacto',
+		contactResult: 'Resultado del contacto',
+		csat: 'CSAT',
+		skipReason: 'Motivo de omisión',
+		interactionTypes: {
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Búsqueda regular',
+			[SearchMode.Fts]: 'Búsqueda de texto completo',
+			[SearchMode.Description]: 'Comentario del agente',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Busque llamadas, chats y correos electrónicos, asígnelos o evalúelos.',
+		},
 		scorecards: {
 			text: 'Cree hojas de puntuación, defina el peso de los criterios y agrupe las preguntas.',
 		},

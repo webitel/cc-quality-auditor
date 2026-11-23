@@ -1,3 +1,8 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -11,11 +16,38 @@ export default {
 		allInteractions: 'All interactions',
 		transcribe: 'Transcribe',
 		assign: 'Assign',
+		assignInteractions: 'Assign interaction | Assign {n} interactions',
+		me: '(me)',
+		deleteEvaluations: 'Delete evaluations | Delete {n} evaluations',
+		evaluationsWillBeDeleted:
+			'The evaluation will be deleted. | These evaluations will be deleted.',
+		interactionReturnsToNotEvaluated:
+			'The interaction returns to Not evaluated.',
 		interactionDate: 'Interaction date',
-		interactionType: 'Interaction type',
 		customer: 'Customer',
+		plan: 'Plan',
+		contactReason: 'Contact reason',
+		contactResult: 'Contact result',
+		csat: 'CSAT',
+		skipReason: 'Skip reason',
+		interactionTypes: {
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Regular search',
+			[SearchMode.Fts]: 'Full text search',
+			[SearchMode.Description]: "Agent's comment",
+		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Search calls, chats, and emails, assign or evaluate them.',
+		},
 		scorecards: {
 			text: 'Create evaluation forms, set criteria weights, and group questions.',
 		},

@@ -1,0 +1,69 @@
+type MockItem = Record<string, unknown>;
+
+const getSortValue = (value: unknown) =>
+	value && typeof value === 'object' && 'name' in value ? value.name : value;
+
+const getByPath = (item: MockItem, path: string) =>
+	path
+		.split('.')
+		.reduce<unknown>(
+			(value, key) => (value as MockItem | undefined)?.[key],
+			item,
+		);
+
+export const sortItems = <T extends MockItem>(
+	items: T[],
+	sort?: string | null,
+) => {
+	if (!sort) return items;
+
+	const direction = sort.startsWith('-') ? -1 : 1;
+	const key = sort.replace(/^[+-]/, '');
+
+	return [
+		...items,
+	].sort((a, b) => {
+		const aValue = getSortValue(getByPath(a, key)) ?? '';
+		const bValue = getSortValue(getByPath(b, key)) ?? '';
+		if (aValue === bValue) return 0;
+		return aValue > bValue ? direction : -direction;
+	});
+};
+
+export const paginateItems = <T>(
+	items: T[],
+	{
+		page,
+		size,
+	}: {
+		page: number;
+		size: number;
+	},
+) => {
+	const start = (page - 1) * size;
+	return {
+		items: items.slice(start, start + size),
+		next: items.length > start + size,
+	};
+};
+
+export const isOneOf = (value: unknown, values: string[] = []) =>
+	!values.length || values.includes(String(value));
+
+export const isInRange = (
+	value: unknown,
+	{
+		from,
+		to,
+	}: {
+		from?: string | null;
+		to?: string | null;
+	} = {},
+) => {
+	if (from == null && to == null) return true;
+	if (value == null || value === '') return false;
+	const number = Number(value);
+	if (from != null && number < Number(from)) return false;
+	if (to != null && number > Number(to)) return false;
+	return true;
+};
