@@ -1,7 +1,7 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Аудит',
@@ -16,25 +16,19 @@ export default {
 		allInteractions: 'Усі взаємодії',
 		transcribe: 'Транскрибувати',
 		assign: 'Призначити',
+		assignInteractions: 'Призначити взаємодію | Призначити взаємодії: {n}',
+		me: '(я)',
+		deleteEvaluations: 'Видалити оцінки | Видалити оцінки: {n}',
+		evaluationsWillBeDeleted: 'Оцінку буде видалено. | Оцінки буде видалено.',
+		interactionReturnsToNotEvaluated:
+			'Взаємодія повернеться в статус «Не оцінено».',
 		interactionDate: 'Дата взаємодії',
 		customer: 'Клієнт',
 		plan: 'План',
-		dueDate: 'Строк',
 		contactReason: 'Причина звернення',
 		contactResult: 'Результат звернення',
 		csat: 'CSAT',
-		ratedAt: 'Дата оцінки',
-		handledBy: 'Обслуговував',
-		firstResponse: 'Перша відповідь',
-		messages: 'Повідомлення',
 		skipReason: 'Причина пропуску',
-		skippedBy: 'Хто пропустив',
-		skippedAt: 'Дата пропуску',
-		handledByTypes: {
-			[HandledBy.Agent]: 'Оператор',
-			[HandledBy.Bot]: 'Бот',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -43,8 +37,16 @@ export default {
 			[InteractionType[ChannelType.Email]]: ({ linked }) =>
 				linked('objects.interactionType.email'),
 		},
+		searchModes: {
+			[SearchMode.Search]: 'Звичайний пошук',
+			[SearchMode.Fts]: 'Повнотекстовий пошук',
+			[SearchMode.Description]: 'Коментар оператора',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Пошук дзвінків, чатів і листів, призначення та оцінювання.',
+		},
 		scorecards: {
 			text: 'Створення анкет оцінювання, ваги критеріїв і групування питань.',
 		},

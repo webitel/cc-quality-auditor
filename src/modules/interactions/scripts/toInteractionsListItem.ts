@@ -1,6 +1,6 @@
 import { InteractionStatus } from '@webitel/api-services/enums';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
-import { convertDuration } from '@webitel/ui-sdk/scripts';
+import { convertDuration, groupFilesByType } from '@webitel/ui-sdk/scripts';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
 import type {
@@ -33,6 +33,7 @@ export const toInteractionsListItem = (
 		team: item.team?.name,
 		duration: convertDuration(item.duration),
 		status,
+		evaluationId: evaluation?.id,
 		assignee: evaluation?.assignee?.name,
 		score: evaluation?.score,
 		plan: evaluation?.plan?.name,
@@ -53,5 +54,7 @@ export const toInteractionsListItem = (
 		skipReason: evaluation?.skipReason,
 		skippedBy: evaluation?.skippedBy?.name,
 		skippedAt: computeDateAndTime(evaluation?.skippedAt),
+		files: groupFilesByType(item.call?.files),
+		transcripts: item.call?.transcripts ?? [],
 	};
 };
