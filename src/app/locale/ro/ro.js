@@ -1,3 +1,8 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -12,11 +17,37 @@ export default {
 		allInteractions: 'Toate interacțiunile',
 		transcribe: 'Transcrie',
 		assign: 'Atribuie',
+		assignInteractions: 'Atribuie interacțiunea | Atribuie {n} interacțiuni',
+		me: '(eu)',
+		deleteEvaluations: 'Șterge evaluările | Șterge {n} evaluări',
+		evaluationsWillBeDeleted:
+			'Evaluarea va fi ștearsă. | Aceste evaluări vor fi șterse.',
+		interactionReturnsToNotEvaluated: 'Interacțiunea revine la „Neevaluat”.',
 		interactionDate: 'Data interacțiunii',
-		interactionType: 'Tipul interacțiunii',
 		customer: 'Client',
+		plan: 'Plan',
+		contactReason: 'Motivul contactului',
+		contactResult: 'Rezultatul contactului',
+		csat: 'CSAT',
+		skipReason: 'Motivul omiterii',
+		interactionTypes: {
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Căutare regulată',
+			[SearchMode.Fts]: 'Căutare text complet',
+			[SearchMode.Description]: 'Comentariul agentului',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Căutați apeluri, chaturi și e-mailuri, atribuiți-le sau evaluați-le.',
+		},
 		scorecards: {
 			text: 'Creați fișe de evaluare, setați ponderea criteriilor și grupați întrebările.',
 		},

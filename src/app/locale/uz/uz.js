@@ -1,3 +1,8 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
+
 export default {
 	audit: 'Audit',
 	scorecards: {
@@ -12,11 +17,38 @@ export default {
 		allInteractions: "Barcha o'zaro aloqalar",
 		transcribe: 'Transkriptsiya qilish',
 		assign: 'Tayinlash',
+		assignInteractions:
+			"O'zaro aloqani tayinlash | O'zaro aloqalarni tayinlash: {n}",
+		me: '(men)',
+		deleteEvaluations: "Baholarni o'chirish | Baholarni o'chirish: {n}",
+		evaluationsWillBeDeleted: "Baho o'chiriladi. | Bu baholar o'chiriladi.",
+		interactionReturnsToNotEvaluated:
+			"O'zaro aloqa «Baholanmagan» holatiga qaytadi.",
 		interactionDate: "O'zaro aloqa sanasi",
-		interactionType: "O'zaro aloqa turi",
 		customer: 'Mijoz',
+		plan: 'Reja',
+		contactReason: 'Murojaat sababi',
+		contactResult: 'Murojaat natijasi',
+		csat: 'CSAT',
+		skipReason: "O'tkazib yuborish sababi",
+		interactionTypes: {
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Oddiy qidiruv',
+			[SearchMode.Fts]: "To'liq matnli qidiruv",
+			[SearchMode.Description]: 'Agent izohi',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: "Qo'ng'iroqlar, chatlar va xatlarni qidiring, ularni tayinlang yoki baholang.",
+		},
 		scorecards: {
 			text: 'Baholash varaqalarini yarating, mezonlar vaznini belgilang va savollarni guruhlang.',
 		},

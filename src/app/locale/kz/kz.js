@@ -1,3 +1,8 @@
+import { ChannelType } from '@webitel/api-services/enums';
+
+import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
+
 export default {
 	audit: 'Аудит',
 	scorecards: {
@@ -11,11 +16,38 @@ export default {
 		allInteractions: 'Барлық өзара әрекеттер',
 		transcribe: 'Транскриберлеу',
 		assign: 'Тағайындау',
+		assignInteractions:
+			'Өзара әрекетті тағайындау | Өзара әрекеттерді тағайындау: {n}',
+		me: '(мен)',
+		deleteEvaluations: 'Бағалауларды жою | Бағалауларды жою: {n}',
+		evaluationsWillBeDeleted: 'Бағалау жойылады. | Бұл бағалаулар жойылады.',
+		interactionReturnsToNotEvaluated:
+			'Өзара әрекет «Бағаланбаған» күйіне оралады.',
 		interactionDate: 'Өзара әрекет күні',
-		interactionType: 'Өзара әрекет түрі',
 		customer: 'Клиент',
+		plan: 'Жоспар',
+		contactReason: 'Хабарласу себебі',
+		contactResult: 'Хабарласу нәтижесі',
+		csat: 'CSAT',
+		skipReason: 'Өткізіп жіберу себебі',
+		interactionTypes: {
+			[InteractionType[ChannelType.Call]]: ({ linked }) =>
+				linked('objects.interactionType.call'),
+			[InteractionType[ChannelType.Chat]]: ({ linked }) =>
+				linked('objects.interactionType.chat'),
+			[InteractionType[ChannelType.Email]]: ({ linked }) =>
+				linked('objects.interactionType.email'),
+		},
+		searchModes: {
+			[SearchMode.Search]: 'Қарапайым іздеу',
+			[SearchMode.Fts]: 'Толық мәтінді іздеу',
+			[SearchMode.Description]: 'Оператордың түсініктемесі',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Қоңыраулар, чаттар мен хаттарды іздеу, тағайындау және бағалау.',
+		},
 		scorecards: {
 			text: 'Бағалау сауалнамаларын жасаңыз, критерийлердің салмағын белгілеңіз және сұрақтарды топтастырыңыз.',
 		},
