@@ -19,6 +19,11 @@ export default {
 		assign: 'Przypisz',
 		assignInteractions: 'Przypisz interakcję | Przypisz interakcje: {n}',
 		me: '(ja)',
+		deleteEvaluations: 'Usuń oceny | Usuń oceny: {n}',
+		evaluationsWillBeDeleted:
+			'Ocena zostanie usunięta. | Te oceny zostaną usunięte.',
+		interactionReturnsToNotEvaluated:
+			'Interakcja wróci do statusu „Nieocenione”.',
 		interactionDate: 'Data interakcji',
 		customer: 'Klient',
 		plan: 'Plan',
@@ -41,6 +46,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Wyszukuj połączenia, czaty i e-maile, przydzielaj je lub oceniaj.',
+		},
 		scorecards: {
 			text: 'Twórz arkusze ocen, ustawiaj wagi kryteriów i grupuj pytania.',
 		},

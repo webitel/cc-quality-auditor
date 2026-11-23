@@ -165,6 +165,35 @@ export const interactionsHandlers = [
 			});
 		},
 	),
+	http.delete(
+		`${import.meta.env.VITE_API_URL}${EvaluationsUrl}`,
+		({ request }) => {
+			const ids = new URL(request.url).searchParams.getAll('id');
+
+			const deleted = ids.filter((id) => {
+				const item = interactionsMock.find(
+					({ evaluation }) => evaluation?.id === id,
+				);
+				if (!item) return false;
+				item.status = InteractionStatus.NotEvaluated;
+				item.evaluation = undefined;
+				return true;
+			});
+
+			return HttpResponse.json({
+				id: deleted,
+				failures: ids
+					.filter((id) => !deleted.includes(id))
+					.map((id) => ({
+						id,
+						error: {
+							code: 5,
+							message: 'Evaluation not found',
+						},
+					})),
+			});
+		},
+	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
 		async ({ request }) => {

@@ -18,6 +18,10 @@ export default {
 		assign: 'Призначити',
 		assignInteractions: 'Призначити взаємодію | Призначити взаємодії: {n}',
 		me: '(я)',
+		deleteEvaluations: 'Видалити оцінки | Видалити оцінки: {n}',
+		evaluationsWillBeDeleted: 'Оцінку буде видалено. | Оцінки буде видалено.',
+		interactionReturnsToNotEvaluated:
+			'Взаємодія повернеться в статус «Не оцінено».',
 		interactionDate: 'Дата взаємодії',
 		customer: 'Клієнт',
 		plan: 'План',
@@ -40,6 +44,9 @@ export default {
 		},
 	},
 	startPage: {
+		interactions: {
+			text: 'Пошук дзвінків, чатів і листів, призначення та оцінювання.',
+		},
 		scorecards: {
 			text: 'Створення анкет оцінювання, ваги критеріїв і групування питань.',
 		},
