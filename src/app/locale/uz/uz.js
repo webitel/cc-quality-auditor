@@ -1,7 +1,7 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
-import { HandledBy } from '../../../modules/interactions/enums/HandledBy.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
+import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
 export default {
 	audit: 'Audit',
@@ -20,25 +20,17 @@ export default {
 		assignInteractions:
 			"O'zaro aloqani tayinlash | O'zaro aloqalarni tayinlash: {n}",
 		me: '(men)',
+		deleteEvaluations: "Baholarni o'chirish | Baholarni o'chirish: {n}",
+		evaluationsWillBeDeleted: "Baho o'chiriladi. | Bu baholar o'chiriladi.",
+		interactionReturnsToNotEvaluated:
+			"O'zaro aloqa «Baholanmagan» holatiga qaytadi.",
 		interactionDate: "O'zaro aloqa sanasi",
 		customer: 'Mijoz',
 		plan: 'Reja',
-		dueDate: 'Muddat',
 		contactReason: 'Murojaat sababi',
 		contactResult: 'Murojaat natijasi',
 		csat: 'CSAT',
-		ratedAt: 'Baholangan sana',
-		handledBy: "Xizmat ko'rsatgan",
-		firstResponse: 'Birinchi javob',
-		messages: 'Xabarlar',
 		skipReason: "O'tkazib yuborish sababi",
-		skippedBy: "Kim o'tkazib yubordi",
-		skippedAt: "O'tkazib yuborilgan sana",
-		handledByTypes: {
-			[HandledBy.Agent]: 'Agent',
-			[HandledBy.Bot]: 'Bot',
-			[HandledBy.Ivr]: 'IVR',
-		},
 		interactionTypes: {
 			[InteractionType[ChannelType.Call]]: ({ linked }) =>
 				linked('objects.interactionType.call'),
@@ -47,8 +39,16 @@ export default {
 			[InteractionType[ChannelType.Email]]: ({ linked }) =>
 				linked('objects.interactionType.email'),
 		},
+		searchModes: {
+			[SearchMode.Search]: 'Oddiy qidiruv',
+			[SearchMode.Fts]: "To'liq matnli qidiruv",
+			[SearchMode.Description]: 'Agent izohi',
+		},
 	},
 	startPage: {
+		interactions: {
+			text: "Qo'ng'iroqlar, chatlar va xatlarni qidiring, ularni tayinlang yoki baholang.",
+		},
 		scorecards: {
 			text: 'Baholash varaqalarini yarating, mezonlar vaznini belgilang va savollarni guruhlang.',
 		},
