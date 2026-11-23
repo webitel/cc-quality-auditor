@@ -5,6 +5,7 @@ import type { InteractionsListItem } from './interaction';
 export type UseTranscribeActionOptions = {
 	selected: Ref<InteractionsListItem[]>;
 	fileIds: Ref<string[]>;
+	hasAccess?: Ref<boolean>;
 	onTranscribed: () => Promise<void>;
 };
 

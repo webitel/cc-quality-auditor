@@ -30,6 +30,17 @@ type SearchFilter = {
 	status?: string[];
 	assignee_id?: string[];
 	score?: Range;
+	due_at?: Range;
+	rated_at?: Range;
+	scorecard_id?: string[];
+	handled_by?: string[];
+	first_response_sec?: Range;
+	message_count?: Range;
+	skipped_by_id?: string[];
+	skipped_at?: Range;
+	q?: string;
+	fts?: string;
+	agent_description?: string;
 };
 
 type SearchRequest = {
@@ -61,6 +72,26 @@ const getCustomer = ({
 }: (typeof interactionsMock)[number]) =>
 	(direction === 'outbound' ? to : from)?.number;
 
+const SearchTopics = [
+	'order delivery',
+	'refund request',
+	'password reset',
+	'tariff change',
+	'connection issue',
+] as const;
+
+const getTopic = (item: (typeof interactionsMock)[number], shift = 0) =>
+	SearchTopics[(interactionsMock.indexOf(item) + shift) % SearchTopics.length];
+
+const getConversationText = (item: (typeof interactionsMock)[number]) =>
+	item.chat || item.call?.transcripts.length ? getTopic(item) : undefined;
+
+const getAgentComment = (item: (typeof interactionsMock)[number]) =>
+	item.agent ? `Customer asked about ${getTopic(item, 2)}` : undefined;
+
+const includesText = (text?: string, query?: string) =>
+	!query || !!text?.toLowerCase().includes(query.toLowerCase());
+
 const findItems = (filter: SearchFilter = {}, sort?: string) =>
 	sortItems(
 		interactionsMock
@@ -74,7 +105,18 @@ const findItems = (filter: SearchFilter = {}, sort?: string) =>
 					isInRange(item.duration, filter.duration) &&
 					isOneOf(item.status, filter.status) &&
 					isOneOf(item.evaluation?.assignee.id, filter.assignee_id) &&
-					isInRange(item.evaluation?.score, filter.score),
+					isInRange(item.evaluation?.score, filter.score) &&
+					isInRange(item.evaluation?.due_at, filter.due_at) &&
+					isInRange(item.evaluation?.rated_at, filter.rated_at) &&
+					isOneOf(item.evaluation?.scorecard?.id, filter.scorecard_id) &&
+					isOneOf(item.handled_by, filter.handled_by) &&
+					isInRange(item.chat?.first_response_sec, filter.first_response_sec) &&
+					isInRange(item.chat?.message_count, filter.message_count) &&
+					isOneOf(item.evaluation?.skipped_by?.id, filter.skipped_by_id) &&
+					isInRange(item.evaluation?.skipped_at, filter.skipped_at) &&
+					includesText(getCustomer(item), filter.q) &&
+					includesText(getConversationText(item), filter.fts) &&
+					includesText(getAgentComment(item), filter.agent_description),
 			)
 			.map((item) => ({
 				...item,
@@ -118,6 +160,35 @@ export const interactionsHandlers = [
 						error: {
 							code: 9,
 							message: 'Evaluation is completed',
+						},
+					})),
+			});
+		},
+	),
+	http.delete(
+		`${import.meta.env.VITE_API_URL}${EvaluationsUrl}`,
+		({ request }) => {
+			const ids = new URL(request.url).searchParams.getAll('id');
+
+			const deleted = ids.filter((id) => {
+				const item = interactionsMock.find(
+					({ evaluation }) => evaluation?.id === id,
+				);
+				if (!item) return false;
+				item.status = InteractionStatus.NotEvaluated;
+				item.evaluation = undefined;
+				return true;
+			});
+
+			return HttpResponse.json({
+				id: deleted,
+				failures: ids
+					.filter((id) => !deleted.includes(id))
+					.map((id) => ({
+						id,
+						error: {
+							code: 5,
+							message: 'Evaluation not found',
 						},
 					})),
 			});
