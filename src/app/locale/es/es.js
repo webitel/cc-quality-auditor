@@ -49,7 +49,6 @@ export default {
 		information: 'Información',
 		evaluation: 'Evaluación',
 		skip: 'Omitir',
-		matchesCount: '{current} de {total}',
 	},
 	startPage: {
 		interactions: {

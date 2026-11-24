@@ -50,7 +50,6 @@ export default {
 		information: "Ma'lumot",
 		evaluation: 'Baholash',
 		skip: "O'tkazib yuborish",
-		matchesCount: '{total} tadan {current}',
 	},
 	startPage: {
 		interactions: {

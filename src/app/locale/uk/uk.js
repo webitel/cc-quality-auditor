@@ -48,7 +48,6 @@ export default {
 		information: 'Інформація',
 		evaluation: 'Оцінка',
 		skip: 'Пропустити',
-		matchesCount: '{current} з {total}',
 	},
 	startPage: {
 		interactions: {

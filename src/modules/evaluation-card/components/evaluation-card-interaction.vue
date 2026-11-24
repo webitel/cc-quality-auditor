@@ -10,8 +10,6 @@
         <evaluation-card-search
           v-if="isSearchShown"
           v-model:query="searchQuery"
-          v-model:active-match="activeMatch"
-          :matches-count="matchesCount"
         />
         <wt-icon-btn
           :icon="`panel-${evaluationPanelCollapsed ? 'collapse' : 'expand'}`"
@@ -23,9 +21,7 @@
       v-if="isCallConversationShown"
       :call="interaction.call"
       :search-query="searchQuery"
-      :active-match="activeMatch"
       @reload="emit('reload')"
-      @matches-change="updateMatchesCount"
     />
   </section>
 </template>
@@ -73,20 +69,9 @@ const currentTab = ref<EvaluationCardTabItem>(
 
 const searchQuery = ref('');
 
-const activeMatch = ref(0);
-
-const matchesCount = ref(0);
-
-function updateMatchesCount(count: number) {
-	matchesCount.value = count;
-	activeMatch.value = 0;
-}
-
 function changeTab(tab: EvaluationCardTabItem) {
 	currentTab.value = tab;
 	searchQuery.value = '';
-	activeMatch.value = 0;
-	matchesCount.value = 0;
 }
 
 const isCallConversationShown = computed(

@@ -50,7 +50,6 @@ export default {
 		information: 'Thông tin',
 		evaluation: 'Đánh giá',
 		skip: 'Bỏ qua',
-		matchesCount: '{current} trên {total}',
 	},
 	startPage: {
 		interactions: {

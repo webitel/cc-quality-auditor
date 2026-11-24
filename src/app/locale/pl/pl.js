@@ -50,7 +50,6 @@ export default {
 		information: 'Informacje',
 		evaluation: 'Ocena',
 		skip: 'Pomiń',
-		matchesCount: '{current} z {total}',
 	},
 	startPage: {
 		interactions: {
