@@ -58,5 +58,8 @@
 		"vite-plugin-vue-devtools": "^8.x",
 		"vitest": "^4.x",
 		"vue-tsc": "^3.3.8"
+	},
+	"overrides": {
+		"decode-uri-component": "^0.5.1"
 	}
 }
