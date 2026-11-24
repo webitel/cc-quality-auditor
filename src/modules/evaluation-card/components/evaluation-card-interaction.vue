@@ -7,8 +7,8 @@
         @change="currentTab = $event"
       />
       <wt-icon-btn
-        :icon="`panel-${evaluationPanelCollapsed ? 'expand' : 'collapse'}`"
-        @click="emit('toggle-evaluation-panel')"
+        :icon="`panel-${collapsed ? 'expand' : 'collapse'}`"
+        @click="emit('toggle')"
       />
     </header>
   </section>
@@ -21,26 +21,26 @@ import { useI18n } from 'vue-i18n';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
 
 defineProps<{
-	evaluationPanelCollapsed: boolean;
+	collapsed: boolean;
 }>();
 
 const emit = defineEmits<{
-	'toggle-evaluation-panel': [];
+	toggle: [];
 }>();
 
 const { t } = useI18n();
 
 const tabValues = computed(() => ({
 	[EvaluationCardTab.Conversation]: {
-		text: t('evaluationCard.conversation'),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.Conversation}`),
 		value: EvaluationCardTab.Conversation,
 	},
 	[EvaluationCardTab.Information]: {
-		text: t('evaluationCard.information'),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.Information}`),
 		value: EvaluationCardTab.Information,
 	},
 	[EvaluationCardTab.ScreenRecording]: {
-		text: t('objects.screenRecordings', 1),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.ScreenRecording}`),
 		value: EvaluationCardTab.ScreenRecording,
 	},
 }));
