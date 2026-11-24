@@ -3,6 +3,7 @@
     <template v-if="isOpened">
       <wt-search-bar
         :value="query"
+        :size="ComponentSize.SM"
         class="evaluation-card-search__bar"
         @input="query = $event"
       />
@@ -20,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { ref } from 'vue';
 
 const query = defineModel<string>('query', {

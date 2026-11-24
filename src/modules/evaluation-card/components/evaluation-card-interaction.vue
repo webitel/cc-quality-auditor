@@ -7,10 +7,6 @@
         @change="changeTab"
       />
       <div class="evaluation-card-interaction__actions">
-        <evaluation-card-search
-          v-if="isSearchShown"
-          v-model:query="searchQuery"
-        />
         <wt-icon-btn
           :icon="`panel-${evaluationPanelCollapsed ? 'collapse' : 'expand'}`"
           @click="emit('toggle-evaluation-panel')"
@@ -20,7 +16,6 @@
     <evaluation-card-call-conversation
       v-if="isCallConversationShown"
       :call="interaction.call"
-      :search-query="searchQuery"
       @reload="emit('reload')"
     />
   </section>
@@ -34,7 +29,6 @@ import type { InteractionResponseItem } from '../../interactions/types/interacti
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
 import type { EvaluationCardTabItem } from '../types/evaluationCardTab';
 import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
-import EvaluationCardSearch from './evaluation-card-search.vue';
 
 const { interaction } = defineProps<{
 	interaction: InteractionResponseItem | null;
@@ -67,22 +61,14 @@ const currentTab = ref<EvaluationCardTabItem>(
 	tabValues.value[EvaluationCardTab.Conversation],
 );
 
-const searchQuery = ref('');
-
 function changeTab(tab: EvaluationCardTabItem) {
 	currentTab.value = tab;
-	searchQuery.value = '';
 }
 
 const isCallConversationShown = computed(
 	() =>
 		currentTab.value.value === EvaluationCardTab.Conversation &&
 		!!interaction?.call,
-);
-
-const isSearchShown = computed(
-	() =>
-		isCallConversationShown.value && !!interaction?.call?.transcripts?.length,
 );
 </script>
 

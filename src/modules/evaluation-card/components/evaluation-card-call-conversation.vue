@@ -12,11 +12,15 @@
     <template v-if="hasAudio">
       <wt-divider />
       <div class="evaluation-card-call-conversation__transcription">
-        <h3
-          class="evaluation-card-call-conversation__transcription-title typo-subtitle-1"
-        >
-          {{ t('objects.transcription') }}
-        </h3>
+        <div class="evaluation-card-call-conversation__transcription-header">
+          <h3 class="typo-subtitle-1">
+            {{ t('objects.transcription') }}
+          </h3>
+          <evaluation-card-search
+            v-if="visualizationCall.transcripts?.length"
+            v-model:query="searchQuery"
+          />
+        </div>
         <call-transcript
           :call="visualizationCall"
           :file="selectedFile"
@@ -50,6 +54,7 @@ import { computed, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
+import EvaluationCardSearch from './evaluation-card-search.vue';
 
 defineOptions({
 	components: {
@@ -59,9 +64,8 @@ defineOptions({
 	},
 });
 
-const { call, searchQuery } = defineProps<{
+const { call } = defineProps<{
 	call: EngineHistoryCall;
-	searchQuery: string;
 }>();
 
 const emit = defineEmits<{
@@ -93,6 +97,8 @@ const selectedFile = ref<CallWaveFile>(audioFiles[0] ?? {});
 
 const currentTime = ref(0);
 
+const searchQuery = ref('');
+
 const wave = useTemplateRef<InstanceType<typeof CallWave>>('wave');
 
 function removeTranscript(transcript: CallTranscriptItem) {
@@ -110,7 +116,12 @@ function removeTranscript(transcript: CallTranscriptItem) {
   gap: var(--spacing-sm);
 }
 
-.evaluation-card-call-conversation__transcription-title {
+.evaluation-card-call-conversation__transcription-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  min-height: 34px;
   margin-bottom: var(--spacing-sm);
 }
 </style>
