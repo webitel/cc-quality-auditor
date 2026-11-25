@@ -8,8 +8,8 @@
       />
       <div class="evaluation-card-interaction__actions">
         <wt-icon-btn
-          :icon="`panel-${evaluationPanelCollapsed ? 'collapse' : 'expand'}`"
-          @click="emit('toggle-evaluation-panel')"
+          :icon="`panel-${collapsed ? 'collapse' : 'expand'}`"
+          @click="emit('toggle')"
         />
       </div>
     </header>
@@ -32,11 +32,11 @@ import EvaluationCardCallConversation from './evaluation-card-call-conversation.
 
 const { interaction } = defineProps<{
 	interaction: InteractionResponseItem | null;
-	evaluationPanelCollapsed: boolean;
+	collapsed: boolean;
 }>();
 
 const emit = defineEmits<{
-	'toggle-evaluation-panel': [];
+	toggle: [];
 	reload: [];
 }>();
 
@@ -44,15 +44,15 @@ const { t } = useI18n();
 
 const tabValues = computed(() => ({
 	[EvaluationCardTab.Conversation]: {
-		text: t('evaluationCard.conversation'),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.Conversation}`),
 		value: EvaluationCardTab.Conversation,
 	},
 	[EvaluationCardTab.Information]: {
-		text: t('evaluationCard.information'),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.Information}`),
 		value: EvaluationCardTab.Information,
 	},
 	[EvaluationCardTab.ScreenRecording]: {
-		text: t('objects.screenRecordings', 1),
+		text: t(`evaluationCard.tabs.${EvaluationCardTab.ScreenRecording}`),
 		value: EvaluationCardTab.ScreenRecording,
 	},
 }));
