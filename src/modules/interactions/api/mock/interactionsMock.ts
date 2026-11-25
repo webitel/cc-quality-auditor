@@ -3,11 +3,17 @@ import {
 	InteractionHandledBy,
 	InteractionStatus,
 } from '@webitel/api-services/enums';
-import { EngineCallFileType } from '@webitel/api-services/gen/models';
+import {
+	EngineCallFileType,
+	EngineHistoryFileJobHistoryFileJobAction,
+	EngineHistoryFileJobHistoryFileJobState,
+} from '@webitel/api-services/gen/models';
+import type { EngineCallAnnotation } from '@webitel/api-services/gen-wire/models';
 
 import { InteractionType } from '../../enums/InteractionType.enum';
 
-const minute = 60 * 1000;
+const second = 1000;
+const minute = 60 * second;
 const hour = 60 * minute;
 const now = Date.now();
 
@@ -37,18 +43,31 @@ const getAgentEndpoint = (agent?: { id: string; name: string }) =>
 		...agent,
 	};
 
+export const DeletedRecordingFileId = '88014';
+
+const getAudioFile = (id: number, name: string, createdAt: number) => ({
+	id: `${id}`,
+	name,
+	mime_type: 'audio/mpeg',
+	type: EngineCallFileType.FileTypeAudio,
+	start_at: String(createdAt),
+	stop_at: String(createdAt + minute),
+});
+
 const getCallFiles = (index: number, createdAt: number) =>
 	index % 5 === 2
 		? []
 		: [
-				{
-					id: `${88000 + index}`,
-					name: `recording_${index + 1}.mp3`,
-					mime_type: 'audio/mpeg',
-					type: EngineCallFileType.FileTypeAudio,
-					start_at: String(createdAt),
-					stop_at: String(createdAt + minute),
-				},
+				getAudioFile(88000 + index, `recording_${index + 1}.mp3`, createdAt),
+				...(index % 8 === 0
+					? [
+							getAudioFile(
+								87000 + index,
+								`recording_${index + 1}_part_2.mp3`,
+								createdAt,
+							),
+						]
+					: []),
 				...(index % 4 === 3
 					? [
 							{
@@ -77,6 +96,82 @@ export const getCallTranscripts = (
 			name,
 		},
 	}));
+
+const getCallHold = (index: number, createdAt: number) =>
+	index % 2 === 0
+		? [
+				{
+					start: String(createdAt + 20 * second),
+					stop: String(createdAt + 30 * second),
+					sec: 10,
+				},
+			]
+		: [];
+
+const getCallAnnotations = (
+	index: number,
+	createdAt: number,
+	files: {
+		id: string;
+		type: string;
+	}[],
+	agent?: {
+		id: string;
+		name: string;
+	},
+): EngineCallAnnotation[] => {
+	const audioFile = files.find(
+		({ type }) => type === EngineCallFileType.FileTypeAudio,
+	);
+	if (!audioFile || index % 3 !== 0) return [];
+	const author = agent ?? getLookup('Evaluator', 0);
+	return [
+		{
+			id: `${7700 + index}`,
+			call_id: `call-${index + 1}`,
+			file_id: audioFile.id,
+			note: 'Customer confirmed the order number',
+			start_sec: 10,
+			end_sec: 15,
+			created_at: String(createdAt + hour),
+			created_by: author,
+		},
+	];
+};
+
+const getCallFilesJob = (
+	index: number,
+	createdAt: number,
+	files: {
+		id: string;
+		type: string;
+	}[],
+) => {
+	const audioFile = files.find(
+		({ type }) => type === EngineCallFileType.FileTypeAudio,
+	);
+	if (!audioFile) return [];
+	const state =
+		index % 6 === 5
+			? EngineHistoryFileJobHistoryFileJobState.Active
+			: index % 6 === 0
+				? EngineHistoryFileJobHistoryFileJobState.Error
+				: undefined;
+	if (!state) return [];
+	return [
+		{
+			id: `${6600 + index}`,
+			file_id: audioFile.id,
+			action: EngineHistoryFileJobHistoryFileJobAction.Stt,
+			state,
+			created_at: String(createdAt + hour),
+			error_detail:
+				state === EngineHistoryFileJobHistoryFileJobState.Error
+					? 'Transcription failed'
+					: undefined,
+		},
+	];
+};
 
 const getEvaluation = (
 	index: number,
@@ -156,9 +251,21 @@ export const interactionsMock = Array.from(
 				? undefined
 				: {
 						id,
+						direction: isOutbound ? 'outbound' : 'inbound',
+						created_at: String(createdAt),
+						answered_at: String(createdAt + 5 * second),
+						bridged_at: String(createdAt + 5 * second),
+						duration: 60,
+						bill_sec: 55,
+						from: isOutbound ? agentEndpoint : customer,
+						to: isOutbound ? customer : agentEndpoint,
+						hold: getCallHold(index, createdAt),
+						annotations: getCallAnnotations(index, createdAt, files, agent),
+						files_job: getCallFilesJob(index, createdAt, files),
 						files,
 						transcripts:
-							index % 6 === 3
+							index % 6 === 3 ||
+							files.some(({ id }) => id === DeletedRecordingFileId)
 								? getCallTranscripts(
 										files.filter(
 											({ type }) => type === EngineCallFileType.FileTypeAudio,
