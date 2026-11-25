@@ -1,7 +1,7 @@
 <template>
   <wt-page-wrapper
     :actions-panel="false"
-    class="evaluation-card"
+    class="opened-evaluation"
   >
     <template #header>
       <wt-page-header
@@ -25,14 +25,14 @@
       <template v-else>
         <evaluation-card-interaction
           :interaction="interaction"
-          :evaluation-panel-collapsed="isEvaluationPanelCollapsed"
-          class="evaluation-card__panel"
-          @toggle-evaluation-panel="toggleEvaluationPanel"
+          :collapsed="isEvaluationPanelCollapsed"
+          class="opened-evaluation__panel"
+          @toggle="toggleEvaluationPanel"
           @reload="loadInteraction"
         />
         <evaluation-card-scorecard
           v-if="!isEvaluationPanelCollapsed"
-          class="evaluation-card__panel"
+          class="opened-evaluation__panel"
         />
       </template>
     </template>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import { useLocalStorage, useToggle } from '@vueuse/core';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { WtApplication } from '@webitel/ui-sdk/enums';
 import { computed, ref } from 'vue';
@@ -50,7 +51,6 @@ import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import InteractionsAPIRepository from '../../interactions/api/InteractionsAPIRepository';
 import { InteractionType } from '../../interactions/enums/InteractionType.enum';
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
-import { useEvaluationPanelCollapse } from '../composables/useEvaluationPanelCollapse';
 import EvaluationCardInteraction from './evaluation-card-interaction.vue';
 import EvaluationCardScorecard from './evaluation-card-scorecard.vue';
 
@@ -63,8 +63,11 @@ const { close } = useClose(section);
 const interaction = ref<InteractionResponseItem | null>(null);
 const isLoading = ref(false);
 
-const { isEvaluationPanelCollapsed, toggleEvaluationPanel } =
-	useEvaluationPanelCollapse();
+const isEvaluationPanelCollapsed = useLocalStorage(
+	'audit-evaluation-panel-collapsed',
+	false,
+);
+const toggleEvaluationPanel = useToggle(isEvaluationPanelCollapsed);
 
 const path = computed(() => [
 	{
@@ -98,18 +101,18 @@ loadInteraction();
 </script>
 
 <style scoped>
-.evaluation-card {
+.opened-evaluation {
   height: 100%;
 }
 
-.evaluation-card :deep(.wt-page-wrapper__main) {
+.opened-evaluation :deep(.wt-page-wrapper__main) {
   min-height: 0;
   padding: 0;
   background: transparent;
   gap: var(--page-wrapper-section-gap);
 }
 
-.evaluation-card__panel {
+.opened-evaluation__panel {
   flex: 1 1 0;
   min-width: 0;
   overflow: auto;
