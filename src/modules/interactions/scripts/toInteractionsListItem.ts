@@ -13,7 +13,11 @@ const computeDateAndTime = (timestamp?: string) => {
 	return formatDate(Number(timestamp), FormatDateMode.DATETIME);
 };
 
-const getCustomer = ({ direction, from, to }: InteractionResponseItem) => {
+export const getCustomer = ({
+	direction,
+	from,
+	to,
+}: InteractionResponseItem) => {
 	const customer = direction === 'outbound' ? to : from;
 	return customer?.number || customer?.name;
 };

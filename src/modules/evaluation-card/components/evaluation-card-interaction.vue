@@ -39,6 +39,10 @@
         />
       </div>
     </header>
+    <evaluation-card-chips
+      v-if="isConversationTab && interaction"
+      :interaction="interaction"
+    />
     <evaluation-card-call-conversation
       v-if="isCallConversationShown"
       :call="interaction.call"
@@ -87,6 +91,7 @@ import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
 import type { EvaluationCardTabItem } from '../types/evaluationCardTab';
 import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
+import EvaluationCardChips from './evaluation-card-chips.vue';
 
 defineOptions({
 	components: {
@@ -141,10 +146,12 @@ function changeTab(tab: EvaluationCardTabItem) {
 	currentTab.value = tab;
 }
 
+const isConversationTab = computed(
+	() => currentTab.value.value === EvaluationCardTab.Conversation,
+);
+
 const isCallConversationShown = computed(
-	() =>
-		currentTab.value.value === EvaluationCardTab.Conversation &&
-		!!interaction?.call,
+	() => isConversationTab.value && !!interaction?.call,
 );
 
 const isScreenRecordingShown = computed(
