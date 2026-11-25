@@ -1,5 +1,6 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
+import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -46,8 +47,11 @@ export default {
 		},
 	},
 	evaluationCard: {
-		conversation: 'Rozmowa',
-		information: 'Informacje',
+		tabs: {
+			[EvaluationCardTab.Conversation]: 'Rozmowa',
+			[EvaluationCardTab.Information]: 'Informacje',
+			[EvaluationCardTab.ScreenRecording]: 'Nagranie ekranu',
+		},
 		evaluation: 'Ocena',
 		skip: 'Pomiń',
 	},
