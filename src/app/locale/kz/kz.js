@@ -1,5 +1,6 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
+import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -43,6 +44,15 @@ export default {
 			[SearchMode.Fts]: 'Толық мәтінді іздеу',
 			[SearchMode.Description]: 'Оператордың түсініктемесі',
 		},
+	},
+	evaluationCard: {
+		tabs: {
+			[EvaluationCardTab.Conversation]: 'Әңгіме',
+			[EvaluationCardTab.Information]: 'Ақпарат',
+			[EvaluationCardTab.ScreenRecording]: 'Экран жазбасы',
+		},
+		evaluation: 'Бағалау',
+		skip: 'Өткізіп жіберу',
 	},
 	startPage: {
 		interactions: {

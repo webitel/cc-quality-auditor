@@ -1,5 +1,6 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
+import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -44,6 +45,15 @@ export default {
 			[SearchMode.Fts]: "To'liq matnli qidiruv",
 			[SearchMode.Description]: 'Agent izohi',
 		},
+	},
+	evaluationCard: {
+		tabs: {
+			[EvaluationCardTab.Conversation]: 'Suhbat',
+			[EvaluationCardTab.Information]: "Ma'lumot",
+			[EvaluationCardTab.ScreenRecording]: 'Ekran yozuvi',
+		},
+		evaluation: 'Baholash',
+		skip: "O'tkazib yuborish",
 	},
 	startPage: {
 		interactions: {

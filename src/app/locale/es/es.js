@@ -1,5 +1,6 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
+import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -43,6 +44,15 @@ export default {
 			[SearchMode.Fts]: 'Búsqueda de texto completo',
 			[SearchMode.Description]: 'Comentario del agente',
 		},
+	},
+	evaluationCard: {
+		tabs: {
+			[EvaluationCardTab.Conversation]: 'Conversación',
+			[EvaluationCardTab.Information]: 'Información',
+			[EvaluationCardTab.ScreenRecording]: 'Grabación de pantalla',
+		},
+		evaluation: 'Evaluación',
+		skip: 'Omitir',
 	},
 	startPage: {
 		interactions: {

@@ -1,5 +1,6 @@
 import { ChannelType } from '@webitel/api-services/enums';
 
+import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
 import { SearchMode } from '../../../modules/interactions/enums/SearchMode.enum';
 
@@ -44,6 +45,15 @@ export default {
 			[SearchMode.Fts]: 'Tìm kiếm toàn văn bản',
 			[SearchMode.Description]: 'Bình luận của tác vụ',
 		},
+	},
+	evaluationCard: {
+		tabs: {
+			[EvaluationCardTab.Conversation]: 'Cuộc hội thoại',
+			[EvaluationCardTab.Information]: 'Thông tin',
+			[EvaluationCardTab.ScreenRecording]: 'Ghi hình màn hình',
+		},
+		evaluation: 'Đánh giá',
+		skip: 'Bỏ qua',
 	},
 	startPage: {
 		interactions: {
