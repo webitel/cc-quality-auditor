@@ -1,3 +1,5 @@
+import { InteractionType } from '../../../modules/scorecards/enums/InteractionType.enum';
+
 export default {
 	audit: 'Auditoría',
 	scorecards: {
@@ -7,6 +9,12 @@ export default {
 			'Esta hoja de puntuación tiene evaluaciones y no se puede editar. Ábrela y usa GUARDAR COMO para crear una copia.',
 		usedScorecardCantDelete:
 			'Esta hoja de puntuación está en uso y no se puede eliminar.',
+		interactionType: 'Tipo de interacción',
+		interactionTypes: {
+			[InteractionType.CALL]: 'Llamada',
+			[InteractionType.CHAT]: 'Chat',
+			[InteractionType.EMAIL]: 'Email',
+		},
 	},
 	startPage: {
 		scorecards: {

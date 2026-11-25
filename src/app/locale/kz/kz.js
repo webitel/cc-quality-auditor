@@ -1,3 +1,5 @@
+import { InteractionType } from '../../../modules/scorecards/enums/InteractionType.enum';
+
 export default {
 	audit: 'Аудит',
 	scorecards: {
@@ -6,6 +8,12 @@ export default {
 		usedScorecardCantEdit:
 			'Сауалнамада бағалар бар, оны өңдеуге болмайды. Оны ашып, көшірме жасау үшін БАСҚАША САҚТАУ пайдаланыңыз.',
 		usedScorecardCantDelete: 'Сауалнама пайдаланылуда, оны жоюға болмайды.',
+		interactionType: 'Өзара әрекеттесу түрі',
+		interactionTypes: {
+			[InteractionType.CALL]: 'Қоңырау',
+			[InteractionType.CHAT]: 'Чат',
+			[InteractionType.EMAIL]: 'Email',
+		},
 	},
 	startPage: {
 		scorecards: {

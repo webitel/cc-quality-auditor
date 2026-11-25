@@ -1,3 +1,5 @@
+import { InteractionType } from '../../../modules/scorecards/enums/InteractionType.enum';
+
 export default {
 	audit: 'Аудит',
 	scorecards: {
@@ -6,6 +8,12 @@ export default {
 		usedScorecardCantEdit:
 			'Анкета має оцінки, її не можна редагувати. Відкрийте її і скористайтеся ЗБЕРЕГТИ ЯК, щоб створити копію.',
 		usedScorecardCantDelete: 'Анкета використовується, її не можна видалити.',
+		interactionType: 'Тип взаємодії',
+		interactionTypes: {
+			[InteractionType.CALL]: 'Дзвінок',
+			[InteractionType.CHAT]: 'Чат',
+			[InteractionType.EMAIL]: 'Email',
+		},
 	},
 	startPage: {
 		scorecards: {
