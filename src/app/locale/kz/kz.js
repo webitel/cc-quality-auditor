@@ -6,6 +6,8 @@ export default {
 		usedScorecardCantEdit:
 			'Сауалнамада бағалар бар, оны өңдеуге болмайды. Оны ашып, көшірме жасау үшін БАСҚАША САҚТАУ пайдаланыңыз.',
 		usedScorecardCantDelete: 'Сауалнама пайдаланылуда, оны жоюға болмайды.',
+		noPositiveRequiredCriterion:
+			'Ең жоғары бағасы 0-ден асатын кемінде бір міндетті критерий қосыңыз.',
 	},
 	startPage: {
 		scorecards: {

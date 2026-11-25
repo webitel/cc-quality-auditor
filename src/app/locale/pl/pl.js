@@ -7,6 +7,8 @@ export default {
 			'Ten arkusz ocen ma oceny i nie można go edytować. Otwórz go i użyj ZAPISZ JAKO, aby utworzyć kopię.',
 		usedScorecardCantDelete:
 			'Ten arkusz ocen jest używany i nie można go usunąć.',
+		noPositiveRequiredCriterion:
+			'Dodaj co najmniej jedno wymagane kryterium z maksymalnym wynikiem powyżej 0.',
 	},
 	startPage: {
 		scorecards: {

@@ -7,6 +7,8 @@ export default {
 			'Phiếu chấm điểm này đã có đánh giá và không thể chỉnh sửa. Hãy mở phiếu và dùng LƯU NHƯ để tạo bản sao.',
 		usedScorecardCantDelete:
 			'Phiếu chấm điểm này đang được sử dụng và không thể xóa.',
+		noPositiveRequiredCriterion:
+			'Thêm ít nhất một tiêu chí bắt buộc có điểm tối đa lớn hơn 0.',
 	},
 	startPage: {
 		scorecards: {

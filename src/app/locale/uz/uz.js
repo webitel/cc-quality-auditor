@@ -7,6 +7,8 @@ export default {
 			'Bu baholash varaqasida baholar mavjud, uni tahrirlab bo‘lmaydi. Uni oching va nusxa yaratish uchun BOSHQA NOM BILAN SAQLASH dan foydalaning.',
 		usedScorecardCantDelete:
 			'Bu baholash varaqasi foydalanilmoqda, uni o‘chirib bo‘lmaydi.',
+		noPositiveRequiredCriterion:
+			'Maksimal bali 0 dan yuqori bo‘lgan kamida bitta majburiy mezon qo‘shing.',
 	},
 	startPage: {
 		scorecards: {
