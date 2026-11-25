@@ -6,7 +6,7 @@
           :current-app="currentApp"
           :nav="accessibleNav"
           :dark-mode="darkMode"
-          :logo-route="RoutePaths.StartPage"
+          :logo-route="StartPageRoutePaths.TheStartPage"
         />
         <wt-logo
           :dark-mode="darkMode"
@@ -39,9 +39,9 @@ import { storeToRefs } from 'pinia';
 import { computed, inject } from 'vue';
 import packageJson from '../../../package.json' with { type: 'json' };
 import { useAppearanceStore } from '../../modules/appearance/stores/appearanceStore';
+import StartPageRoutePaths from '../../modules/start-page/router/internals/start-page-route-paths';
 import { useNavStore } from '../../modules/start-page/stores/navStore';
 import { useUserinfoStore } from '../../modules/userinfo/userInfoStore';
-import RoutePaths from '../router/_internals/RoutePaths.enum';
 
 defineOptions({
 	components: {

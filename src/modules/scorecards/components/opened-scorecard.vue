@@ -69,9 +69,10 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
-import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
-import ScorerecordTabNames from '../../../app/router/_internals/ScorerecordTabNames.enum';
 import { useErrorRedirectHandler } from '../../error-pages/composable/useErrorRedirectHandler';
+import StartPageRoutePaths from '../../start-page/router/internals/start-page-route-paths';
+import ScorecardsRouteNames from '../router/internals/scorecards-route-names';
+import ScorecardsRoutePaths from '../router/internals/scorecards-route-paths';
 import { useScorecardsCardStore } from '../stores';
 
 const { t } = useI18n();
@@ -99,12 +100,12 @@ const tabs = computed(() => [
 	{
 		text: t('reusable.general'),
 		value: 'general',
-		pathName: ScorerecordTabNames.GENERAL,
+		pathName: ScorecardsRouteNames.General,
 	},
 	{
 		text: t('objects.criterion', 2),
 		value: 'criteria',
-		pathName: ScorerecordTabNames.CRITERIA,
+		pathName: ScorecardsRouteNames.Criteria,
 	},
 ]);
 
@@ -114,11 +115,11 @@ const { close } = useClose(AuditorSections.Scorecards);
 const path = computed(() => [
 	{
 		name: t('audit'),
-		route: RoutePaths.StartPage,
+		route: StartPageRoutePaths.TheStartPage,
 	},
 	{
 		name: t('scorecards.scorecards', 2),
-		route: RoutePaths.Scorecards,
+		route: ScorecardsRoutePaths.Scorecards,
 	},
 	{
 		name: isNew.value ? t('reusable.new') : originalItemInstance.value?.name,

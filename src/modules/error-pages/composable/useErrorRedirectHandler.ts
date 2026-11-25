@@ -1,5 +1,5 @@
 import { useRouter } from 'vue-router';
-import { ErrorRedirectMap } from '../enems/ErrorRedirectMap.enum';
+import { ErrorRedirectMap } from '../enums/ErrorRedirectMap.enum';
 
 export function useErrorRedirectHandler() {
 	const router = useRouter();

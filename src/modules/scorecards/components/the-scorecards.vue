@@ -74,7 +74,12 @@
               @update:selected="updateSelected"
             >
               <template #name="{ item }">
-                <wt-item-link :link="`${AuditorSections.Scorecards}/${item.id}`">
+                <wt-item-link
+                  :link="{
+                    name: ScorecardsRouteNames.Card,
+                    params: { id: item.id },
+                  }"
+                >
                   {{ item.name }}
                 </wt-item-link>
               </template>
@@ -162,12 +167,7 @@
 import type { EngineAuditForm } from '@webitel/api-services/gen/models';
 import { DynamicFilterSearchComponent as DynamicFilterSearch } from '@webitel/ui-datalist/filters';
 import { WtTimeTooltip } from '@webitel/ui-sdk/components';
-import {
-	AuditorSections,
-	FormatDateMode,
-	IconAction,
-	WtObject,
-} from '@webitel/ui-sdk/enums';
+import { FormatDateMode, IconAction, WtObject } from '@webitel/ui-sdk/enums';
 import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
 import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
@@ -178,8 +178,10 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
-import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
+import StartPageRoutePaths from '../../start-page/router/internals/start-page-route-paths';
 import { SearchMode } from '../enums/SearchMode.enum';
+import ScorecardsRouteNames from '../router/internals/scorecards-route-names';
+import ScorecardsRoutePaths from '../router/internals/scorecards-route-paths';
 import { useScorecardsDatalistStore } from '../stores';
 
 // @vue/compat: kebab-case template tags do not count as import usage for vue-tsc
@@ -278,11 +280,11 @@ const isDeleteActionDisabled = (item: EngineAuditForm) =>
 const path = computed(() => [
 	{
 		name: t('audit'),
-		route: RoutePaths.StartPage,
+		route: StartPageRoutePaths.TheStartPage,
 	},
 	{
 		name: t('scorecards.scorecards', 2),
-		route: RoutePaths.Scorecards,
+		route: ScorecardsRoutePaths.Scorecards,
 	},
 ]);
 
@@ -293,7 +295,7 @@ function prettifyDateTime(timestamp?: string) {
 
 function create() {
 	return router.push({
-		name: `${AuditorSections.Scorecards}-card`,
+		name: ScorecardsRouteNames.Card,
 		params: {
 			id: 'new',
 		},
@@ -302,7 +304,7 @@ function create() {
 
 function edit(item: EngineAuditForm) {
 	return router.push({
-		name: `${AuditorSections.Scorecards}-card`,
+		name: ScorecardsRouteNames.Card,
 		params: {
 			id: item.id,
 		},
