@@ -44,11 +44,10 @@ import {
 	CallWave,
 	toCallVisualizationCall,
 } from '@webitel/ui-sdk/modules/CallVisualization';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useUserinfoStore } from '../../userinfo/userInfoStore';
+import { usePlaybackAccess } from '../../../app/composables/usePlaybackAccess';
 
 defineOptions({
 	components: {
@@ -68,14 +67,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const userinfoStore = useUserinfoStore();
-
-const hasPlaybackAccess = computed(() =>
-	[
-		SpecialGlobalAction.PlaybackRecordFile,
-		SpecialGlobalAction.TimeLimitedRecordFile,
-	].some((action) => userinfoStore.hasSpecialGlobalActionAccess(action)),
-);
+const { hasPlaybackAccess } = usePlaybackAccess();
 
 const visualizationCall = ref(toCallVisualizationCall(call));
 

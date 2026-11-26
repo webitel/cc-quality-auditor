@@ -229,6 +229,10 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import {
+	playbackActions,
+	usePlaybackAccess,
+} from '../../../app/composables/usePlaybackAccess';
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
@@ -279,12 +283,7 @@ const hasExportDataGridAccess = computed(() =>
 	]),
 );
 
-const playbackActions = [
-	SpecialGlobalAction.PlaybackRecordFile,
-	SpecialGlobalAction.TimeLimitedRecordFile,
-];
-
-const hasPlaybackAccess = computed(() => hasAnySpecialAccess(playbackActions));
+const { hasPlaybackAccess } = usePlaybackAccess();
 
 const tableStore = useInteractionsDatalistStore();
 
