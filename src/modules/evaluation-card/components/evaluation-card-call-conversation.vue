@@ -49,11 +49,10 @@ import {
 	CallWave,
 	toCallVisualizationCall,
 } from '@webitel/ui-sdk/modules/CallVisualization';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
-import { computed, ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useUserinfoStore } from '../../userinfo/userInfoStore';
+import { usePlaybackAccess } from '../../../app/composables/usePlaybackAccess';
 import EvaluationCardSearch from './evaluation-card-search.vue';
 
 defineOptions({
@@ -74,26 +73,31 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const userinfoStore = useUserinfoStore();
-
-const hasPlaybackAccess = computed(() =>
-	[
-		SpecialGlobalAction.PlaybackRecordFile,
-		SpecialGlobalAction.TimeLimitedRecordFile,
-	].some((action) => userinfoStore.hasSpecialGlobalActionAccess(action)),
-);
+const { hasPlaybackAccess } = usePlaybackAccess();
 
 const visualizationCall = ref(toCallVisualizationCall(call));
 
-const audioFiles = (visualizationCall.value.files[
-	EngineCallFileType.FileTypeAudio
-] ?? []) as CallWaveFile[];
+const audioFiles = computed(
+	() =>
+		(visualizationCall.value.files[EngineCallFileType.FileTypeAudio] ??
+			[]) as CallWaveFile[],
+);
 
-const hasAudio = audioFiles.length > 0;
+const hasAudio = computed(() => audioFiles.value.length > 0);
 
-const isPlayerShown = computed(() => hasPlaybackAccess.value && hasAudio);
+const isPlayerShown = computed(() => hasPlaybackAccess.value && hasAudio.value);
 
-const selectedFile = ref<CallWaveFile>(audioFiles[0] ?? {});
+const selectedFile = ref<CallWaveFile>(audioFiles.value[0] ?? {});
+
+watch(
+	() => call,
+	(value) => {
+		visualizationCall.value = toCallVisualizationCall(value);
+		if (!audioFiles.value.some(({ id }) => id === selectedFile.value.id)) {
+			selectedFile.value = audioFiles.value[0] ?? {};
+		}
+	},
+);
 
 const currentTime = ref(0);
 
