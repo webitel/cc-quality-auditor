@@ -24,9 +24,11 @@
       <wt-loader v-if="isLoading" />
       <template v-else>
         <evaluation-card-interaction
+          :interaction="interaction"
           :collapsed="isEvaluationPanelCollapsed"
           class="opened-evaluation__panel"
           @toggle="toggleEvaluationPanel"
+          @reload="loadInteraction"
         />
         <evaluation-card-scorecard
           v-if="!isEvaluationPanelCollapsed"
