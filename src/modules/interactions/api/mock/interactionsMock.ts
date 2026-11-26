@@ -54,6 +54,19 @@ const getAudioFile = (id: number, name: string, createdAt: number) => ({
 	stop_at: String(createdAt + minute),
 });
 
+const getScreenRecordingFile = (
+	id: number,
+	name: string,
+	createdAt: number,
+) => ({
+	id: `${id}`,
+	name,
+	mime_type: 'video/mp4',
+	type: EngineCallFileType.FileTypeScreensharing,
+	start_at: String(createdAt),
+	stop_at: String(createdAt + minute),
+});
+
 const getCallFiles = (index: number, createdAt: number) =>
 	index % 5 === 2
 		? []
@@ -70,14 +83,16 @@ const getCallFiles = (index: number, createdAt: number) =>
 					: []),
 				...(index % 4 === 3
 					? [
-							{
-								id: `${89000 + index}`,
-								name: `screen_${index + 1}.mp4`,
-								mime_type: 'video/mp4',
-								type: EngineCallFileType.FileTypeScreensharing,
-								start_at: String(createdAt),
-								stop_at: String(createdAt + minute),
-							},
+							getScreenRecordingFile(
+								89000 + index,
+								`screen_${index + 1}.mp4`,
+								createdAt,
+							),
+							getScreenRecordingFile(
+								89100 + index,
+								`screen_${index + 1}_part_2.mp4`,
+								createdAt + minute,
+							),
 						]
 					: []),
 			];

@@ -1,10 +1,11 @@
 import { InteractionStatus } from '@webitel/api-services/enums';
+import { EngineCallFileType } from '@webitel/api-services/gen/models';
 import type {
 	EngineCallAnnotation,
 	EngineCallServiceCreateCallAnnotationBody,
 	EngineCallServiceUpdateCallAnnotationBody,
 } from '@webitel/api-services/gen-wire/models';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http, passthrough } from 'msw';
 
 import {
 	isInRange,
@@ -135,6 +136,25 @@ const MockAnnotationAuthor = {
 
 const findCall = (callId: string) =>
 	interactionsMock.find(({ call }) => call?.id === callId)?.call;
+
+const findScreenRecordingFile = (fileId: string) =>
+	interactionsMock
+		.flatMap(({ call }) => call?.files ?? [])
+		.find(
+			({ id, type }) =>
+				id === fileId && type === EngineCallFileType.FileTypeScreensharing,
+		);
+
+const ScreenRecordingThumbnail =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="128" height="72"><rect width="128" height="72" fill="#c4c4c4"/></svg>';
+
+const EmptyZip = new Uint8Array([
+	0x50,
+	0x4b,
+	0x05,
+	0x06,
+	...new Array(18).fill(0),
+]);
 
 const callNotFound = () =>
 	HttpResponse.json(
@@ -310,6 +330,80 @@ export const interactionsHandlers = [
 			return HttpResponse.json({
 				items: id,
 			});
+		},
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/call/:callId`,
+		({ params }) =>
+			HttpResponse.json({
+				items: findCall(String(params.callId))
+					?.files.filter(
+						({ type }) => type === EngineCallFileType.FileTypeScreensharing,
+					)
+					.map(({ id, name, mime_type, start_at, stop_at }) => ({
+						id,
+						name,
+						view_name: name,
+						mime_type,
+						uploaded_at: stop_at,
+						properties: {
+							start_time: start_at,
+							end_time: stop_at,
+						},
+					})),
+			}),
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/file/:id/stream`,
+		({ params, request }) => {
+			if (!findScreenRecordingFile(String(params.id))) return passthrough();
+			if (new URL(request.url).searchParams.get('fetch_thumbnail') !== 'true') {
+				return new HttpResponse(null, {
+					status: 404,
+				});
+			}
+			return new HttpResponse(ScreenRecordingThumbnail, {
+				headers: {
+					'Content-Type': 'image/svg+xml',
+				},
+			});
+		},
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/storage/file/:id/download`,
+		({ params }) =>
+			findScreenRecordingFile(String(params.id))
+				? new HttpResponse(new Uint8Array(16), {
+						headers: {
+							'Content-Type': 'video/mp4',
+						},
+					})
+				: passthrough(),
+	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/calls/:callId/exports/archive/screenrecordings`,
+		({ params }) =>
+			findCall(String(params.callId))
+				? new HttpResponse(EmptyZip, {
+						headers: {
+							'Content-Type': 'application/zip',
+						},
+					})
+				: callNotFound(),
+	),
+	http.delete(
+		`${import.meta.env.VITE_API_URL}/storage/file`,
+		async ({ request }) => {
+			const { id = [] } = (await request.json()) as {
+				id?: string[];
+			};
+
+			interactionsMock.forEach(({ call }) => {
+				if (!call) return;
+				call.files = call.files.filter((file) => !id.includes(file.id));
+			});
+
+			return HttpResponse.json({});
 		},
 	),
 	http.post(
