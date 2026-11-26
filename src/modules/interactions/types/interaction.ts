@@ -6,6 +6,7 @@ import type {
 	EngineCallFile,
 	EngineEndpoint,
 	EngineHistoryCall,
+	EngineHistoryCallCallForm,
 	EngineLookup,
 	EngineTranscriptLookup,
 } from '@webitel/api-services/gen/models';
@@ -16,6 +17,12 @@ import type { InteractionType } from '../enums/InteractionType.enum';
 export type InteractionsRange = {
 	from?: number | null;
 	to?: number | null;
+};
+
+export type InteractionCall = EngineHistoryCall & {
+	forms?: (EngineHistoryCallCallForm & {
+		form_fields?: Record<string, string>;
+	})[];
 };
 
 export type InteractionResponseItem = {
@@ -45,7 +52,7 @@ export type InteractionResponseItem = {
 		skippedBy?: EngineLookup;
 		skippedAt?: string;
 	};
-	call?: EngineHistoryCall;
+	call?: InteractionCall;
 	chat?: {
 		firstResponseSec?: number;
 		messageCount?: number;
