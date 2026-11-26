@@ -91,7 +91,6 @@ const chips = computed(() => {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-xs);
-  --p-chip-secondary-background: var(--p-secondary-highlight-color);
 }
 
 .evaluation-card-chips__item {
