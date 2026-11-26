@@ -188,6 +188,60 @@ const getCallFilesJob = (
 	];
 };
 
+const hasCallInformation = (index: number) => index % 5 !== 4;
+
+const getCallVariables = (index: number) =>
+	hasCallInformation(index)
+		? {
+				Country: 'UA',
+				Language: 'Default',
+				wbt_contact_id: `${100 + index}`,
+				contact_reason: 'Default',
+				contact_result: 'Default',
+				customer_segment: 'Default',
+				campaign: 'Default',
+				transfer_from: 'Default',
+			}
+		: undefined;
+
+const getCallForms = (
+	index: number,
+	createdAt: number,
+	agent?: {
+		id: string;
+		name: string;
+	},
+) =>
+	hasCallInformation(index) && agent && index % 2 === 0
+		? [
+				{
+					agent,
+					reporting_at: String(createdAt + 2 * minute),
+					form_fields: {
+						reason: 'UA',
+						result: 'Default',
+						client_type: 'Default',
+						product: 'Default',
+						comment: 'Default',
+						follow_up: 'Default',
+						city: 'Default',
+						...(index % 4 === 0 && {
+							filesOutcome: JSON.stringify([
+								{
+									id: '1',
+									name: 'contract.pdf',
+								},
+								{
+									id: '2',
+									name: 'invoice.pdf',
+								},
+							]),
+						}),
+					},
+				},
+			]
+		: undefined;
+
 const getEvaluation = (
 	index: number,
 	status: InteractionStatus,
@@ -275,6 +329,8 @@ export const interactionsMock = Array.from(
 						from: isOutbound ? agentEndpoint : customer,
 						to: isOutbound ? customer : agentEndpoint,
 						hold: getCallHold(index, createdAt),
+						variables: getCallVariables(index),
+						forms: getCallForms(index, createdAt, agent),
 						annotations: getCallAnnotations(index, createdAt, files, agent),
 						files_job: getCallFilesJob(index, createdAt, files),
 						files,
