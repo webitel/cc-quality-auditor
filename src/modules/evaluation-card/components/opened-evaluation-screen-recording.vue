@@ -1,14 +1,10 @@
 <template>
-  <section class="evaluation-card-interaction">
-    <header class="evaluation-card-interaction__header">
-      <wt-tabs
-        :current="currentTab"
-        :tabs="Object.values(tabValues)"
-        @change="changeTab"
-      />
-      <div class="evaluation-card-interaction__actions">
+  <section class="opened-evaluation-screen-recording">
+    <header class="opened-evaluation-screen-recording__header">
+      <slot name="tabs" />
+      <div class="opened-evaluation-screen-recording__actions">
         <wt-action-bar
-          v-if="isScreenRecordingShown"
+          v-if="interaction?.call"
           :include="[IconAction.DOWNLOAD, IconAction.REFRESH, IconAction.DELETE]"
           :disabled:delete="!selected.length || !hasDeleteAccess"
           @click:download="downloadArchive"
@@ -33,21 +29,9 @@
             />
           </template>
         </wt-action-bar>
-        <wt-icon-btn
-          :icon="`panel-${collapsed ? 'collapse' : 'expand'}`"
-          @click="emit('toggle')"
-        />
+        <slot name="panel-toggle" />
       </div>
     </header>
-    <evaluation-card-chips
-      v-if="isConversationTab && interaction"
-      :interaction="interaction"
-    />
-    <evaluation-card-call-conversation
-      v-if="isCallConversationShown"
-      :call="interaction.call"
-      @reload="emit('reload')"
-    />
     <delete-confirmation-popup
       :shown="isDeleteConfirmationPopup"
       :callback="deleteCallback"
@@ -55,7 +39,7 @@
       @close="closeDelete"
     />
     <screen-recordings
-      v-if="isScreenRecordingShown"
+      v-if="interaction?.call"
       v-model:selected="selected"
       :data-list="dataList"
       :is-loading="isLoading"
@@ -79,19 +63,12 @@ import {
 	ScreenRecordings,
 	useCallScreenRecordings,
 } from '@webitel/ui-sdk/modules/ScreenRecordings';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import DeleteConfirmationPopup from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/components/delete-confirmation-popup.vue';
 import { useDeleteConfirmationPopup } from '@webitel/ui-sdk/src/modules/DeleteConfirmationPopup/composables/useDeleteConfirmationPopup';
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
 import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
-import { useUserinfoStore } from '../../userinfo/userInfoStore';
-import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
-import type { EvaluationCardTabItem } from '../types/evaluationCardTab';
-import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
-import EvaluationCardChips from './evaluation-card-chips.vue';
 
 defineOptions({
 	components: {
@@ -101,67 +78,12 @@ defineOptions({
 
 const { interaction } = defineProps<{
 	interaction: InteractionResponseItem | null;
-	collapsed: boolean;
 }>();
-
-const emit = defineEmits<{
-	toggle: [];
-	reload: [];
-}>();
-
-const { t } = useI18n();
-
-const userinfoStore = useUserinfoStore();
-
-const hasScreenRecordingAccess = computed(() =>
-	userinfoStore.hasSpecialGlobalActionAccess(
-		SpecialGlobalAction.ControlAgentScreen,
-	),
-);
 
 const { hasDeleteAccess } = useUserAccessControl(WtObject.ScreenRecordings);
 
-const tabValues = computed(() => ({
-	[EvaluationCardTab.Conversation]: {
-		text: t(`evaluationCard.tabs.${EvaluationCardTab.Conversation}`),
-		value: EvaluationCardTab.Conversation,
-	},
-	[EvaluationCardTab.Information]: {
-		text: t(`evaluationCard.tabs.${EvaluationCardTab.Information}`),
-		value: EvaluationCardTab.Information,
-	},
-	...(hasScreenRecordingAccess.value && {
-		[EvaluationCardTab.ScreenRecording]: {
-			text: t(`evaluationCard.tabs.${EvaluationCardTab.ScreenRecording}`),
-			value: EvaluationCardTab.ScreenRecording,
-		},
-	}),
-}));
-
-const currentTab = ref<EvaluationCardTabItem>(
-	tabValues.value[EvaluationCardTab.Conversation],
-);
-
-function changeTab(tab: EvaluationCardTabItem) {
-	currentTab.value = tab;
-}
-
-const isConversationTab = computed(
-	() => currentTab.value.value === EvaluationCardTab.Conversation,
-);
-
-const isCallConversationShown = computed(
-	() => isConversationTab.value && !!interaction?.call,
-);
-
-const isScreenRecordingShown = computed(
-	() =>
-		currentTab.value.value === EvaluationCardTab.ScreenRecording &&
-		!!interaction?.call,
-);
-
 const callId = computed(() =>
-	isScreenRecordingShown.value ? String(interaction?.call?.id) : '',
+	interaction?.call ? String(interaction.call.id) : '',
 );
 
 const { dataList, isLoading, selected, loadDataList, deleteRecordings } =
@@ -190,20 +112,20 @@ const {
 </script>
 
 <style scoped>
-.evaluation-card-interaction {
+.opened-evaluation-screen-recording {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
 }
 
-.evaluation-card-interaction__header {
+.opened-evaluation-screen-recording__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-xs);
 }
 
-.evaluation-card-interaction__actions {
+.opened-evaluation-screen-recording__actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);

@@ -23,7 +23,7 @@
     <template #main>
       <wt-loader v-if="isLoading" />
       <template v-else>
-        <evaluation-card-interaction
+        <opened-evaluation-tabs
           :interaction="interaction"
           :collapsed="isEvaluationPanelCollapsed"
           class="opened-evaluation__panel"
@@ -51,8 +51,8 @@ import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import InteractionsAPIRepository from '../../interactions/api/InteractionsAPIRepository';
 import { InteractionType } from '../../interactions/enums/InteractionType.enum';
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
-import EvaluationCardInteraction from './evaluation-card-interaction.vue';
 import EvaluationCardScorecard from './evaluation-card-scorecard.vue';
+import OpenedEvaluationTabs from './opened-evaluation-tabs.vue';
 
 const { t } = useI18n();
 const route = useRoute();
