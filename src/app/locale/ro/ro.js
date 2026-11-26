@@ -53,6 +53,11 @@ export default {
 		},
 		evaluation: 'Evaluare',
 		skip: 'Omite',
+		information: {
+			unknown: 'Necunoscut',
+			postprocessing: 'Postprocesare',
+			empty: 'Nu există încă informații',
+		},
 	},
 	startPage: {
 		interactions: {

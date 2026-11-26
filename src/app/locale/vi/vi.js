@@ -54,6 +54,11 @@ export default {
 		},
 		evaluation: 'Đánh giá',
 		skip: 'Bỏ qua',
+		information: {
+			unknown: 'Không xác định',
+			postprocessing: 'Xử lý sau',
+			empty: 'Chưa có thông tin',
+		},
 	},
 	startPage: {
 		interactions: {

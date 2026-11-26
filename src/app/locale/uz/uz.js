@@ -54,6 +54,11 @@ export default {
 		},
 		evaluation: 'Baholash',
 		skip: "O'tkazib yuborish",
+		information: {
+			unknown: "Noma'lum",
+			postprocessing: 'Keyingi ishlov',
+			empty: "Hozircha ma'lumot yo'q",
+		},
 	},
 	startPage: {
 		interactions: {

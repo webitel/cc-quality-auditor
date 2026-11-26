@@ -52,6 +52,11 @@ export default {
 		},
 		evaluation: 'Оцінка',
 		skip: 'Пропустити',
+		information: {
+			unknown: 'Невідомо',
+			postprocessing: 'Постобробка',
+			empty: 'Інформації ще немає',
+		},
 	},
 	startPage: {
 		interactions: {

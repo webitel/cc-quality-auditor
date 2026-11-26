@@ -54,6 +54,11 @@ export default {
 		},
 		evaluation: 'Ocena',
 		skip: 'Pomiń',
+		information: {
+			unknown: 'Nieznany',
+			postprocessing: 'Po zakończeniu',
+			empty: 'Brak informacji',
+		},
 	},
 	startPage: {
 		interactions: {

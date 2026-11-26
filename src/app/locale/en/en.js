@@ -53,6 +53,11 @@ export default {
 		},
 		evaluation: 'Evaluation',
 		skip: 'Skip',
+		information: {
+			unknown: 'Unknown',
+			postprocessing: 'Postprocessing',
+			empty: 'There is no information yet',
+		},
 	},
 	startPage: {
 		interactions: {
