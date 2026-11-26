@@ -40,6 +40,11 @@
           v-bind="panel"
         />
       </div>
+      <opened-evaluation-information-panel
+        v-if="csatRows.length"
+        :title="t('interactions.csat')"
+        :rows="csatRows"
+      />
     </template>
   </section>
 </template>
@@ -68,6 +73,11 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+const CsatVariableKeys = [
+	'csat_comment',
+	'answered_at',
+];
+
 const searchQuery = ref('');
 
 const contact = computed(() =>
@@ -95,8 +105,16 @@ const toInformationRows = (
 		value,
 	}));
 
-const variableRows = computed(() =>
+const callVariableRows = computed(() =>
 	toInformationRows(interaction?.call?.variables).filter(isFieldRowMatched),
+);
+
+const variableRows = computed(() =>
+	callVariableRows.value.filter(({ key }) => !CsatVariableKeys.includes(key)),
+);
+
+const csatRows = computed(() =>
+	callVariableRows.value.filter(({ key }) => CsatVariableKeys.includes(key)),
 );
 
 const postprocessingRows = computed<EvaluationCardInformationRow[]>(() =>
@@ -138,7 +156,10 @@ const {
 	text: emptyText,
 } = useTableEmpty(
 	{
-		dataList: panels,
+		dataList: computed(() => [
+			...panels.value,
+			...csatRows.value,
+		]),
 		filters: computed(() => ({
 			search: searchQuery.value,
 		})),

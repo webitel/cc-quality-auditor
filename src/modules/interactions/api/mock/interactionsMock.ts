@@ -201,6 +201,8 @@ const getCallVariables = (index: number) =>
 				customer_segment: 'Default',
 				campaign: 'Default',
 				transfer_from: 'Default',
+				csat_comment: 'Default',
+				answered_at: 'Default',
 			}
 		: undefined;
 
