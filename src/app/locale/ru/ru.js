@@ -53,6 +53,11 @@ export default {
 		},
 		evaluation: 'Оценка',
 		skip: 'Пропустить',
+		information: {
+			unknown: 'Неизвестно',
+			postprocessing: 'Постобработка',
+			empty: 'Информации пока нет',
+		},
 	},
 	startPage: {
 		interactions: {

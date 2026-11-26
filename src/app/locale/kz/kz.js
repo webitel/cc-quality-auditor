@@ -53,6 +53,11 @@ export default {
 		},
 		evaluation: 'Бағалау',
 		skip: 'Өткізіп жіберу',
+		information: {
+			unknown: 'Белгісіз',
+			postprocessing: 'Өңдеуден кейін',
+			empty: 'Әзірге ақпарат жоқ',
+		},
 	},
 	startPage: {
 		interactions: {

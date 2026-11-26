@@ -48,7 +48,10 @@ const getInteraction = async ({ type, id }: InteractionKey) => {
 	try {
 		const response = await instance.get(`${InteractionsUrl}/${type}/${id}`);
 		return applyTransform(response.data, [
-			snakeToCamel(),
+			snakeToCamel([
+				'variables',
+				'form_fields',
+			]),
 		]) as InteractionResponseItem;
 	} catch (err) {
 		throw applyTransform(err, [
