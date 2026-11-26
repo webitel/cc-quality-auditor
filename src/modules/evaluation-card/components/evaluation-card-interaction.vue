@@ -4,12 +4,14 @@
       <wt-tabs
         :current="currentTab"
         :tabs="Object.values(tabValues)"
-        @change="currentTab = $event"
+        @change="changeTab"
       />
-      <wt-icon-btn
-        :icon="`panel-${collapsed ? 'collapse' : 'expand'}`"
-        @click="emit('toggle')"
-      />
+      <div class="evaluation-card-interaction__actions">
+        <wt-icon-btn
+          :icon="`panel-${collapsed ? 'collapse' : 'expand'}`"
+          @click="emit('toggle')"
+        />
+      </div>
     </header>
     <evaluation-card-call-conversation
       v-if="isCallConversationShown"
@@ -25,6 +27,7 @@ import { useI18n } from 'vue-i18n';
 
 import type { InteractionResponseItem } from '../../interactions/types/interaction';
 import { EvaluationCardTab } from '../enums/EvaluationCardTab.enum';
+import type { EvaluationCardTabItem } from '../types/evaluationCardTab';
 import EvaluationCardCallConversation from './evaluation-card-call-conversation.vue';
 
 const { interaction } = defineProps<{
@@ -54,7 +57,13 @@ const tabValues = computed(() => ({
 	},
 }));
 
-const currentTab = ref(tabValues.value[EvaluationCardTab.Conversation]);
+const currentTab = ref<EvaluationCardTabItem>(
+	tabValues.value[EvaluationCardTab.Conversation],
+);
+
+function changeTab(tab: EvaluationCardTabItem) {
+	currentTab.value = tab;
+}
 
 const isCallConversationShown = computed(
 	() =>
@@ -74,6 +83,12 @@ const isCallConversationShown = computed(
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.evaluation-card-interaction__actions {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-xs);
 }
 </style>
