@@ -225,18 +225,6 @@ const getCallForms = (
 						comment: 'Default',
 						follow_up: 'Default',
 						city: 'Default',
-						...(index % 4 === 0 && {
-							filesOutcome: JSON.stringify([
-								{
-									id: '1',
-									name: 'contract.pdf',
-								},
-								{
-									id: '2',
-									name: 'invoice.pdf',
-								},
-							]),
-						}),
 					},
 				},
 			]
