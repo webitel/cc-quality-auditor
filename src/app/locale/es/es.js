@@ -1,4 +1,4 @@
-import { ChannelType } from '@webitel/api-services/enums';
+import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
@@ -53,6 +53,12 @@ export default {
 		},
 		evaluation: 'Evaluación',
 		skip: 'Omitir',
+		assignedTo: 'Asignado a',
+		unavailable: {
+			[InteractionStatus.Pending]: 'No puede evaluar esta interacción',
+			[InteractionStatus.Skipped]: 'Esta interacción fue omitida',
+		},
+		date: 'Fecha',
 		information: {
 			unknown: 'Desconocido',
 			postprocessing: 'Postprocesamiento',

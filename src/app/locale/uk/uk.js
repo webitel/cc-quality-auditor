@@ -1,4 +1,4 @@
-import { ChannelType } from '@webitel/api-services/enums';
+import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
@@ -52,6 +52,12 @@ export default {
 		},
 		evaluation: 'Оцінка',
 		skip: 'Пропустити',
+		assignedTo: 'Призначено',
+		unavailable: {
+			[InteractionStatus.Pending]: 'Ви не можете оцінити цю взаємодію',
+			[InteractionStatus.Skipped]: 'Цю взаємодію пропущено',
+		},
+		date: 'Дата',
 		information: {
 			unknown: 'Невідомо',
 			postprocessing: 'Постобробка',

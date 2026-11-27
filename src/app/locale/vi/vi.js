@@ -1,4 +1,4 @@
-import { ChannelType } from '@webitel/api-services/enums';
+import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
@@ -54,6 +54,12 @@ export default {
 		},
 		evaluation: 'Đánh giá',
 		skip: 'Bỏ qua',
+		assignedTo: 'Được giao cho',
+		unavailable: {
+			[InteractionStatus.Pending]: 'Bạn không thể đánh giá tương tác này',
+			[InteractionStatus.Skipped]: 'Tương tác này đã bị bỏ qua',
+		},
+		date: 'Ngày',
 		information: {
 			unknown: 'Không xác định',
 			postprocessing: 'Xử lý sau',

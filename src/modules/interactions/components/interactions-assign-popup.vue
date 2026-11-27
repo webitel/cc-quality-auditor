@@ -49,7 +49,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import InteractionsAPIRepository from '../api/InteractionsAPIRepository';
-import type { InteractionsListItem } from '../types/interaction';
+import type { InteractionKey } from '../types/interaction';
 
 type Assignee = {
 	id: string;
@@ -57,7 +57,7 @@ type Assignee = {
 };
 
 const props = defineProps<{
-	interactions: InteractionsListItem[];
+	interactions: InteractionKey[];
 }>();
 
 const emit = defineEmits<{
