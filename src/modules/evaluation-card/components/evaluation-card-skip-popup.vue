@@ -8,14 +8,16 @@
       {{ t('evaluationCard.skip.title') }}
     </template>
     <template #main>
-      <p>{{ t('evaluationCard.skip.popupDescription') }}</p>
-      <wt-textarea
-        v-model:model-value="reason"
-        :label="t('cases.reason', 1)"
-        :placeholder="t('evaluationCard.skip.reasonPlaceholder')"
-        :rows="4"
-        required
-      />
+      <div class="evaluation-card-skip-popup__content">
+        <p>{{ t('evaluationCard.skip.popupDescription') }}</p>
+        <wt-textarea
+          v-model:model-value="reason"
+          :label="t('cases.reason', 1)"
+          :placeholder="t('evaluationCard.skip.reasonPlaceholder')"
+          :rows="4"
+          required
+        />
+      </div>
     </template>
     <template #actions>
       <wt-button
@@ -68,3 +70,11 @@ const skip = async () => {
 	}
 };
 </script>
+
+<style scoped>
+.evaluation-card-skip-popup__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+</style>
