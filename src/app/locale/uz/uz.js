@@ -1,4 +1,4 @@
-import { ChannelType } from '@webitel/api-services/enums';
+import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
@@ -54,6 +54,12 @@ export default {
 		},
 		evaluation: 'Baholash',
 		skip: "O'tkazib yuborish",
+		assignedTo: 'Tayinlangan',
+		unavailable: {
+			[InteractionStatus.Pending]: "Siz bu o'zaro aloqani baholay olmaysiz",
+			[InteractionStatus.Skipped]: "Bu o'zaro aloqa o'tkazib yuborildi",
+		},
+		date: 'Sana',
 		information: {
 			unknown: "Noma'lum",
 			postprocessing: 'Keyingi ishlov',

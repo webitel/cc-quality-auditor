@@ -1,4 +1,4 @@
-import { ChannelType } from '@webitel/api-services/enums';
+import { ChannelType, InteractionStatus } from '@webitel/api-services/enums';
 
 import { EvaluationCardTab } from '../../../modules/evaluation-card/enums/EvaluationCardTab.enum';
 import { InteractionType } from '../../../modules/interactions/enums/InteractionType.enum';
@@ -53,6 +53,12 @@ export default {
 		},
 		evaluation: 'Бағалау',
 		skip: 'Өткізіп жіберу',
+		assignedTo: 'Тағайындалған',
+		unavailable: {
+			[InteractionStatus.Pending]: 'Сіз бұл өзара әрекетті бағалай алмайсыз',
+			[InteractionStatus.Skipped]: 'Бұл өзара әрекет өткізіп жіберілді',
+		},
+		date: 'Күні',
 		information: {
 			unknown: 'Белгісіз',
 			postprocessing: 'Өңдеуден кейін',
