@@ -5,14 +5,14 @@
     @close="emit('close')"
   >
     <template #title>
-      {{ t('evaluationCard.skipInteraction') }}
+      {{ t('evaluationCard.skip.title') }}
     </template>
     <template #main>
-      <p>{{ t('evaluationCard.skipText') }}</p>
+      <p>{{ t('evaluationCard.skip.popupDescription') }}</p>
       <wt-textarea
         v-model:model-value="reason"
         :label="t('cases.reason', 1)"
-        :placeholder="t('evaluationCard.skipReasonPlaceholder')"
+        :placeholder="t('evaluationCard.skip.reasonPlaceholder')"
         :rows="4"
         required
       />
@@ -23,7 +23,7 @@
         :loading="isLoading"
         @click="skip"
       >
-        {{ t('evaluationCard.skip') }}
+        {{ t('evaluationCard.skip.action') }}
       </wt-button>
       <wt-button
         color="secondary"

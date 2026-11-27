@@ -52,7 +52,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Запись экрана',
 		},
 		evaluation: 'Оценка',
-		skip: 'Пропустить',
+		skip: {
+			action: 'Пропустить',
+			title: 'Пропустить взаимодействие',
+			popupDescription:
+				'Взаимодействие будет убрано из вашей очереди и помечено как пропущенное.',
+			reasonPlaceholder: 'Почему вы пропускаете это взаимодействие?',
+		},
 		assignedTo: 'Назначено',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Вы не можете оценить это взаимодействие',

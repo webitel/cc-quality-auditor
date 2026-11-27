@@ -53,7 +53,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Ghi hình màn hình',
 		},
 		evaluation: 'Đánh giá',
-		skip: 'Bỏ qua',
+		skip: {
+			action: 'Bỏ qua',
+			title: 'Bỏ qua tương tác',
+			popupDescription:
+				'Tương tác sẽ bị xóa khỏi hàng chờ của bạn và được đánh dấu là đã bỏ qua.',
+			reasonPlaceholder: 'Tại sao bạn bỏ qua tương tác này?',
+		},
 		assignedTo: 'Được giao cho',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Bạn không thể đánh giá tương tác này',

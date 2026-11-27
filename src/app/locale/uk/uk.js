@@ -51,7 +51,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Запис екрану',
 		},
 		evaluation: 'Оцінка',
-		skip: 'Пропустити',
+		skip: {
+			action: 'Пропустити',
+			title: 'Пропустити взаємодію',
+			popupDescription:
+				'Взаємодію буде прибрано з вашої черги й позначено як пропущену.',
+			reasonPlaceholder: 'Чому ви пропускаєте цю взаємодію?',
+		},
 		assignedTo: 'Призначено',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Ви не можете оцінити цю взаємодію',

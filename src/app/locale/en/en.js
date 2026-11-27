@@ -52,7 +52,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Screen recording',
 		},
 		evaluation: 'Evaluation',
-		skip: 'Skip',
+		skip: {
+			action: 'Skip',
+			title: 'Skip interaction',
+			popupDescription:
+				'The interaction will be removed from your queue and marked as Skipped.',
+			reasonPlaceholder: 'Why are you skipping this interaction?',
+		},
 		assignedTo: 'Assigned to',
 		unavailable: {
 			[InteractionStatus.Pending]: "You can't evaluate this interaction",

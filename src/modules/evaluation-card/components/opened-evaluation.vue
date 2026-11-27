@@ -15,7 +15,7 @@
             color="secondary"
             @click="isSkipPopupOpened = true"
           >
-            {{ t('evaluationCard.skip') }}
+            {{ t('evaluationCard.skip.action') }}
           </wt-button>
         </template>
       </wt-page-header>
