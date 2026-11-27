@@ -9,6 +9,11 @@
         :interaction="interaction"
         @assign="isAssignPopupOpened = true"
       />
+      <opened-evaluation-rate
+        v-if="isCompleted && interaction.evaluation"
+        :evaluation-id="interaction.evaluation.id"
+        @deleted="emit('deleted')"
+      />
       <interactions-assign-popup
         v-if="isAssignPopupOpened"
         :interactions="[interaction]"
@@ -28,7 +33,12 @@ import { useI18n } from 'vue-i18n';
 import InteractionsAssignPopup from '../../interactions/components/interactions-assign-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import { useEvaluationCardStore } from '../stores/evaluationCardStore';
+import OpenedEvaluationRate from './opened-evaluation-rate.vue';
 import OpenedEvaluationUnavailable from './opened-evaluation-unavailable.vue';
+
+const emit = defineEmits<{
+	deleted: [];
+}>();
 
 const { t } = useI18n();
 
@@ -47,6 +57,10 @@ const isUnavailable = computed(() => {
 			evaluation.assignee.id !== userId.value)
 	);
 });
+
+const isCompleted = computed(
+	() => interaction.value?.status === InteractionStatus.Completed,
+);
 
 const handleAssigned = () => {
 	isAssignPopupOpened.value = false;

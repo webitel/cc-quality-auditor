@@ -302,6 +302,99 @@ export const interactionsHandlers = [
 			return HttpResponse.json(item.evaluation);
 		},
 	),
+	http.get(
+		`${import.meta.env.VITE_API_URL}/call_center/audit/rate/:id`,
+		({ params }) => {
+			const item = interactionsMock.find(
+				({ evaluation, status }) =>
+					evaluation?.id === params.id &&
+					status === InteractionStatus.Completed,
+			);
+
+			if (!item?.evaluation) {
+				return HttpResponse.json(
+					{
+						code: 5,
+						message: 'Rate not found',
+					},
+					{
+						status: 404,
+					},
+				);
+			}
+
+			const { evaluation } = item;
+
+			return HttpResponse.json({
+				id: evaluation.id,
+				created_at: evaluation.rated_at,
+				created_by: evaluation.assignee,
+				rated_user: item.agent,
+				form: evaluation.scorecard,
+				score_required: evaluation.score,
+				score_optional: 75,
+				comment:
+					'The agent handled the request politely, but the resolution took longer than expected.',
+				questions: [
+					{
+						type: 'question_score',
+						question: 'Greeted the customer',
+						required: true,
+						min: 0,
+						max: 10,
+					},
+					{
+						type: 'question_option',
+						question: 'Resolved the issue',
+						required: true,
+						options: [
+							{
+								name: 'Fully',
+								score: 10,
+							},
+							{
+								name: 'Partially',
+								score: 5,
+							},
+							{
+								name: 'Not resolved',
+								score: 0,
+							},
+						],
+					},
+					{
+						type: 'question_yes',
+						question: 'Was rude to the customer',
+						required: false,
+						critical_violation: true,
+					},
+					{
+						type: 'question_yes',
+						question: 'Offered additional help',
+						required: false,
+					},
+				],
+				answers: [
+					{
+						score: 8,
+					},
+					{
+						score: 5,
+						comment:
+							'The customer had to repeat the order number twice before the agent found it in the system, which made the call noticeably longer than necessary.',
+						updated_at: String(Number(evaluation.rated_at) + 30 * 60 * 1000),
+						updated_by: evaluation.assignee,
+					},
+					{
+						score: 0,
+					},
+					{
+						score: 1,
+					},
+				],
+			});
+		},
+	),
 	http.post(
 		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
 		async ({ request }) => {
