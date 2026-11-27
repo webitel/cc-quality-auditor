@@ -34,6 +34,7 @@
         <evaluation-card-scorecard
           v-if="!isEvaluationPanelCollapsed"
           class="opened-evaluation__panel"
+          @deleted="close"
         />
       </template>
       <evaluation-card-skip-popup
