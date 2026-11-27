@@ -11,8 +11,9 @@
         <wt-breadcrumb :path="path" />
         <template #actions>
           <wt-button
+            :disabled="!isSkipAvailable"
             color="secondary"
-            disabled
+            @click="isSkipPopupOpened = true"
           >
             {{ t('evaluationCard.skip') }}
           </wt-button>
@@ -35,23 +36,33 @@
           class="opened-evaluation__panel"
         />
       </template>
+      <evaluation-card-skip-popup
+        v-if="isSkipPopupOpened"
+        :evaluation-id="interaction.evaluation.id"
+        @close="isSkipPopupOpened = false"
+        @skipped="close"
+      />
     </template>
   </wt-page-wrapper>
 </template>
 
 <script setup lang="ts">
 import { useLocalStorage, useToggle } from '@vueuse/core';
+import { InteractionStatus } from '@webitel/api-services/enums';
 import { useClose } from '@webitel/ui-sdk/composables';
-import { WtApplication } from '@webitel/ui-sdk/enums';
+import { WtApplication, WtObject } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import { useUserAccessControl } from '../../../app/composables/useUserAccessControl';
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
 import { InteractionType } from '../../interactions/enums/InteractionType.enum';
+import { useUserinfoStore } from '../../userinfo/userInfoStore';
 import { useEvaluationCardStore } from '../stores/evaluationCardStore';
 import EvaluationCardScorecard from './evaluation-card-scorecard.vue';
+import EvaluationCardSkipPopup from './evaluation-card-skip-popup.vue';
 import OpenedEvaluationTabs from './opened-evaluation-tabs.vue';
 
 const { t } = useI18n();
@@ -62,6 +73,17 @@ const { close } = useClose(section);
 
 const evaluationCardStore = useEvaluationCardStore();
 const { interaction, isLoading } = storeToRefs(evaluationCardStore);
+const { userId } = storeToRefs(useUserinfoStore());
+const { hasCreateAccess } = useUserAccessControl(WtObject.AuditRating);
+
+const isSkipPopupOpened = ref(false);
+
+const isSkipAvailable = computed(
+	() =>
+		hasCreateAccess.value &&
+		interaction.value?.status === InteractionStatus.Pending &&
+		interaction.value.evaluation?.assignee?.id === userId.value,
+);
 
 const isEvaluationPanelCollapsed = useLocalStorage(
 	'audit-evaluation-panel-collapsed',
