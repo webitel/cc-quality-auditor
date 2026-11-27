@@ -52,7 +52,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Grabación de pantalla',
 		},
 		evaluation: 'Evaluación',
-		skip: 'Omitir',
+		skip: {
+			action: 'Omitir',
+			title: 'Omitir interacción',
+			popupDescription:
+				'La interacción se eliminará de su cola y se marcará como omitida.',
+			reasonPlaceholder: '¿Por qué omite esta interacción?',
+		},
 		assignedTo: 'Asignado a',
 		unavailable: {
 			[InteractionStatus.Pending]: 'No puede evaluar esta interacción',

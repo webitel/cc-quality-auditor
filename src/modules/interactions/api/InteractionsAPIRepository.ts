@@ -95,6 +95,25 @@ const deleteEvaluations = async ({ ids }: { ids: string[] }) => {
 	}
 };
 
+const skipEvaluation = async ({
+	id,
+	reason,
+}: {
+	id: string;
+	reason: string;
+}) => {
+	try {
+		const response = await instance.post(`${EvaluationsUrl}/${id}/skip`, {
+			reason,
+		});
+		return response.data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
+};
+
 const exportData = async (params: ExportInteractionsParams) => {
 	const response = await instance.post(
 		`${InteractionsUrl}/export`,
@@ -113,6 +132,7 @@ const InteractionsAPIRepository = {
 	getInteraction,
 	assign,
 	deleteEvaluations,
+	skipEvaluation,
 	exportData,
 };
 

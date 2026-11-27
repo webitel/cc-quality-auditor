@@ -53,7 +53,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Nagranie ekranu',
 		},
 		evaluation: 'Ocena',
-		skip: 'Pomiń',
+		skip: {
+			action: 'Pomiń',
+			title: 'Pomiń interakcję',
+			popupDescription:
+				'Interakcja zostanie usunięta z Twojej kolejki i oznaczona jako pominięta.',
+			reasonPlaceholder: 'Dlaczego pomijasz tę interakcję?',
+		},
 		assignedTo: 'Przypisano do',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Nie możesz ocenić tej interakcji',

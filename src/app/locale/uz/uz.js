@@ -53,7 +53,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Ekran yozuvi',
 		},
 		evaluation: 'Baholash',
-		skip: "O'tkazib yuborish",
+		skip: {
+			action: "O'tkazib yuborish",
+			title: "O'zaro aloqani o'tkazib yuborish",
+			popupDescription:
+				"O'zaro aloqa navbatingizdan olib tashlanadi va o'tkazib yuborilgan deb belgilanadi.",
+			reasonPlaceholder: "Nega bu o'zaro aloqani o'tkazib yuboryapsiz?",
+		},
 		assignedTo: 'Tayinlangan',
 		unavailable: {
 			[InteractionStatus.Pending]: "Siz bu o'zaro aloqani baholay olmaysiz",

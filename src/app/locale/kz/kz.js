@@ -52,7 +52,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Экран жазбасы',
 		},
 		evaluation: 'Бағалау',
-		skip: 'Өткізіп жіберу',
+		skip: {
+			action: 'Өткізіп жіберу',
+			title: 'Өзара әрекетті өткізіп жіберу',
+			popupDescription:
+				'Өзара әрекет сіздің кезегіңізден алынып, өткізіп жіберілген деп белгіленеді.',
+			reasonPlaceholder: 'Неліктен бұл өзара әрекетті өткізіп жібересіз?',
+		},
 		assignedTo: 'Тағайындалған',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Сіз бұл өзара әрекетті бағалай алмайсыз',

@@ -52,7 +52,13 @@ export default {
 			[EvaluationCardTab.ScreenRecording]: 'Înregistrarea ecranului',
 		},
 		evaluation: 'Evaluare',
-		skip: 'Omite',
+		skip: {
+			action: 'Omite',
+			title: 'Omite interacțiunea',
+			popupDescription:
+				'Interacțiunea va fi eliminată din coada dvs. și marcată ca omisă.',
+			reasonPlaceholder: 'De ce omiteți această interacțiune?',
+		},
 		assignedTo: 'Atribuit lui',
 		unavailable: {
 			[InteractionStatus.Pending]: 'Nu puteți evalua această interacțiune',

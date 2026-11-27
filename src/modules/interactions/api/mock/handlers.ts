@@ -270,6 +270,39 @@ export const interactionsHandlers = [
 		},
 	),
 	http.post(
+		`${import.meta.env.VITE_API_URL}${EvaluationsUrl}/:id/skip`,
+		async ({ params, request }) => {
+			const { reason } = (await request.json()) as {
+				reason: string;
+			};
+			const item = interactionsMock.find(
+				({ evaluation }) => evaluation?.id === params.id,
+			);
+
+			if (!item?.evaluation || item.status !== InteractionStatus.Pending) {
+				return HttpResponse.json(
+					{
+						code: 9,
+						message: 'Evaluation is not pending',
+					},
+					{
+						status: 400,
+					},
+				);
+			}
+
+			item.status = InteractionStatus.Skipped;
+			item.evaluation = {
+				...item.evaluation,
+				skip_reason: reason,
+				skipped_by: item.evaluation.assignee,
+				skipped_at: String(Date.now()),
+			};
+
+			return HttpResponse.json(item.evaluation);
+		},
+	),
+	http.post(
 		`${import.meta.env.VITE_API_URL}/storage/transcript_file`,
 		async ({ request }) => {
 			const { file_id } = (await request.json()) as {
