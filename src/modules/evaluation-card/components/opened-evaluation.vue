@@ -28,7 +28,7 @@
           :collapsed="isEvaluationPanelCollapsed"
           class="opened-evaluation__panel"
           @toggle="toggleEvaluationPanel"
-          @reload="loadInteraction"
+          @reload="loadRouteInteraction"
         />
         <evaluation-card-scorecard
           v-if="!isEvaluationPanelCollapsed"
@@ -43,14 +43,14 @@
 import { useLocalStorage, useToggle } from '@vueuse/core';
 import { useClose } from '@webitel/ui-sdk/composables';
 import { WtApplication } from '@webitel/ui-sdk/enums';
-import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import RoutePaths from '../../../app/router/_internals/RoutePaths.enum';
-import InteractionsAPIRepository from '../../interactions/api/InteractionsAPIRepository';
 import { InteractionType } from '../../interactions/enums/InteractionType.enum';
-import type { InteractionResponseItem } from '../../interactions/types/interaction';
+import { useEvaluationCardStore } from '../stores/evaluationCardStore';
 import EvaluationCardScorecard from './evaluation-card-scorecard.vue';
 import OpenedEvaluationTabs from './opened-evaluation-tabs.vue';
 
@@ -60,8 +60,8 @@ const route = useRoute();
 const section = route.meta.UiSection as string;
 const { close } = useClose(section);
 
-const interaction = ref<InteractionResponseItem | null>(null);
-const isLoading = ref(false);
+const evaluationCardStore = useEvaluationCardStore();
+const { interaction, isLoading } = storeToRefs(evaluationCardStore);
 
 const isEvaluationPanelCollapsed = useLocalStorage(
 	'audit-evaluation-panel-collapsed',
@@ -85,19 +85,13 @@ const path = computed(() => [
 	},
 ]);
 
-const loadInteraction = async () => {
-	isLoading.value = true;
-	try {
-		interaction.value = await InteractionsAPIRepository.getInteraction({
-			type: InteractionType[route.params.type as string],
-			id: route.params.id as string,
-		});
-	} finally {
-		isLoading.value = false;
-	}
-};
+const loadRouteInteraction = () =>
+	evaluationCardStore.loadInteraction({
+		type: InteractionType[route.params.type as string],
+		id: route.params.id as string,
+	});
 
-loadInteraction();
+loadRouteInteraction();
 </script>
 
 <style scoped>
